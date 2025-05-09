@@ -3,7 +3,6 @@ import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
-import { partnerList } from './employeeListTableData';
 import { SharedModule } from '../../../../../shared/common/sharedmodule';
 import { RouterModule } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -33,7 +32,6 @@ export class EmployeeListComponent implements OnInit {
   totalPages = 1;
   pageNumbers: number[] = [];
 
-  partnerList$!: Observable<partnerList[]>;
   total$!: Observable<number>;
   
   constructor(private partnerService: PartnerService,private toastr: ToastrService) {}

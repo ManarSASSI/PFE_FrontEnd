@@ -1,11 +1,9 @@
 import {Directive, EventEmitter, Input, Output} from '@angular/core';
 import { attendanceByUserType } from '../../componets/dashbord/hrmdashboards/attendance/attendencebyuser/attendenceByUserTableData';
-import { partnerList } from '../../componets/dashbord/hrmdashboards/employess/employee-list/employeeListTableData';
 import { noticeBoardList } from '../../componets/dashbord/hrmdashboards/notice-board/noticaBoardTableData';
 import { employeeAttendanceList } from '../../componets/dashbord/employee-dashboard/attendance/employeeAttendanceTableData';
 
 export type SortColumn = keyof noticeBoardList | '';
-export type employeeSortColumn = keyof partnerList | '';
 export type AttendanceByUserSortColumn = keyof attendanceByUserType | '';
 export type employeeAttendanceSortColumn = keyof employeeAttendanceList | '';
 // export type SortCountryColumn = keyof Country | '';

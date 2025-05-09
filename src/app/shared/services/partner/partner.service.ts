@@ -23,11 +23,13 @@ export class PartnerService {
   }
 
   deletePartner(id: number): Observable<void> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, {headers});
+    // const headers = new HttpHeaders({
+    //   'Authorization': `Bearer ${this.authService.getToken()}`,
+    //   'Content-Type': 'application/json'
+    // });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`
+      // , {headers}
+    );
   }
 
   // Nouvelle méthode pour créer un partenaire
