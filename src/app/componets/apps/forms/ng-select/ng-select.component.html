@@ -1,0 +1,158 @@
+<app-page-header title="Ng-select" title1="Forms" activeTitle="Ng-select"></app-page-header>
+
+
+<!-- Start::row-1 -->
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">Basic Select2</div>
+            </div>
+            <div class="card-body">
+                <ng-select [items]="Selection">
+                </ng-select>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    Multiple Select
+                </div>
+            </div>
+            <div class="card-body">
+                <ng-select [items]="people$ | async" [multiple]="true" [closeOnSelect]="false" [hideSelected]="true"
+                    bindLabel="name" placeholder="Select people" [ngModel]="selectedPersonId">
+                </ng-select>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    Single Select With Placeholder
+                </div>
+            </div>
+            <div class="card-body">
+                <ng-select placeholder="Single Select" class="js-example-placeholder-single js-states">
+                    <ng-option value="st-1" selected>Texas</ng-option>
+                    <ng-option value="st-2">Georgia</ng-option>
+                    <ng-option value="st-3">California</ng-option>
+                    <ng-option value="st-4">Washington D.C</ng-option>
+                    <ng-option value="st-5">Virginia</ng-option>
+                </ng-select>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    Multiple Select With Placeholder
+                </div>
+            </div>
+            <div class="card-body">
+                <ng-select placeholder="Multiple Select" class="js-example-placeholder-multiple js-states"
+                    [multiple]="true">
+                    <ng-option value="fr-1">Appple</ng-option>
+                    <ng-option value="fr-2">Mango</ng-option>
+                    <ng-option value="fr-3">Orange</ng-option>
+                    <ng-option value="fr-4">Guava</ng-option>
+                    <ng-option value="fr-5">Pineapple</ng-option>
+                </ng-select>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    Templating
+                </div>
+            </div>
+            <div class="card-body">
+               
+                <ng-select placeholder=" Select" [items]="cities" [ngModel]="selectedCity" bindLabel="name"
+                    bindValue="name">
+                    <ng-template ng-label-tmp let-item="item">
+                        <img height="15" width="15" [src]="item.avatar" />
+                        {{item.name}}
+                    </ng-template>
+                </ng-select>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    Templating Selection
+                </div>
+            </div>
+            <div class="card-body">
+                <ng-select [items]="cities1" [(ngModel)]="selectedCity1" [maxSelectedItems]="2" bindLabel="name"
+                bindValue="name">
+                <ng-template ng-label-tmp let-item="item">
+                    <img height="15" width="15" [src]="item.avatar" />
+                    {{ item.name }}
+                </ng-template>
+                <input style="width: 100%; line-height: 24px" type="text" />
+            </ng-select>
+                <!-- <ng-select [items]="cities1" [(ngModel)]="selectedCity1" [maxSelectedItems]="2" bindLabel="name"
+                bindValue="name">
+                <ng-template ng-label-tmp let-item="item">
+                    <img height="15" width="15" [src]="item.avatar" class="select2-img" />
+                    {{ item.name }}
+                </ng-template>
+                <input style="width: 100%; line-height: 24px" type="text" />
+            </ng-select> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!--End::row-1 -->
+
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    Max Selections Limiting
+                </div>
+            </div>
+            <div class="card-body">
+                <ng-select placeholder="Max three Selections" #select [items]="people$ | async" [multiple]="true"
+                    [maxSelectedItems]="3" bindLabel="name" [ngModel]="selectedPersonId">
+                </ng-select>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    Disabling a Select2 control
+                </div>
+            </div>
+            <div class="card-body vstack gap-3">
+                
+                <ng-select [items]="people$ | async" [multiple]="true" [closeOnSelect]="false"
+                [disabled]="disable" [hideSelected]="true" bindLabel="name"
+                    placeholder="Select people" [ngModel]="selectedPersonId">
+                </ng-select>
+                <div>
+                    <button class="btn btn-primary-light js-programmatic-enable me-2"
+                        (click)="enableSelect()">Enable</button>
+                    <button class="btn btn-primary js-programmatic-disable" (click)="disableSelect()">Disable</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-2 -->

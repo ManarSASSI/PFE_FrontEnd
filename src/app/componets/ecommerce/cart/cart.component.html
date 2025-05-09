@@ -1,0 +1,68 @@
+<app-page-header title="Cart" title1="Ecommerce" activeTitle="Cart" ></app-page-header>
+  <!-- Start::row-1 -->
+  <div class="row">
+    <div class="col-md-12">
+        <div class="card custom-card">
+            <div class="card-header border-bottom-0">
+                <h3 class="card-title">Shopping Cart</h3>
+            </div>
+            <div class="card-body ">
+                <div class="table-responsive ">
+                    <table class="table table-bordered text-nowrap border-top">
+                        <thead class="">
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Sub Total</th>
+                                <th class="w-5"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (product of products; track product) {
+
+                                <tr>
+                                    <td>
+                                        <div class="d-flex w-200 align-items-center">
+                                            <div>
+                                                <img [src]="product.img"  alt="img" title="" class="w-7 h-7 rounded-2">
+                                            </div>
+                                            <h6 class="mb-0 fw-medium ms-4">{{product.name}}</h6>
+                                        </div>
+                                    </td>
+                                    <td><a  href="javascript:void(0);">{{product.quantity}}</a></td>
+                                    <td class="price">{{product.price}}</td>
+                                    <td>{{product.total}}</td>
+                                    <td class="text-center">
+                                        <a  href="javascript:void(0);" class="remove_cart" (click)="ConformAlert(product.id)" ngbTooltip="Remove" placement="top" >
+                                            <span class="fe fe-trash-2"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="3" >Total</td>
+                                <td class="total h4 mb-0 fw-medium" colspan="2">$45,795.16</td>
+                            </tr>
+                         
+                        </tbody>
+                    </table>
+                </div>
+                <div class="float-start mt-4">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Apply Coupon"
+                            aria-label="Apply Coupon" aria-describedby="basic-addon2">
+                        <span class="input-group-text bg-primary" id="basic-addon2">Apply</span>
+                    </div>
+                </div>
+                <div class="float-end mt-4">
+                    <a routerLink="/ecommerce/products" class="btn btn-info mt-2"><i class="fe fe-arrow-left"></i> Continue Shopping</a>
+                    <a routerLink="/ecommerce/cart" class="btn btn-primary mt-2">Update Cart</a>
+                    <a  href="javascript:void(0);" class="btn btn-secondary mt-2">Checkout <i class="fe fe-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End::row-1 -->
+

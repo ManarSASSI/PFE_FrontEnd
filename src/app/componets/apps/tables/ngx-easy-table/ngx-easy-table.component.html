@@ -1,0 +1,81 @@
+<app-page-header title="Ngx-Easy-Tables" title1="Tables" activeTitle="Ngx-Easy-Tables"></app-page-header>
+ <!-- Start::row-1 -->
+ <div class="row">
+  <div class="col-xl-12">
+      <div class="card custom-card">
+          <div class="card-header">
+              <div class="card-title">
+                  Basic Datatable
+              </div>
+          </div>
+          <div class="card-body">
+              <div class="table-responsive">
+                     <ngx-table id="datatable-basic" class="table table-bordered text-nowrap w-100"
+                  [configuration]="configuration"
+                  [data]="data"
+                  [columns]="columns"
+                >
+                </ngx-table>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!--End::row-1 -->
+
+<!-- Start:: row-2 -->
+<div class="row">
+  <div class="col-xl-12">
+      <div class="card custom-card">
+          <div class="card-header">
+              <div class="card-title">
+                  Table with Pagination
+              </div>
+          </div>
+          <div class="card-body overflow-auto">
+              <ngx-table [configuration]="configuration1" [data]="data" [columns]="columns" id="responsiveDataTable" class="ngx-tables table table-bordered text-nowrap w-100">
+              </ngx-table>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- End:: row-2 -->
+
+<!-- Start:: row-3 -->
+<div class="row">
+  <div class="col-xl-12">
+      <div class="card custom-card">
+          <div class="card-header">
+              <div class="card-title">
+                  Table With Search
+              </div>
+          </div>
+          <div class="card-body overflow-auto">
+              <input class="form-input" type="text" id="globalSearch" (input)="onChange($event)"
+              placeholder="Search" />
+          <div id="grid-search">
+              <ngx-table id="responsivemodal-DataTable" class="table table-bordered text-nowrap w-100" [configuration]="configuration" [data]="data" #table [columns]="columns">
+              </ngx-table>
+          </div>
+      </div>
+      </div>
+  </div>
+</div>
+<!-- End:: row-3 -->
+
+<!-- Start:: row-4 -->
+<div class="row">
+  <div class="col-xl-12">
+      <div class="card custom-card">
+          <div class="card-header">
+              <div class="card-title">Dragable Row and Columns</div>
+          </div>
+          <div class="card-body overflow-auto">
+              <div class="table-responsive">
+                  <ngx-table id="file-export" class="table table-bordered text-nowrap w-100" [data]="data" [configuration]="configuration2" [columns]="columns"> </ngx-table>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- End:: row-4 -->

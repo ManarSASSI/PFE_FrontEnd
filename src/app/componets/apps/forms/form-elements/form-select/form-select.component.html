@@ -1,0 +1,304 @@
+<app-page-header title="Form-Select" title1="Form-Elements" activeTitle="Form-Select" ></app-page-header>
+
+<!-- Start:: row-4 -->
+<h6 class="fw-medium mb-2">Choices:</h6>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card custom-card">
+                    <div
+                      class="card-header d-flex align-items-center justify-content-between"
+                    >
+                      <h6 class="card-title">Multiple Select</h6>
+                    </div>
+                    <div class="card-body">
+                      <p class="fw-medium mb-2">Default</p>
+                      <ng-select class="rounded-sm" placeholder="Open this select menu"[multiple]="true"  [hideSelected]="true"  [(ngModel)]="selectedCompanies">
+                        <ng-option>Choice 1</ng-option>
+                        <ng-option>Choice 2</ng-option>
+                        <ng-option>Choice 3</ng-option>
+                        <ng-option>Choice 4</ng-option>
+                        <ng-option>Choice 5</ng-option>
+                        <ng-option value="Choice 4" [disabled]="true">Choice 6</ng-option>
+
+                      </ng-select>
+          
+                      <p class="fw-medium mb-2 mt-2">With Remove Button</p>
+                      <ng-select class="rounded-sm" placeholder="Open this select menu"[multiple]="true"  [hideSelected]="true"  [(ngModel)]="selectedChoices">
+                        <ng-option >Choice 2</ng-option>
+                        <ng-option >Choice 3</ng-option>
+                        <ng-option>Choice 4</ng-option>
+                      
+                      </ng-select>
+                      <p class="fw-medium mb-2 mt-2">Option groups</p>
+                      <ng-select [items]="accounts"
+                      bindLabel="name"
+                      bindValue="name"
+                      placeholder="Select city"
+                      groupBy="country"
+                      [hideSelected]="true" 
+                      [multiple]="true"
+                      [(ngModel)]="selectedAccount">
+               <ng-template ng-optgroup-tmp let-item="item">
+                   {{item.country || 'Unnamed group'}}
+               </ng-template>
+            </ng-select>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-xl-12"> 
+              <div class="card custom-card"> 
+                <div class="card-header">
+                   <div class="card-title"> Passing Through Options </div>
+                   </div> <div class="card-body">
+                    <ng-select
+                    class=""
+                    placeholder="Type to Add"
+                    [addTag]="addTagFn"
+                    [hideSelected]="true" 
+                    [multiple]="true"
+                    bindLabel="name"
+                    [(ngModel)]="selectedValues"
+                  >
+                  <ng-option >three</ng-option>
+                  <ng-option >four</ng-option>
+                  </ng-select>
+                    </div>
+                     </div>
+                     </div>
+          
+            <div class="col-xl-12">
+                <div class="card custom-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            Options added via config with no search
+                        </div>
+                    </div>
+                    <div class="card-body">
+                      <ng-select class=" p-0" name="choices-single-no-search" id="choices-single-no-search" placeholder="Label One">
+                        <ng-option >Label Five</ng-option>
+                        <ng-option >Label Four</ng-option>
+                        <ng-option >Label One</ng-option>
+                        <ng-option>Label Six</ng-option>
+                        <ng-option >Label Three</ng-option>
+                        <ng-option >Label Two</ng-option>
+                        <ng-option >Label Zero</ng-option>
+                    </ng-select>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card custom-card">
+                    <div
+                      class="card-header d-flex align-items-center justify-content-between"
+                    >
+                      <h6 class="card-title">Single Select</h6>
+                    </div>
+                    <div class="card-body">
+                      <p class="fw-medium mb-2">Default</p>
+                      <ng-select [items]="Countries"
+                      bindLabel="name"
+                      bindValue="name"
+                      placeholder="Select city"
+                      groupBy="country"
+                      [hideSelected]="true" 
+                      [(ngModel)]="selectedAccount">
+               <ng-template ng-optgroup-tmp let-item="item">
+                   {{item.country || 'Unnamed group'}}
+               </ng-template>
+            </ng-select>
+                      <p class="fw-medium mb-2 mt-2">Option groups</p>
+                      <ng-select
+                        placeholder="Choose a city"
+                        class=""
+                        data-trigger
+                        name="choices-single-groups"
+                        id="choices-single-groups"
+                      >
+                        <ng-option value="">Choose a city</ng-option>
+                        <ng-option label="UK">
+                          <ng-option value="London">London</ng-option>
+                          <ng-option value="Manchester">Manchester</ng-option>
+                          <ng-option value="Liverpool">Liverpool</ng-option>
+                        </ng-option>
+                        <ng-option label="FR">
+                          <ng-option value="Paris">Paris</ng-option>
+                          <ng-option value="Lyon">Lyon</ng-option>
+                          <ng-option value="Marseille">Marseille</ng-option>
+                        </ng-option>
+                        <ng-option label="DE" disabled>
+                          <ng-option value="Hamburg">Hamburg</ng-option>
+                          <ng-option value="Munich">Munich</ng-option>
+                          <ng-option value="Berlin">Berlin</ng-option>
+                        </ng-option>
+                        <ng-option label="US">
+                          <ng-option value="New York">New York</ng-option>
+                          <ng-option value="Washington" disabled>Washington</ng-option>
+                          <ng-option value="Michigan">Michigan</ng-option>
+                        </ng-option>
+                        <ng-option label="SP">
+                          <ng-option value="Madrid">Madrid</ng-option>
+                          <ng-option value="Barcelona">Barcelona</ng-option>
+                          <ng-option value="Malaga">Malaga</ng-option>
+                        </ng-option>
+                        <ng-option label="CA">
+                          <ng-option value="Montreal">Montreal</ng-option>
+                          <ng-option value="Toronto">Toronto</ng-option>
+                          <ng-option value="Vancouver">Vancouver</ng-option>
+                        </ng-option>
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-12">
+                  <div class="card custom-card">
+                    <div class="card-header">
+                      <div class="card-title">Email Address Only</div>
+                    </div>
+                    <div class="card-body">
+                      <div>
+                        <label for="emailInput" class="mb-2">Email Address:</label>
+                        <input class="form-control" id="choices-text-email-filter" type="text" placeholder="This is a placeholder"    [(ngModel)]="email"
+                        [formControl]="emailFormControl"
+                      />  
+                      @if(emailFormControl.hasError('email') && emailFormControl.touched){
+                          <div
+                            class="text-danger"
+                          >
+                            Only values matching specific conditions can be added
+                          </div>
+                      }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-12">
+                  <div class="card custom-card">
+                    <div class="card-header">
+                      <div class="card-title">Passing Unique Values</div>
+                    </div>
+                    <div class="card-body">
+                      <ng-select
+                      [items]="[]"
+                      class=" p-0"
+                      [(ngModel)]="uniqueOptions"
+                      [addTag]="true"
+                      [multiple]="true"
+                      [selectOnTab]="true"
+                      [isOpen]="false"
+                    >
+                    </ng-select>   
+                    </div>
+                  </div>
+                </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-4 -->
+
+<!-- Start::row-1 -->
+<div class="row">
+    <div class="col-xl-4">
+      <app-showcode-card [title]="'Default Select'" [prism]="prismCode.formselectTS">
+        <select class="form-select" aria-label="Default select example">
+          <option selected>Open this select menu
+          </option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+      </select>
+        </app-showcode-card>
+    
+    </div>
+    <div class="col-xl-4">
+      <app-showcode-card [title]="'Disabled Select'" [prism]="prismCode.formselectTS1">
+        <select class="form-select" aria-label="Disabled select example" disabled="">
+          <option selected="">Open this select menu</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+      </select>
+      </app-showcode-card>
+  
+    </div>
+    <div class="col-xl-4">
+      <app-showcode-card [title]="'Rounded Select'" [prism]="prismCode.formselectTS2">
+        <select class="form-select rounded-pill" aria-label="Default select example">
+          <option selected>Open this select menu
+          </option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+      </select>
+      </app-showcode-card>
+      
+    </div>
+</div>
+<!--End::row-1 -->
+
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-6">
+      <app-showcode-card [title]="'Multiple Attribute Select'" [prism]="prismCode.formselectTS3
+      ">
+          <select class="form-select" multiple="" aria-label="multiple select example">
+            <option selected="">Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+        </app-showcode-card>
+        
+    </div>
+    <div class="col-xl-6">
+      <app-showcode-card [title]="'Using Size Attribute'" [prism]="prismCode.formselectTS4
+      ">
+          <select class="form-select" size="4" aria-label="size 3 select example">
+            <option selected="">Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+            <option value="4">Four</option>
+            <option value="5">Five</option>
+        </select>
+      </app-showcode-card>
+    
+    </div>
+</div>
+<!-- End:: row-2 -->
+
+<!-- Start:: row-3 -->
+<div class="row">
+    <div class="col-xl-12">
+      <app-showcode-card [title]="'Select Sizes'" [prism]="prismCode.formselectTS5
+      ">
+        <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+          <option selected="">Open this select menu</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+      </select><select class="form-select mb-3" aria-label="Default select">
+          <option selected>Open this select menu
+          </option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+      </select>
+      <select class="form-select form-select-lg"
+          aria-label=".form-select-lg example">
+          <option selected="">Open this select menu</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+      </select>
+      </app-showcode-card>
+
+      
+    </div>
+</div>
+<!-- End:: row-3 -->

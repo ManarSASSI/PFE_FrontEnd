@@ -1,0 +1,199 @@
+<app-hr-dashboard-page-header
+  [title]="'Partner Profile'"
+  [title2]="'View/Edit Partner Details'"
+  [class]="'btn btn-primary'"
+  [path]="'/dashboard/hrmdashboards/employees/add-employee'"
+></app-hr-dashboard-page-header>
+
+<!-- Row -->
+<div class="row ">
+  <div class="col-xxl-3 col-md-12 col-lg-12">
+    <div class="card box-widget widget-user custom-card">
+      <div class="card-body text-center">
+        <div class="widget-user-image mx-auto text-center">
+          <img
+            class="avatar avatar-xxl avatar-rounded rounded-circle"
+            alt="img"
+            src="./assets/images/users/1.jpg"
+          />
+        </div>
+        <div class="pro-user mt-3">
+          <h5 class="pro-user-username text-dark mb-1 fs-16">Tech Solutions Inc</h5>
+          <h6 class="pro-user-desc text-muted fs-12 mb-1">Gold Partner</h6>
+        </div>
+        <!--Start:: Partner ratings -->
+        <ngb-rating [(rate)]="partnerRate" class="text-warning"></ngb-rating>
+        <!-- End:: partner ratings -->
+      </div>
+      <div class="card-footer p-0">
+        <div class="row mx-0">
+          <div class="col-4 text-center py-3 border-end">
+            <h5 class="fs-12 fw-medium mb-3">This Year</h5>
+            <h5 class="mb-2">
+              <span class="fs-18 text-success">$2.4M</span>
+            </h5>
+            <h5 class="fs-12 mb-0">Revenue</h5>
+          </div>
+          <div class="col-4 py-3 text-center border-end">
+            <h5 class="fs-12 fw-medium mb-3">Projects</h5>
+            <h5 class="mb-2">
+              <span class="fs-18 text-orange">15</span>
+            </h5>
+            <h5 class="fs-12 mb-0">Active</h5>
+          </div>
+          <div class="col-4 text-center py-3">
+            <h5 class="fs-12 fw-medium mb-3">Certified</h5>
+            <h5 class="mb-2"><span class="fs-18 text-primary">42</span></h5>
+            <h5 class="fs-12 mb-0">Staff</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <!-- Carte statistiques -->
+     <div class="card custom-card">
+      <div class="card-header">
+        <div class="card-title">Partner Performance</div>
+      </div>
+      <div class="card-body">
+        <div class="row justify-content-evenly">
+          <div class="col-auto pe-0 text-center">
+            <circle-progress
+              [percent]="92"
+              [radius]="30"
+              [outerStrokeColor]="'#3366ff'"
+              class="chart-circle"
+            ></circle-progress>
+            <h6 class="fs-14 fw-medium">Satisfaction</h6>
+          </div>
+          <div class="col-auto pe-0 text-center">
+            <circle-progress
+              [percent]="85"
+              [radius]="30"
+              [outerStrokeColor]="'#fe7f00'"
+              class="chart-circle"
+            ></circle-progress>
+            <h6 class="fs-14 fw-medium">Delivery</h6>
+          </div>
+          <div class="col-auto pe-0 text-center">
+            <circle-progress
+              [percent]="78"
+              [radius]="30"
+              [outerStrokeColor]="'#0dcd94'"
+              class="chart-circle"
+            ></circle-progress>
+            <h6 class="fs-14 fw-medium">Growth</h6>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="d-flex align-items-end justify-content-between">
+          <h6 class="">This Quarter</h6>
+          <h6 class="fw-bold mb-1">4.8</h6>
+        </div>
+        <div class="progress progress-sm progress-animate mb-4">
+          <div class="progress-bar bg-success" style="width: 80%"></div>
+        </div>
+        
+        <div class="d-flex align-items-end justify-content-between">
+          <h6 class="">Last Quarter</h6>
+          <h6 class="fw-bold mb-1">4.5</h6>
+        </div>
+        <div class="progress progress-sm progress-animate mb-4">
+          <div class="progress-bar bg-info" style="width: 75%"></div>
+        </div>
+        
+        <div class="d-flex align-items-end justify-content-between">
+          <h6 class="">YTD Average</h6>
+          <h6 class="fw-bold mb-1">4.6</h6>
+        </div>
+        <div class="progress progress-sm progress-animate">
+          <div class="progress-bar bg-primary" style="width: 77%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <!-- Détails du partenaire -->
+   <div class="col-xxl-9 col-md-12 col-lg-12">
+    <div class="tab-menu-heading hremp-tabs p-0 border-0">
+      <div class="tabs-menu1">
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="panel-tabs">
+          <li [ngbNavItem]="1">
+            <a ngbNavLink>Company Profile</a>
+            <ng-template ngbNavContent>
+              <div class="tab-pane active">
+                <div class="card-body">
+                  <h4 class="mb-4 font-weight-bold">Basic Information</h4>
+                  
+                  <div class="form-group">
+                    <div class="row gy-2">
+                      <div class="col-md-3">
+                        <label class="form-label mb-0 mt-2">Company Name</label>
+                      </div>
+                      <div class="col-md-9">
+                        <input type="text" class="form-control" value="Tech Solutions Inc.">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="row gy-2">
+                      <div class="col-md-3">
+                        <label class="form-label mb-0 mt-2">Partner Tier</label>
+                      </div>
+                      <div class="col-md-9">
+                        <ng-select class="form-control custom-select p-0" placeholder="Gold">
+                          <ng-option value="1">Silver</ng-option>
+                          <ng-option value="2">Gold</ng-option>
+                          <ng-option value="3">Platinum</ng-option>
+                        </ng-select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Plus de champs... -->
+
+                  <h4 class="mb-5 mt-7 font-weight-bold">Certifications</h4>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="form-label mb-0 mt-2">Upload Certifications</div>
+                      </div>
+                      <div class="col-md-9">
+                        <input class="form-control" type="file" multiple>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+
+          <li [ngbNavItem]="2">
+            <a ngbNavLink>Financial Data</a>
+            <ng-template ngbNavContent>
+              <!-- Contenu financier... -->
+            </ng-template>
+          </li>
+
+          <li [ngbNavItem]="3">
+            <a ngbNavLink>Projects</a>
+            <ng-template ngbNavContent>
+              <!-- Liste des projets... -->
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="panel-body tabs-menu-body hremp-tabs1 p-0">
+      <div [ngbNavOutlet]="nav" class="tab-content"></div>
+      <div class="panel-footer text-end">
+        <button class="me-2 btn btn-primary">Save Changes</button>
+        <button class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Row-->
