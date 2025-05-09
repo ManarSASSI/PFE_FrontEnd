@@ -49,7 +49,7 @@ export class AddEmployeeComponent implements OnInit {
     Validators.pattern(/^\+?[\d\s-]{10,}$/)
   ]],
   location: ['', Validators.required],
-  avatar: ['']
+  avatar: [null]
 });
   }
   ngOnInit(): void {
@@ -102,6 +102,10 @@ export class AddEmployeeComponent implements OnInit {
         } else {
           formData.append(key, this.partnerForm.get(key)?.value);
         }
+        console.log('Avatar value:', this.partnerForm.get('avatar')?.value);
+        for (let pair of (formData as any).entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+          }
       });
       // Utilisation du PartnerService pour créer le partenaire
       this.partnerService.createPartner(formData).subscribe({

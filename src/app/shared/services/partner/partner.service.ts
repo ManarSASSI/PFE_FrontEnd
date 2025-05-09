@@ -34,7 +34,10 @@ export class PartnerService {
 
   // Nouvelle méthode pour créer un partenaire
   createPartner(partnerData: FormData): Observable<User> {
-    return this.http.post<User>(this.apiUrl, partnerData);
+    return this.http.post<User>(`${this.apiUrl}/partners`, partnerData, {
+      headers: new HttpHeaders({
+      })
+    });
   }
   
   
