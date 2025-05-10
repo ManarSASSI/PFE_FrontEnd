@@ -44,6 +44,8 @@ export class DepartmentComponent {
     this.loadContratCount();
   }
 
+  
+
   // Méthode pour filtrer et paginer les données
     get filteredContrats(): Contrat[] {
       console.log('Filtering contrats:');
@@ -91,6 +93,17 @@ export class DepartmentComponent {
     this.contratService.getAllContrats().subscribe(
       (data: any[]) => {
         this.contrats = data;
+        // Charger les détails des partenaires pour chaque contrat
+      this.contrats.forEach(contrat => {
+        if (contrat.partnerId) {
+          this.contratService.getPartnerDetails(contrat.partnerId).subscribe({
+            next: (partner) => {
+              contrat.partner = partner; // Ajoute l'objet partner au contrat
+            },
+            error: (err) => console.error('Error loading partner', err)
+          });
+        }
+      });
       },
       (error) => {
         console.error('Erreur lors du chargement des contrats:', error);

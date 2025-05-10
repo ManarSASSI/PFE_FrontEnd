@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { Contrat } from '../../../models/contrat.model';
+import { User } from '../auth/auth.service';
 
 
 @Injectable({
@@ -52,5 +53,9 @@ export class ContratService {
       // , {headers}
     );
   }
+
+  getPartnerDetails(partnerId: number): Observable<User> {
+  return this.http.get<User>(`${this.apiUrl}/users/${partnerId}`);
+}
 
 }
