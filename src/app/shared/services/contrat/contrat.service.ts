@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, tap } from 'rxjs';
-import { Contrat } from '../../../models/contrat.model';
+import { Contrat } from '../../models/contrat.model';
 import { User } from '../auth/auth.service';
 
 
@@ -52,6 +52,10 @@ export class ContratService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`
       // , {headers}
     );
+  }
+
+  createContrat(contrat: Contrat): Observable<Contrat> {
+    return this.http.post<Contrat>(this.apiUrl, contrat);
   }
 
   getPartnerDetails(partnerId: number): Observable<User> {

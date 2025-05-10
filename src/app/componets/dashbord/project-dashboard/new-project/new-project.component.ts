@@ -2,13 +2,26 @@ import { Component, OnInit } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '../../../../shared/common/sharedmodule';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlatpickrDefaults, FlatpickrModule } from 'angularx-flatpickr';
 import flatpickr from 'flatpickr';
 import { RouterModule } from '@angular/router';
 import jsonDoc from '../../../../shared/data/editor';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NgxEditorModule, Validators, Editor, Toolbar } from 'ngx-editor';
+import { User, Role } from '../../../../shared/models/user.model';
+import { ContratService } from '../../../../shared/services/contrat/contrat.service';
+import { Contrat } from '../../../../shared/models/contrat.model';
+import { PartnerService } from '../../../../shared/services/partner/partner.service';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
+export function minValue(min: number): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    return value !== null && value < min ? { min: { required: min } } : null;
+  };
+}
+
 @Component({
   selector: 'app-new-project',
   standalone: true,
@@ -18,20 +31,22 @@ import { NgxEditorModule, Validators, Editor, Toolbar } from 'ngx-editor';
   styleUrls: ['./new-project.component.scss']
 })
 export class NewProjectComponent implements OnInit {
-  model!: NgbDateStruct;
-  model1!: NgbDateStruct;
-  constructor() { }
-  selected=['choice 2','Choice 3']
-  inlineDatePicker: boolean = false;
-  weekNumbers!: true
-  // selectedDate: Date | null = null; 
-  flatpickrOptions: any = {
-    inline: true,
-   
-  };
-  // flatpickrOptions: FlatpickrOptions;
+  contratForm = this.fb.group({
+    objetContrat: ['', Validators.required],
+    typeContrat: ['SERVICE', Validators.required],
+    departement: ['', Validators.required],
+    partnerId: [null, Validators.required],
+    montant: [null, [Validators.required, minValue(0)]],
+    dateDebut: ['', Validators.required],
+    dateFin: ['', Validators.required],
+    status: ['NOUVEAU', Validators.required],
+    commentaire: [''],
+    etatExecution: ['EN_COURS', Validators.required]
+  });
 
-  editordoc = jsonDoc;
+  partners: User[] = [];
+
+  flatpickrOptions = { dateFormat: 'Y-m-d' };
 
   editor!: Editor;
   toolbar: Toolbar = [
@@ -44,34 +59,90 @@ export class NewProjectComponent implements OnInit {
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
+  // model!: NgbDateStruct;
+  // model1!: NgbDateStruct;
+  constructor(private fb: FormBuilder,
+    private contratService: ContratService,
+    private partnerService: PartnerService) { 
+      this.loadPartners();
+    }
 
-  form = new FormGroup({
-    editorContent: new FormControl(
-      { value: jsonDoc, disabled: false },
-      Validators.required()
-    ),
-  });
+
+
+  // selected=['choice 2','Choice 3']
+  // inlineDatePicker: boolean = false;
+  // weekNumbers!: true
+  // // selectedDate: Date | null = null; 
+  // flatpickrOptions: any = {
+  //   inline: true,
+   
+  // };
+  // flatpickrOptions: FlatpickrOptions;
+
+  // editordoc = jsonDoc;
+
+  
+
+  // form = new FormGroup({
+  //   editorContent: new FormControl(
+  //     { value: jsonDoc, disabled: false },
+  //     Validators.required()
+  //   ),
+  // });
 
   
 
 
   ngOnInit() {
-    this.editor = new Editor();
-    this.flatpickrOptions = {
-      enableTime: true,
-      noCalendar: true,
-      dateFormat: 'H:i',
-    };
+    this.initializeForm();
+    this.loadPartners();
+    };  
 
-    flatpickr('#inlinetime', this.flatpickrOptions);
+  initializeForm(): void {
+    
+  }  
 
-      this.flatpickrOptions = {
-        enableTime: true,
-        dateFormat: 'Y-m-d H:i', // Specify the format you want
-        defaultDate: '2023-11-07 14:30', // Set the default/preloaded time (adjust this to your desired time)
-      };
 
-      flatpickr('#pretime', this.flatpickrOptions);
+  loadPartners(): void {
+    this.partnerService.getPartners().subscribe({
+    next: (partners) => this.partners = partners,
+    error: (error) => console.error('Erreur', error)
+  });
   }
+
+  onSubmit(): void {
+    if (this.contratForm.valid) {
+      const formData: Contrat = {
+        ...this.contratForm.value,
+        // Valeurs par défaut pour les champs obligatoires manquants
+        heureDebutSemaine: '08:00',
+        heureFinSemaine: '18:00',
+        penaliteParJour: 0,
+        joursRetard: 0,
+        alerteExpirationEnvoyee: false
+      } as Contrat;
+
+      this.contratService.createContrat(formData).subscribe({
+        next: (response) => console.log('Succès', response),
+        error: (error) => console.error('Erreur', error)
+      });
+    }
+    
+  }
+
+  onClose(): void {
+    // Logique d'annulation
+  }
+
+  //   flatpickr('#inlinetime', this.flatpickrOptions);
+
+  //     this.flatpickrOptions = {
+  //       enableTime: true,
+  //       dateFormat: 'Y-m-d H:i', // Specify the format you want
+  //       defaultDate: '2023-11-07 14:30', // Set the default/preloaded time (adjust this to your desired time)
+  //     };
+
+  //     flatpickr('#pretime', this.flatpickrOptions);
+  // }
 
 }

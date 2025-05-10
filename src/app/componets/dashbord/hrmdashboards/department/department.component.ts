@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { ContratService } from '../../../../shared/services/contrat/contrat.service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { Contrat } from '../../../../models/contrat.model';
+import { Contrat } from '../../../../shared/models/contrat.model';
 
 interface departmentList {
   id: string;

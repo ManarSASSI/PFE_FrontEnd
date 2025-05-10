@@ -22,8 +22,8 @@ import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { ContratService } from '../../../../shared/services/contrat/contrat.service';
 import { PartnerService } from '../../../../shared/services/partner/partner.service';
-import { Contrat } from '../../../../models/contrat.model';
-import { User } from '../../../../models/user.model';
+import { Contrat } from '../../../../shared/models/contrat.model';
+import { User } from '../../../../shared/models/user.model';
 
 SwiperCore.use([
 
