@@ -38,32 +38,33 @@
                         <thead>
                             <tr class="border-bottom">
                                 <th>#ID</th>
-                                <th>Project Name</th>
+                                <th>Contrat object</th>
                                 <th>Partner</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
+                                <th>Type</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @for(project of projects;track $index){
+                            @for(contrat of contrats; track $index){
 
                             <tr class="border-bottom">
-                                <th scope="row">{{project.id}}</th>
-                                <td>{{project.name}}</td>
-                                <td>{{project.partnerName}}</td>
-                                <td>{{project.startDate | date:'dd/MM/yyyy'}}</td>
-                                <td>{{project.endDate | date:'dd/MM/yyyy'}}</td>
-                                
+                                <th scope="row">{{contrat.id}}</th>
+                                <td>{{contrat.objetContrat}}</td>
+                                <td>{{contrat.partner?.username}}</td>
+                                <td>{{contrat.dateDebut | date:'dd/MM/yyyy'}}</td>
+                                <td>{{contrat.dateFin | date:'dd/MM/yyyy'}}</td>
+                                <td>{{contrat.typeContrat}}</td>
                                 <td>
                                     <span class="badge" 
                                           [ngClass]="{
-                                            'bg-success-transparent text-success': project.status === 'Actif',
-                                            'bg-warning-transparent text-warning': project.status === 'En cours',
-                                            'bg-danger-transparent text-danger': project.status === 'Terminé'
+                                            'bg-success-transparent text-success': contrat.status === 'Actif',
+                                            'bg-warning-transparent text-warning': contrat.status === 'En cours',
+                                            'bg-danger-transparent text-danger': contrat.status === 'Terminé'
                                           }">
-                                        {{project.status}}
+                                        {{contrat.status}}
                                     </span>
                                 </td>
 
@@ -72,7 +73,7 @@
                                         data-bs-target="#editdepartmentmodal">
                                         <i class="fe fe-edit" data-bs-toggle="tooltip" data-original-title="Edit"></i>
                                     </a>
-                                    <a class="btn btn-danger btn-icon " (click)="click(project.id)"
+                                    <a class="btn btn-danger btn-icon " (click)="deleteContrat(contrat.id)"
                                         data-bs-toggle="tooltip" data-original-title="Delete"><i
                                             class="fe fe-trash-2"></i></a>
                                 </td>
@@ -83,7 +84,23 @@
                     </table>
                 </div>
                 <!-- Start::pagination -->
+
                 <nav class="mt-4">
+                <ul class="pagination justify-content-end mb-0">
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" (click)="prevPage()">Previous</a>
+                  </li>
+                  @for (page of pageNumbers; track page) {
+                    <li class="page-item" [class.active]="page === currentPage">
+                      <a class="page-link" (click)="setPage(page)">{{ page }}</a>
+                    </li>
+                  }
+                  <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" (click)="nextPage()">Next</a>
+                  </li>
+                </ul>
+                </nav>
+                <!-- <nav class="mt-4">
                     <ul class="pagination justify-content-end mb-0">
                         <li class="page-item disabled"><a class="page-link" href="javascript:void(0);">Prev</a></li>
                         <li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>
@@ -91,7 +108,7 @@
                         <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
                         <li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>
                     </ul>
-                </nav>
+                </nav> -->
                 <!-- End::pagination -->
             </div>
         </div>

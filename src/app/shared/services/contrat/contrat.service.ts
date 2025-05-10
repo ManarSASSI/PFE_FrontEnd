@@ -39,8 +39,18 @@ export class ContratService {
     return this.http.get<any>(`${this.apiUrl}/stats`);
   }
 
-  countContrats(): Observable<number> {
+  getContratCount(): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/count`);
+  }
+
+  deleteContrat(id: number): Observable<void> {
+    // const headers = new HttpHeaders({
+    //   'Authorization': `Bearer ${this.authService.getToken()}`,
+    //   'Content-Type': 'application/json'
+    // });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`
+      // , {headers}
+    );
   }
 
 }
