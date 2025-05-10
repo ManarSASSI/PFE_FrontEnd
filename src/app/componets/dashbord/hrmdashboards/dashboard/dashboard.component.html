@@ -48,7 +48,7 @@
                                 <div class="col-8">
                                     <div class="mt-0 text-start">
                                         <span class="fs-14 fw-medium">Total Partners</span>
-                                        <h3 class="mb-0 mt-1 mb-2">6,578</h3>
+                                        <h3 class="mb-0 mt-1 mb-2">{{ totalPartners}}</h3>
                                         <!-- <span class="text-muted">
                                             <span class="text-success fs-12 mt-2 me-1">
                                                 <i class="fe fe-arrow-up-right me-1 bg-success-transparent p-1 rounded-circle"></i>124
@@ -74,7 +74,7 @@
                                 <div class="col-8">
                                     <div class="mt-0 text-start">
                                         <span class="fs-14 fw-medium">Project</span>
-                                        <h3 class="mb-0 mt-1 mb-2">124</h3>
+                                        <h3 class="mb-0 mt-1 mb-2">{{ totalProjects}}</h3>
                                         <!-- <span class="text-muted">
                                             <span class="text-danger fs-12 mt-2 me-1">
                                                 <i class="fe fe-arrow-down-left me-1 bg-danger-transparent p-1 rounded-circle"></i>13
@@ -197,15 +197,15 @@
                     <div class="row">
                         <div class="col-4 border-end">
                             <span class="text-muted fs-12">Actifs</span>
-                            <h4 class="mb-0 fw-semibold mt-1">42</h4>
+                            <h4 class="mb-0 fw-semibold mt-1">{{ contratStats.active }}</h4>
                         </div>
                         <div class="col-4 border-end">
                             <span class="text-muted fs-12">Expirés</span>
-                            <h4 class="mb-0 fw-semibold mt-1">15</h4>
+                            <h4 class="mb-0 fw-semibold mt-1">{{ contratStats.expired }}</h4>
                         </div>
                         <div class="col-4">
                             <span class="text-muted fs-12">En alerte</span>
-                            <h4 class="mb-0 fw-semibold mt-1">7</h4>
+                            <h4 class="mb-0 fw-semibold mt-1">{{ contratStats.warning }}</h4>
                         </div>
                     </div>
                 </div>
@@ -225,6 +225,116 @@
                             <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Aujourd'hui</a></li>
                             <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Cette semaine</a></li>
                             <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Ce mois</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="timeline">
+                   @for(activity of recentActivities; track activity.id) {
+                    <li [class]="getActivityClass(activity)">
+                        <a href="javascript:void(0);" class="fw-medium fs-15 ms-3">{{ activity.type }}</a>
+                        <a href="javascript:void(0);" class="text-muted float-end fs-13">{{ formatDate(activity.date) }}</a>
+                        <p class="mb-0 pb-0 text-muted pt-1 fs-11 ms-3">{{ activity.details }}</p>
+                        <span class="text-muted ms-3 fs-11">Statut: {{ activity.status }}</span>
+                    </li>
+                }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-12 col-lg-12">
+        <div class="card custom-card">
+            <div class="card-header border-0">
+                <h4 class="card-title">Répartition par Type</h4>
+            </div>
+            <div class="card-body">
+                <div id="contract-types" class="py-4">
+                    <apx-chart [series]="chartOptions2.series" [chart]="chartOptions2.chart" [legend]="chartOptions2.legend"
+                    [xaxis]="chartOptions2.xaxis" [colors]="chartOptions2.colors" [plotOptions]="chartOptions2.plotOptions"
+                    [stroke]="chartOptions2.stroke" [fill]="chartOptions2.fill"[labels]="chartOptions2.labels"
+                    [dataLabels]="chartOptions2.dataLabels" [grid]="chartOptions2.grid"
+                    [yaxis]="chartOptions2.yaxis"></apx-chart>
+                </div>
+                <div class="text-center">
+                    <div class="row">
+                        <div class="col-4 border-end">
+                            <span class="text-muted fs-12">Services</span>
+                            <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('SERVICE') }}</h4>
+                        </div>
+                        <div class="col-4 border-end">
+                            <span class="text-muted fs-12">Travaux</span>
+                            <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('TRAVAUX') }}</h4>
+                        </div>
+                        <div class="col-4">
+                            <span class="text-muted fs-12">Continu</span>
+                            <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('CONTINU') }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="row">
+    <div class="col-xxl-4 col-md-12 col-lg-6">
+        <div class="card custom-card">
+            <div class="card-header border-0 justify-content-between">
+                <h4 class="card-title">Aperçu des Contrats</h4>
+                <div>
+                    <div class="dropdown" ngbDropdown> 
+                        <a ngbDropdownToggle href="javascript:void(0);" class="btn btn-outline-light no-caret" data-bs-toggle="dropdown" aria-expanded="false"> 
+                            Ce mois <i class="fe fe-chevron-down"></i> 
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu role="menu">
+                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Ce trimestre</a></li>
+                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Cette année</a></li>
+                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Personnalisé</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="contract-overview">
+                    <apx-chart [series]="chartOptions1.series" [chart]="chartOptions1.chart" [legend]="chartOptions1.legend"
+                    [xaxis]="chartOptions1.xaxis" [colors]="chartOptions1.colors" [plotOptions]="chartOptions1.plotOptions"
+                    [stroke]="chartOptions1.stroke" [fill]="chartOptions1.fill"
+                    [dataLabels]="chartOptions1.dataLabels" [grid]="chartOptions1.grid"
+                    [yaxis]="chartOptions1.yaxis"></apx-chart>
+                </div>
+                <div class="text-center mt-3">
+                    <div class="row">
+                        <div class="col-4 border-end">
+                            <span class="text-muted fs-12">Actifs</span>
+                            <h4 class="mb-0 fw-semibold mt-1">42</h4>
+                        </div>
+                        <div class="col-4 border-end">
+                            <span class="text-muted fs-12">Expirés</span>
+                            <h4 class="mb-0 fw-semibold mt-1">15</h4>
+                        </div>
+                        <div class="col-4">
+                            <span class="text-muted fs-12">En alerte</span>
+                            <h4 class="mb-0 fw-semibold mt-1">7</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-12 col-lg-6">
+        <div class="card custom-card recent-activities">
+            <div class="card-header border-0 justify-content-between">
+                <h4 class="card-title">Aperçu des Contrats</h4>
+                <div>
+                    <div class="dropdown" ngbDropdown> 
+                        <a ngbDropdownToggle href="javascript:void(0);" class="btn btn-outline-light no-caret" data-bs-toggle="dropdown" aria-expanded="false"> 
+                            Ce mois <i class="fe fe-chevron-down"></i> 
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu role="menu">
+                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Ce trimestre</a></li>
+                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Cette année</a></li>
+                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Personnamisé</a></li>
                         </ul>
                     </div>
                 </div>
@@ -291,10 +401,10 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- End::row-2 -->
 
-    <!-- Start::row-3 -->
+<!-- Start::row-3 -->
 <div class="row">
     <div class="col-xxl-6 col-lg-12 col-md-12">
         <div class="card custom-card overflow-hidden card-table">
@@ -315,8 +425,165 @@
             </div>
             <div class="tab-menu-heading table_tabs mt-2 p-0">
                 <div class="tabs-menu1">
-                    <!-- Tabs -->
                     <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav panel-tabs">
+                        <li [ngbNavItem]="1" class="ms-sm-3">
+                            <a ngbNavLink href="#tab5" class="ms-2" data-bs-toggle="tab">Contrats actifs</a>
+                            <ng-template ngbNavContent>
+                                <div class="tab-pane p-0 border-0" id="tab5">
+                                    <div class="table-responsive recent_jobs px-0 py-1 card-body card-table-one">
+                                        <table class="table mb-0 text-nowrap">
+                                            <tbody>
+                                                @for(contrat of recentContrats; track contrat.id) {
+                                                <tr class="border-bottom">
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <div class="table_img me-3 rounded-circle bg-light">
+                                                                <span class="fs-12 contract-bg">CT-{{ contrat.id }}</span>
+                                                            </div>
+                                                            <div class="me-3 mt-3 d-block">
+                                                                <h6 class="mb-0 fs-13 fw-medium">{{ contrat.objetContrat }}</h6>
+                                                                <div class="clearfix"></div>
+                                                                <small class="text-muted">{{ contrat.dateDebut }} - {{ contrat.dateFin }}</small>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-start fs-13">
+                                                        <span class="badge" [ngClass]="{
+                                                            'bg-success-transparent': contrat.etatExecution === 'EN_COURS',
+                                                            'bg-warning-transparent': contrat.etatExecution === 'EN_RETARD',
+                                                            'bg-danger-transparent': contrat.etatExecution === 'TERMINE'
+                                                        }">
+                                                            {{ contrat.etatExecution }}
+                                                        </span>
+                                                    </td>
+                                                    <td class="text-start fs-13">
+                                                        <i class="fe fe-user text-muted me-2"></i>{{ contrat.partner.username }}
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Détails">
+                                                            <i class="fe fe-eye text-primary"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Modifier">
+                                                            <i class="fe fe-edit text-warning"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Supprimer">
+                                                            <i class="fe fe-trash-2 text-danger"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body tabs-menu-body table_tabs1 p-0 border-0">
+                <div class="tab-content" [ngbNavOutlet]="nav"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-6 col-lg-12 col-md-12">
+        <div class="card custom-card overflow-hidden">
+            <div class="card-header border-0 justify-content-between">
+                <h3 class="card-title">Statistiques des contrats</h3>
+                <div>
+                    <div class="dropdown" ngbDropdown> 
+                        <a href="javascript:void(0);" ngbDropdownToggle class="btn btn-outline-light no-caret" data-bs-toggle="dropdown" aria-expanded="false"> 
+                            Options <i class="fe fe-chevron-down"></i> 
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu role="menu">
+                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Exporter PDF</a></li>
+                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Exporter Excel</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive attendance_table mt-4 mb-1 card-table-one">
+                <table class="table mb-0 text-nowrap">
+                    <thead>
+                        <tr>
+                            <th class="text-start">Statut</th>
+                            <th class="text-center">Nombre</th>
+                            <th class="text-center">Pourcentage</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-bottom">
+                            <td class="text-start fw-semibold fs-14">Contrats actifs</td>
+                            <td class="text-center">{{ contratStats.active }}</td>
+                            <td class="text-center">{{ (contratStats.active / contratStats.total * 100).toFixed(0) }}%</td>
+                            <td class="text-end">
+                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Voir détails">
+                                    <i class="fe fe-eye text-primary"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr class="border-bottom">
+                            <td class="text-start fw-semibold fs-14">Contrats expirés</td>
+                            <td class="text-center">{{ contratStats.expired }}</td>
+                            <td class="text-center">{{ (contratStats.expired / contratStats.total * 100).toFixed(0) }}%</td>
+                            <td class="text-end">
+                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Voir détails">
+                                    <i class="fe fe-eye text-primary"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr class="border-bottom">
+                            <td class="text-start fw-semibold fs-14">Contrats en alerte</td>
+                            <td class="text-center">{{ contratStats.warning }}</td>
+                            <td class="text-center">{{ (contratStats.warning / contratStats.total * 100).toFixed(0) }}%</td>
+                            <td class="text-end">
+                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Voir détails">
+                                    <i class="fe fe-eye text-primary"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-start fw-semibold fs-14">Total contrats</td>
+                            <td class="text-center">{{ contratStats.total }}</td>
+                            <td class="text-center">100%</td>
+                            <td class="text-end">
+                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Voir détails">
+                                    <i class="fe fe-eye text-primary"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <div class="row">
+    <div class="col-xxl-6 col-lg-12 col-md-12">
+        <div class="card custom-card overflow-hidden card-table">
+            <div class="card-header border-bottom-0 justify-content-between">
+                <h3 class="card-title">Contrats récents</h3>
+                <div>
+                    <div class="dropdown" ngbDropdown> 
+                        <a ngbDropdownToggle href="javascript:void(0);" class="btn btn-outline-light no-caret" data-bs-toggle="dropdown" aria-expanded="false"> 
+                            Voir tout <i class="fe fe-chevron-down"></i> 
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu role="menu">
+                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Ce mois</a></li>
+                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Cette année</a></li>
+                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Personnalisé</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-menu-heading table_tabs mt-2 p-0">
+                <div class="tabs-menu1">
+                    Tabs -->
+                    <!-- <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav panel-tabs">
                         <li [ngbNavItem]="1" class="ms-sm-3">
                             <a ngbNavLink href="#tab5" class="ms-2" data-bs-toggle="tab">Contrats actifs</a>
                             <ng-template ngbNavContent>
@@ -518,11 +785,11 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- End::row-3 -->
 
         <!-- Start:: clock-in -->
-                <ng-template #content let-modal>
+                <!-- <ng-template #content let-modal>
                     <div class="modal-header">
                         <h6 class="modal-title" id="exampleModalLabel1"><span class="fe fe-clock  me-1"></span>Clock In</h6>
                         <button type="button" (click)="modal.close('cross click')" class="btn-close" data-bs-dismiss="modal"
@@ -539,5 +806,5 @@
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="modal.close('cross click')">Close</button>
                         <button type="button" class="btn btn-primary">Clock In</button>
                     </div>
-                </ng-template>
+                </ng-template> -->
         <!-- ENd:: clock-in -->
