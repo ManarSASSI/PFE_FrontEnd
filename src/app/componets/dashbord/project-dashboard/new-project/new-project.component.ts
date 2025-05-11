@@ -5,7 +5,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlatpickrDefaults, FlatpickrModule } from 'angularx-flatpickr';
 import flatpickr from 'flatpickr';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import jsonDoc from '../../../../shared/data/editor';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NgxEditorModule, Validators, Editor, Toolbar } from 'ngx-editor';
@@ -14,6 +14,7 @@ import { ContratService } from '../../../../shared/services/contrat/contrat.serv
 import { Contrat } from '../../../../shared/models/contrat.model';
 import { PartnerService } from '../../../../shared/services/partner/partner.service';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 export function minValue(min: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -35,12 +36,12 @@ export class NewProjectComponent implements OnInit {
     objetContrat: ['', Validators.required],
     typeContrat: ['SERVICE', Validators.required],
     departement: ['', Validators.required],
-    partnerId: [null, Validators.required],
+    partnerId: [undefined, Validators.required],
     montant: [null, [Validators.required, minValue(0)]],
     dateDebut: ['', Validators.required],
     dateFin: ['', Validators.required],
     status: ['NOUVEAU', Validators.required],
-    commentaire: [''],
+    commentaire: ['', Validators.required],
     etatExecution: ['EN_COURS', Validators.required]
   });
 
@@ -63,7 +64,7 @@ export class NewProjectComponent implements OnInit {
   // model1!: NgbDateStruct;
   constructor(private fb: FormBuilder,
     private contratService: ContratService,
-    private partnerService: PartnerService) { 
+    private partnerService: PartnerService,private router: Router,private toastr: ToastrService) { 
       this.loadPartners();
     }
 
@@ -96,6 +97,7 @@ export class NewProjectComponent implements OnInit {
   ngOnInit() {
     this.initializeForm();
     this.loadPartners();
+    this.editor = new Editor();
     };  
 
   initializeForm(): void {
@@ -111,6 +113,10 @@ export class NewProjectComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (this.contratForm.invalid) {
+      console.log('Form invalid:', this.contratForm.errors);
+      return;
+    }
     if (this.contratForm.valid) {
       const formData: Contrat = {
         ...this.contratForm.value,
@@ -123,15 +129,36 @@ export class NewProjectComponent implements OnInit {
       } as Contrat;
 
       this.contratService.createContrat(formData).subscribe({
-        next: (response) => console.log('Succès', response),
-        error: (error) => console.error('Erreur', error)
+        next: (response) => {
+          this.router.navigate(['/dashboard/hrmdashboards/employees/employee-list']);
+          this.toastr.success('addition successful', 'Contract', {
+            timeOut: 3000,
+            positionClass: 'toast-top-right',
+          });
+        },
+        error: (error) => {
+          console.error('Erreur lors de ajout du contrat', error);
+          // Gestion des erreurs (à adapter selon votre besoin)
+          let errorMessage = 'Addition failed. Please try again.';
+        
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        } else if (error.status === 400) {
+          errorMessage = 'Validation error. Please check your inputs.';
+        }
+        this.toastr.error(errorMessage);
+        }
       });
     }
+    }
     
+
+  closeForm(): void {
+    // Logique d'annulation
   }
 
-  onClose(): void {
-    // Logique d'annulation
+  ngOnDestroy() {
+      this.editor.destroy();
   }
 
   //   flatpickr('#inlinetime', this.flatpickrOptions);

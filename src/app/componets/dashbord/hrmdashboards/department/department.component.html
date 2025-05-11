@@ -80,13 +80,17 @@
                                 <td>{{contrat.status}}</td>
 
                                 <td>
+                                    <a class="btn btn-primary btn-icon me-1" (click)="generatePdf(contrat.id)" data-bs-toggle="modal">
+                                        <i class="fe fe-file-text" data-bs-toggle="tooltip" data-original-title="Générer PDF"></i>
+                                    </a>
                                     <a class="btn btn-primary btn-icon me-1" (click)="open(content1)" data-bs-toggle="modal"
                                         data-bs-target="#editdepartmentmodal">
                                         <i class="fe fe-edit" data-bs-toggle="tooltip" data-original-title="Edit"></i>
                                     </a>
                                     <a class="btn btn-danger btn-icon " (click)="deleteContrat(contrat.id)"
                                         data-bs-toggle="tooltip" data-original-title="Delete"><i
-                                            class="fe fe-trash-2"></i></a>
+                                            class="fe fe-trash-2"></i>
+                                    </a>
                                 </td>
                             </tr>
                             }

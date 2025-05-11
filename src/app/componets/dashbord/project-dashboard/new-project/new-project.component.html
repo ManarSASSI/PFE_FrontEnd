@@ -3,9 +3,9 @@
     <div class="row">
         <div class="col-xl-12 col-md-12 col-lg-12">
             <div class="card custom-card">
-                <div class="card-body">
-                    <form [formGroup]="contratForm" (ngSubmit)="onSubmit()"></form>
-                    <div class="row">
+                 <form [formGroup]="contratForm" (ngSubmit)="onSubmit()">
+                   <div class="card-body">
+                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">Contract Object</label>
@@ -39,14 +39,19 @@
                             <div class="form-group">
                                 <label class="form-label">Client :</label>
                                 <ng-select formControlName="partnerId" class="form-control custom-select p-0">
-                                    <ng-option *ngFor="let partner of partners" [value]="partner.id">{{ partner.username }}</ng-option>
+                                    @for (partner of partners; track partner.id) {
+                                    <ng-option [value]="partner.id">{{ partner.username }}</ng-option>
+                                    }
+                                    @empty {
+                                        <ng-option disabled>Aucun partenaire trouvé</ng-option>
+                                    }
                                 </ng-select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">Price ($) :</label>
-                                 <input formControlName="montant" type="number" class="form-control" placeholder="Montant">
+                                 <input formControlName="montant" type="number" step="0.01" class="form-control" placeholder="Montant">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -76,12 +81,10 @@
                     <div class="form-group">
                         <label class="form-label">Description:</label>
                         <div id="note">
-                            <form [formGroup]="contratForm">
                                 <div class="NgxEditor__Wrapper">
                                   <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"> </ngx-editor-menu>
                                   <ngx-editor [editor]="editor" formControlName="commentaire"> </ngx-editor>
                                 </div>
-                              </form>
                         </div>
                     </div>
                     <!-- <div class="form-group">
@@ -108,10 +111,11 @@
                 </div>
                 <div class="card-footer">
                     <div class="text-end">
-                        <button  class="btn btn-danger me-2">Close</button>
-                        <button  class="btn btn-success successful-notify">Submit</button>
+                        <button  class="btn btn-danger me-2" (click)="closeForm()">Close</button>
+                        <button  class="btn btn-success successful-notify" type="submit" [disabled]="contratForm.invalid">Submit</button>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
     </div>

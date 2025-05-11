@@ -8,6 +8,7 @@ import { ContratService } from '../../../../shared/services/contrat/contrat.serv
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { Contrat } from '../../../../shared/models/contrat.model';
+import { saveAs } from 'file-saver';
 
 interface departmentList {
   id: string;
@@ -27,7 +28,7 @@ export class DepartmentComponent {
    ContratCount = 0;
 
 
-   // Nouveaux états pour pagination et recherche
+   
      currentPage = 1;
      itemsPerPage = 10;
      searchQuery = '';
@@ -68,7 +69,7 @@ export class DepartmentComponent {
       this.pageNumbers = Array.from({length: this.totalPages}, (_, i) => i + 1);
     }
   
-    // Gestion de la pagination
+    
     setPage(page: number): void {
       if (page >= 1 && page <= this.totalPages) {
         this.currentPage = page;
@@ -93,12 +94,11 @@ export class DepartmentComponent {
     this.contratService.getAllContrats().subscribe(
       (data: any[]) => {
         this.contrats = data;
-        // Charger les détails des partenaires pour chaque contrat
       this.contrats.forEach(contrat => {
         if (contrat.partnerId) {
           this.contratService.getPartnerDetails(contrat.partnerId).subscribe({
             next: (partner) => {
-              contrat.partner = partner; // Ajoute l'objet partner au contrat
+              contrat.partner = partner; 
             },
             error: (err) => console.error('Error loading partner', err)
           });
@@ -123,11 +123,6 @@ export class DepartmentComponent {
     this.modalService.open(content1, { windowClass : 'modalCusSty' })
   }
 
-  // edit(editData:any, departmant: any) {
-  //   this.modalService.open(editData, {backdrop : 'static' , windowClass : 'modalCusSty' })
-  //   this.departmantname = departmant.name
-  //   this.departmantid = departmant.id
-  // }
   click(id:string){
     const data = this.contrats.filter((x: { id: string }) => {
       return x.id != id;
@@ -157,4 +152,18 @@ export class DepartmentComponent {
       });
     }
   }
+
+  generatePdf(contratId: number): void {
+  this.contratService.generatePdfReport(contratId).subscribe({
+    next: (blob: Blob) => {
+      const filename = `contrat-${contratId}-rapport.pdf`;
+      saveAs(blob, filename);
+    },
+    error: (err) => {
+      console.error('Erreur génération PDF', err);
+      this.toastr.error('Échec de génération du rapport');
+    }
+  });
+}
+
 }

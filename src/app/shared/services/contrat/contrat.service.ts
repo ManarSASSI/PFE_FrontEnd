@@ -18,10 +18,9 @@ export class ContratService {
     tap(contrats => console.log('API Response:', contrats)),
     catchError(err => {
       console.error('API Error:', err);
-      return of([]); // Retourne un tableau vide en cas d'erreur
+      return of([]);
     })
   );
-    // return this.http.get<Contrat[]>(this.apiUrl);
   }
 
   getContratById(id: number): Observable<Contrat> {
@@ -45,12 +44,7 @@ export class ContratService {
   }
 
   deleteContrat(id: number): Observable<void> {
-    // const headers = new HttpHeaders({
-    //   'Authorization': `Bearer ${this.authService.getToken()}`,
-    //   'Content-Type': 'application/json'
-    // });
     return this.http.delete<void>(`${this.apiUrl}/${id}`
-      // , {headers}
     );
   }
 
@@ -61,5 +55,11 @@ export class ContratService {
   getPartnerDetails(partnerId: number): Observable<User> {
   return this.http.get<User>(`${this.apiUrl}/users/${partnerId}`);
 }
+
+  generatePdfReport(id: number): Observable<Blob> {
+    return this.http.get(`/api/rapports/contrats/${id}`, {
+      responseType: 'blob'
+    });
+  }
 
 }
