@@ -130,7 +130,7 @@ export class NewProjectComponent implements OnInit {
 
       this.contratService.createContrat(formData).subscribe({
         next: (response) => {
-          this.router.navigate(['/dashboard/hrmdashboards/employees/employee-list']);
+          this.router.navigate(['/dashboard/hrmdashboards/department']);
           this.toastr.success('addition successful', 'Contract', {
             timeOut: 3000,
             positionClass: 'toast-top-right',
@@ -154,7 +154,7 @@ export class NewProjectComponent implements OnInit {
     
 
   closeForm(): void {
-    // Logique d'annulation
+    this.router.navigate(['/dashboard/hrmdashboards/department']);
   }
 
   ngOnDestroy() {

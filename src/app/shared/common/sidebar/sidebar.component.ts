@@ -18,7 +18,11 @@ import { NavigationEnd, Router } from '@angular/router';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit, OnDestroy{
-  //////
+  
+  userName: string = 'User';
+  userRole: string = 'Role';
+  userAvatar: string | null = null;
+
   eventTriggered: boolean = false;
   screenWidth!: number;
   public windowSubscribe$!: Subscription;
@@ -48,13 +52,23 @@ export class SidebarComponent implements OnInit, OnDestroy{
     });
   }
   ngOnInit() {
+    const userData = localStorage.getItem('currentUser');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        this.userName = user.username || 'User';
+        this.userRole = user.role || 'Rôle';
+        this.userAvatar = user.avatar || null; // Assurez-vous que le JSON contient avatarUrl
+      } catch (e) {
+        console.error('Erreur de parsing des données utilisateur', e);
+      }
+    }
+
     this.menuitemsSubscribe$ = this.navServices.items.subscribe((items) => {
       this.menuItems = items;
       this.cd.detectChanges();
     });
     this.navServices.updateMenuItems();
-
-
 
     const WindowResize = fromEvent(window, 'resize');
     // subscribing the Observable
@@ -67,6 +81,10 @@ export class SidebarComponent implements OnInit, OnDestroy{
 
     if (document.querySelector('html')?.getAttribute('data-nav-layout') == 'horizontal' && window.innerWidth >= 992) { this.clearNavDropdown(); }
 
+  }
+
+   handleImageError(event: Event) {
+    (event.target as HTMLImageElement).src = './assets/images/users/18.jpg';
   }
 
   // Start of Set menu Active event

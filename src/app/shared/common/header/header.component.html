@@ -424,9 +424,9 @@
           <!-- Start::header-element -->
           <div class="header-element notifications-dropdown">
               <!-- Start::header-link|notification-rights -->
-              <a  class="header-link" (click)="openNotifications()" data-bs-toggle="offcanvas" data-bs-target="#notification-sidebar-canvas" id="messageDropdown">
+              <a  class="header-link" (click)="openNotifications()" >
                   <i class="fe fe-bell header-link-icon"></i>
-                  <span class="bg-dot"></span>
+                  <span class="badge bg-danger" *ngIf="notificationCount > 0">{{ notificationCount }}</span>
               </a>
               <!-- End::header-link|notification-rights -->
           </div>
@@ -443,14 +443,13 @@
               <ul ngbDropdownMenu class="main-header-dropdown dropdown-menu pt-0 header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
                   <Li>
                       <div class="p-3 text-center border-bottom">
-                          <a routerLink="/pages/profile/profile01" class="text-center fw-semibold">John Thomson</a>
-                          <p class="text-center user-semi-title fs-13 mb-0">App Developer</p>
+                          <a class="text-center fw-semibold">{{userName}}</a>
                       </div>
                   </Li>
-                  <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" routerLink="/pages/profile/profile01"><i class="fe fe-user me-2"></i>Profile</a></li>
-                  <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" routerLink="/pages/email/email-inbox"><i class="fe fe-mail me-2"></i>Inbox <span class="badge bg-success-transparent ms-auto">25</span></a></li>
+                  <!-- <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" routerLink="/pages/profile/profile01"><i class="fe fe-user me-2"></i>Profile</a></li>
+                  <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" routerLink="/pages/email/email-inbox"><i class="fe fe-mail me-2"></i>Inbox <span class="badge bg-success-transparent ms-auto">25</span></a></li> -->
                   <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" routerLink="/pages/edit-profile"><i class="fe fe-settings me-2"></i>Settings</a></li>
-                  <li><a ngbDropdownItem (click)="openModal(content)" class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#changepasswordnmodal"><i class="fe fe-edit-3 me-2"></i>Change Password</a></li>
+                  <!-- <li><a ngbDropdownItem (click)="openModal(content)" class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#changepasswordnmodal"><i class="fe fe-edit-3 me-2"></i>Change Password</a></li> -->
                   <!-- <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" routerLink="/chat"><i class="fe fe-headphones me-2"></i>Support</a></li> -->
                   <li><a ngbDropdownItem class="dropdown-item d-flex align-items-center" (click)="logout()"><i class="fe fe-power me-2"></i>Log Out</a></li>
               </ul>

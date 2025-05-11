@@ -155,21 +155,21 @@ export class DepartmentComponent {
 
   generatePdf(contratId: number): void {
   this.contratService.generatePdfReport(contratId).subscribe({
-    next: (blob: Blob) => {
-      const blobUrl = URL.createObjectURL(blob);
+    next: (data: Blob) => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
       
-      // Ouvrir dans un nouvel onglet
+      // Solution cross-browser
       const a = document.createElement('a');
-      a.href = blobUrl;
-      a.target = '_blank';
-      a.download = `contrat-${contratId}.pdf`;
+      a.style.display = 'none';
+      a.href = url;
+      a.download = `contrat_${contratId}.pdf`;
+      document.body.appendChild(a);
       a.click();
       
-      // Nettoyer après 1s
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
-
-      // const filename = `contrat-${contratId}-rapport.pdf`;
-      // saveAs(blob, filename);
+      // Nettoyage
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
     },
     error: (err) => {
       console.error('Erreur génération PDF', err);

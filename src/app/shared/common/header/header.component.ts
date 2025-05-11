@@ -13,6 +13,7 @@ import { AppStateService } from '../../services/app-state.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { RightSidebarComponent } from '../right-sidebar/right-sidebar.component';
+import { AlertService } from '../../services/alert/alert.service';
 interface Item {
   id: number;
   name: string;
@@ -26,8 +27,12 @@ interface Item {
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+
+  userName: string = 'User';
+  notificationCount = 0;
+  alerts: any[] = [];
+
   cartItemCount: number = 5;
-  notificationCount: number = 5;
   public isCollapsed = true;
   collapse: any;
   closeResult = '';
@@ -43,7 +48,8 @@ modal: any;
     private elementRef: ElementRef,
     public renderer: Renderer2,
     public modalService:NgbModal,
-    private router: Router, private activatedRoute: ActivatedRoute
+    private router: Router, private activatedRoute: ActivatedRoute,
+    private alertService: AlertService
   ) {this.localStorageBackUp()}
 
   private offcanvasService = inject(NgbOffcanvas);
@@ -75,12 +81,12 @@ modal: any;
       panelClass:'switcher-canvas-width'
     });
   }
-  openNotifications() {
-    this.offcanvasService.open(RightSidebarComponent, {
-      position: 'end',
-      scroll: true,
-    });
-  }
+  // openNotifications() {
+  //   this.offcanvasService.open(RightSidebarComponent, {
+  //     position: 'end',
+  //     scroll: true,
+  //   });
+  // }
   openModal(content: any) {
     this.modalService.open(content);
   }
@@ -241,6 +247,16 @@ modal: any;
   public SearchResultEmpty: boolean = false;
 
   ngOnInit(): void {
+    this.loadAlerts();
+    const userData = localStorage.getItem('currentUser');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        this.userName = user.username || 'User';
+      } catch (e) {
+        console.error('Erreur de parsing des données utilisateur', e);
+      }
+    }
     const storedSelectedItem = localStorage.getItem('selectedItem');
     // this.updateSelectedItem();
   // If there's no selected item stored, set a default one
@@ -378,4 +394,38 @@ modal: any;
   toggleFullscreen() {
     this.isFullscreen = !this.isFullscreen;
   }
+
+  private loadAlerts() {
+    this.alertService.getUserAlerts().subscribe({
+      next: (alerts) => {
+        console.log('Alertes reçues:', alerts);
+        this.alerts = alerts;
+        this.notificationCount = alerts.filter(alert => !alert.read).length;
+        console.log('Nombre de notifications non lues:', this.notificationCount); 
+      },
+      error: (err) => console.error('Error loading alerts', err)
+    });
+  }
+  openNotifications() {
+    this.offcanvasService.open(RightSidebarComponent, {
+    position: 'end',
+    scroll: true,
+    panelClass: 'notification-sidebar-width'
+  }).componentInstance.alerts = this.alerts;
+  }
+
+  markAsRead(alertId: number) {
+    this.alertService.markAsRead(alertId).subscribe({
+      next: () => {
+        const alert = this.alerts.find(a => a.id === alertId);
+        if (alert) {
+          alert.read = true;
+          this.notificationCount--;
+        }
+      },
+      error: (err) => console.error('Error marking alert as read', err)
+    });
+  }
+
+
 }

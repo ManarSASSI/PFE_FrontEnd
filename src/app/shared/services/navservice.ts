@@ -180,15 +180,15 @@ export class NavService implements OnDestroy {
 						// { title: 'Notice Board', dirchange: false, type: 'link', active: false, selected: false, path: '/dashboard/hrmdashboards/notice-board' },
 						// { title: 'Settings', dirchange: false, type: 'link', active: false, selected: false, path: '/dashboard/hrmdashboards/settings' },
 				{
-					title: 'Partners', dirchange: false, type: 'link', active: false, selected: false, path: '/dashboard/hrmdashboards/employees/employee-list',
+					title: 'Partners', type: 'sub', badgeType: 'success', badgeValue: '2', selected: false, active: false, children: [
 				//  children: [
 				// 		// { path: '/dashboard/employee-dashboard/dashboard', title: 'Dashboard', type: 'link', selected: false },
 				//         // { path: '/dashboard/employee-dashboard/attendance', title: 'Attendance', type: 'link', selected: false },
-				// 		{ path: '/dashboard/hrmdashboards/employees/employee-list', title: 'Partners List', type: 'link', selected: false },
+						{ path: '/dashboard/hrmdashboards/employees/employee-list', title: 'Partners List', type: 'link', selected: false },
 				// 		{ path: '/dashboard/hrmdashboards/employees/view-employee', title: 'View Partner', type: 'link', selected: false },
-				// 		{ path: '/dashboard/hrmdashboards/employees/add-employee', title: 'Add Partner', type: 'link', selected: false },
+						{ path: '/dashboard/hrmdashboards/employees/add-employee', title: 'Add Partner', type: 'link', selected: false },
 				// 	]
-				 },
+					]},
 				// { title: 'Chat', dirchange: false, type: 'link', active: false, selected: false, path: '/chat/chat' },
 				// {
 				// 	title: 'Task Dashboard', type: 'sub', badgeType: 'success', badgeValue: '2', selected: false, active: false, children: [
@@ -201,30 +201,30 @@ export class NavService implements OnDestroy {
 				// },
 				{
 					title: 'Contrat', type: 'sub', badgeType: 'success', badgeValue: '2', selected: false, active: false, children: [
-						{ path: '/dashboard/project-dashboard/new-project', title: 'Add Contrat', type: 'link', selected: false },
 						{ path: '/dashboard/hrmdashboards/department', title: 'Contrat List', type: 'link', selected: false },
-						{ path: '/dashboard/project-dashboard/view-project', title: 'View Contrat', type: 'link', selected: false },
+						{ path: '/dashboard/project-dashboard/new-project', title: 'Add Contrat', type: 'link', selected: false },
+						// { path: '/dashboard/project-dashboard/view-project', title: 'View Contrat', type: 'link', selected: false },
 						// { path: '/dashboard/project-dashboard/overview-calendar', title: 'Overview Calendar', type: 'link', selected: false },
 						
 					]
 				},
-				{
-					title: 'Partner', type: 'sub', badgeType: 'success', badgeValue: '2', selected: false, active: false, children: [
-						// { path: '/dashboard/client-dashboard/dashboard', title: 'Dashboard', type: 'link', selected: false },
-						{ path: '/dashboard/client-dashboard/client-list', title: 'Client List', type: 'link', selected: false },
-						{ path: '/dashboard/client-dashboard/view-client', title: 'View Client', type: 'link', selected: false },
-						{ path: '/dashboard/client-dashboard/new-client', title: 'New Client', type: 'link', selected: false },
-						{ path: '/dashboard/client-dashboard/user-profile', title: 'User Profile', type: 'link', selected: false },
-					]
-				},
-				{
-					title: 'Job Dashboard', type: 'sub', badgeType: 'success', badgeValue: '2', selected: false, active: false, children: [
-						{ path: '/dashboard/job-dashboard/job-lists', title: 'Job Lists', type: 'link', selected: false },
-						{ path: '/dashboard/job-dashboard/apply-job', title: 'Apply Job', type: 'link', selected: false },
-						{ path: '/dashboard/job-dashboard/new-job', title: 'New Job', type: 'link', selected: false },
-						{ path: '/dashboard/job-dashboard/user-profile', title: 'User Profile', type: 'link', selected: false },
-					]
-				},
+				// {
+				// 	title: 'Partner', type: 'sub', badgeType: 'success', badgeValue: '2', selected: false, active: false, children: [
+				// 		// { path: '/dashboard/client-dashboard/dashboard', title: 'Dashboard', type: 'link', selected: false },
+				// 		{ path: '/dashboard/client-dashboard/client-list', title: 'Client List', type: 'link', selected: false },
+				// 		{ path: '/dashboard/client-dashboard/view-client', title: 'View Client', type: 'link', selected: false },
+				// 		{ path: '/dashboard/client-dashboard/new-client', title: 'New Client', type: 'link', selected: false },
+				// 		{ path: '/dashboard/client-dashboard/user-profile', title: 'User Profile', type: 'link', selected: false },
+				// 	]
+				// },
+				// {
+				// 	title: 'Job Dashboard', type: 'sub', badgeType: 'success', badgeValue: '2', selected: false, active: false, children: [
+				// 		{ path: '/dashboard/job-dashboard/job-lists', title: 'Job Lists', type: 'link', selected: false },
+				// 		{ path: '/dashboard/job-dashboard/apply-job', title: 'Apply Job', type: 'link', selected: false },
+				// 		{ path: '/dashboard/job-dashboard/new-job', title: 'New Job', type: 'link', selected: false },
+				// 		{ path: '/dashboard/job-dashboard/user-profile', title: 'User Profile', type: 'link', selected: false },
+				// 	]
+				// },
 				// {
 				// 	title: 'Super Admin', type: 'sub', active: false, selected: false, children: [
 				// 		{ path: '/dashboard/super-admin/dashboard', title: 'Dashboard', type: 'link', selected: false },
