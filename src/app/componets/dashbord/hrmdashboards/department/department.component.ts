@@ -156,12 +156,24 @@ export class DepartmentComponent {
   generatePdf(contratId: number): void {
   this.contratService.generatePdfReport(contratId).subscribe({
     next: (blob: Blob) => {
-      const filename = `contrat-${contratId}-rapport.pdf`;
-      saveAs(blob, filename);
+      const blobUrl = URL.createObjectURL(blob);
+      
+      // Ouvrir dans un nouvel onglet
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.target = '_blank';
+      a.download = `contrat-${contratId}.pdf`;
+      a.click();
+      
+      // Nettoyer après 1s
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+
+      // const filename = `contrat-${contratId}-rapport.pdf`;
+      // saveAs(blob, filename);
     },
     error: (err) => {
       console.error('Erreur génération PDF', err);
-      this.toastr.error('Échec de génération du rapport');
+      this.toastr.error('Échec génération rapport');
     }
   });
 }
