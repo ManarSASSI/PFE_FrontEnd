@@ -1,0 +1,52 @@
+<div class="page responsive-log login-bg">
+    <div class="page-single">
+        <div class="container">
+            <div class="row justify-content-center">       
+                <div class="col-md-9 col-lg-7 col-xl-4 col-xxl-4">  
+                    <div class="card custom-card my-4">
+                        <div class="p-4 pt-0 text-center">
+                            <h2 class="mb-2">Forget Account</h2>
+                        </div>
+                        <form class="card-body pb-3" [formGroup]="resetEmailForm" (ngSubmit)="onSubmit()">
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">
+                                        <i class="fe fe-mail" aria-hidden="true"></i>
+                                    </span>
+                                    <input class="form-control" type="email" formControlName="email" placeholder="example@domain.com" required>
+                                </div>
+                                @if(resetEmailForm.get('email')?.errors?.['required'] && resetEmailForm.get('email')?.touched) {
+                                    <small class="text-danger">Email is required</small>
+                                }
+                                @if(resetEmailForm.get('email')?.errors?.['email'] && resetEmailForm.get('email')?.touched) {
+                                    <small class="text-danger">Please enter a valid email</small>
+                                }
+                            </div>
+                            <!-- Submit Button -->
+                            <div class="submit d-grid">
+                                <button class="btn btn-primary me-0" type="submit" [disabled]="resetEmailForm.invalid || isLoading">
+                                    @if(isLoading) {
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Loading...</span>
+                                    } @else {
+                                        Reset
+                                    }
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Login Link -->
+                        <div class="text-center mt-3 pb-3">
+                            <p class="text-dark mb-0">Already have an account? 
+                                <a class="text-primary ms-1" routerLink="/auth/login">Login</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

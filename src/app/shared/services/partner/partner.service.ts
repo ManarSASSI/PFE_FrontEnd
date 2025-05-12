@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { User } from '../../models/user.model';
@@ -13,10 +13,18 @@ export class PartnerService {
   constructor(private http: HttpClient,private authService: AuthService) { }
 
 
-  getPartners(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl).pipe(
-      tap(data => console.log('Données reçues du backend:', data)));
+  // getPartners(): Observable<User[]> {
+  //   return this.http.get<User[]>(this.apiUrl).pipe(
+  //     tap(data => console.log('Données reçues du backend:', data)));
+  // }
+
+  getPartners(name?: string): Observable<User[]> {
+  let params = new HttpParams();
+  if (name) {
+    params = params.set('name', name);
   }
+  return this.http.get<User[]>(`${this.apiUrl}`, { params });
+}
 
   getPartnerCount(): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/count`);

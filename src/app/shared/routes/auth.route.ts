@@ -18,6 +18,16 @@ export const authen: Routes = [
         loadComponent: () =>
           import('../../authentication/login/login.component').then((m) => m.LoginComponent),
       },
+      {
+        path: 'resetEmail',
+        loadComponent: () =>
+          import('../../authentication/reset-email/reset-email.component').then((m) => m.ResetEmailComponent),
+      },
+      {
+        path: 'resetPassword/:token',
+        loadComponent: () =>
+          import('../../authentication/reset-password/reset-password.component').then((m) => m.ResetPasswordComponent),
+      },
       ...ErrorRoutingModule.routes,
       ...AlertMessageRoutingModule.routes,
     ],

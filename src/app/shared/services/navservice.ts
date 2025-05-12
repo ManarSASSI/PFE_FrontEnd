@@ -107,18 +107,6 @@ export class NavService implements OnDestroy {
 		  const isVisible = item.roles.map(r => r.toUpperCase()).includes(role);
 		  console.log(`Item "${item.title}" visible: ${isVisible}`);
 		  return isVisible;
-		// }).map(item => {
-		// 	// Filtre aussi les enfants si nécessaire
-		// 	if (item.children) {
-		// 	  return {
-		// 		...item,
-		// 		children: item.children.filter(child => {
-		// 		  if (!child.roles) return true;
-		// 		  return child.roles.includes(role);
-		// 		})
-		// 	  };
-		// 	}
-		// 	return item;
 		});
 	  }
 	

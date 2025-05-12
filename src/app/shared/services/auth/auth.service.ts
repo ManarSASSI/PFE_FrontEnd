@@ -29,30 +29,16 @@ export class AuthService {
   public currentUser: Observable<any>;
   public showLoader = false; 
 
-
-  // authState: any;
-  // afAuth: any;
-  // afs: any;
-  // public showLoader:boolean=false;
-
   constructor(
     private storage: StorageService,
     private http: HttpClient,
-    // private afu: AngularFireAuth, 
     private router: Router,public ngZone: NgZone, 
-    // private cookieService: CookieService
   ) {
  
     const userData = this.storage.getUser;
     this.currentUserSubject = new BehaviorSubject<any>(userData);
-    // this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser') || 'null'));
     this.currentUser = this.currentUserSubject.asObservable();
-      // this.loadUserFromStorage();
     this.clearStorage();  
-
-    // this.afu.authState.subscribe((auth: any) => {
-    //   this.authState = auth;
-    // });
   }
 
   private loadCurrentUser(): void {
@@ -70,14 +56,6 @@ export class AuthService {
   private clearStorage(): void {
     localStorage.removeItem('currentUser');
   }
-
-
-  // private loadUserFromStorage(): void {
-  //   const userData = localStorage.getItem('currentUser');
-  //   if (userData) {
-  //     this.currentUserSubject.next(JSON.parse(userData));
-  //   }
-  // }
 
   public getCurrentUserValue() {
     return this.currentUserSubject.value;
@@ -121,7 +99,7 @@ export class AuthService {
       })
     );
   
-    // return this.http.post(`${this.apiUrl}/register`, userData);
+    
   }
 
   logout(): void {
@@ -132,6 +110,13 @@ export class AuthService {
 
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+
+  resetEmail(formData: { email: string }) {
+    return this.http.post(`${this.apiUrl}/forgot-password`, formData, {
+    responseType: 'text'
+  });
   }
 
   // Getters
@@ -166,18 +151,16 @@ export class AuthService {
     return user?.displayName || '';
   }
 
-  // getIsUserEmailLoggedIn(): boolean {
-  //   return this.isLoggedIn;
-  // }
-
   // Méthodes optionnelles (si vous en avez besoin)
   SendVerificationMail(): void {
     // Implémentez cette fonction si votre backend Spring gère l'envoi d'emails
     console.warn('SendVerificationMail not implemented for Spring Boot');
   }
 
-
- 
+  resetPassword(formData: { token: string, newPassword: string }) {
+  return this.http.post(`${this.apiUrl}/reset-password`, formData , {
+    responseType: 'text'});
+}
 
   SetUserData(user: any): void {
     localStorage.setItem('currentUser', JSON.stringify(user));
