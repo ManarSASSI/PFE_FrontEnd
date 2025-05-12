@@ -42,7 +42,7 @@ export class PartnerService {
 
   // Nouvelle méthode pour créer un partenaire
   createPartner(partnerData: FormData): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/partners`, partnerData, {
+    return this.http.post<User>(`${this.apiUrl}`, partnerData, {
       headers: new HttpHeaders({
       })
     });
@@ -50,6 +50,14 @@ export class PartnerService {
 
   countPartners(): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/count`);
+  }
+
+  updatePartner(id: number, formData: FormData): Observable<User> {
+  return this.http.put<User>(`${this.apiUrl}/${id}`, formData);
+  }
+
+  getPartnerById(id: number): Observable<User> {
+  return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
   
   

@@ -1,0 +1,103 @@
+<app-hr-dashboard-page-header [title]="'Edit Partner'" ></app-hr-dashboard-page-header>
+<!-- Row -->
+<div class="row">
+    <div class="col-xl-12 col-md-12 col-lg-12">
+        <div class="card">
+            <form [formGroup]="partnerForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+                <div class="card-body">
+                    <h4 class="mb-5 fw-semibold">Partner Details:</h4>
+                    
+                    <!-- Current Avatar Preview -->
+                    <div class="form-group text-center mb-4">
+                        <label class="form-label d-block">Current Avatar</label>
+                        <img [src]="currentAvatar" class="avatar-preview rounded-circle" 
+                             alt="Current Avatar" style="width: 120px; height: 120px;">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input class="form-control" type="text" 
+                                       formControlName="username" 
+                                       placeholder="Enter Full Name" required>
+                                @if(partnerForm.get('username')?.invalid && partnerForm.get('username')?.touched) {
+                                    <small class="text-danger">Full name is required</small>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input class="form-control" type="email" 
+                                       formControlName="email" 
+                                       placeholder="Enter Email Address" required>
+                                @if(partnerForm.get('email')?.errors?.['required'] && partnerForm.get('email')?.touched) {
+                                    <small class="text-danger">Email is required</small>
+                                }
+                                @if(partnerForm.get('email')?.errors?.['email'] && partnerForm.get('email')?.touched) {
+                                    <small class="text-danger">Invalid email format</small>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">New Password (optional)</label>
+                                <input class="form-control" type="password" 
+                                       formControlName="password" 
+                                       placeholder="Enter New Password">
+                                @if(partnerForm.get('password')?.errors?.['minlength']) {
+                                    <small class="text-danger">Minimum 8 characters</small>
+                                }
+                                @if(partnerForm.get('password')?.errors?.['pattern']) {
+                                    <small class="text-danger">Requires uppercase, number and special char</small>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Phone Number</label>
+                                <input class="form-control" type="text" 
+                                       formControlName="phone" 
+                                       placeholder="Enter Phone Number">
+                                @if(partnerForm.get('phone')?.errors?.['pattern']) {
+                                    <small class="text-danger">Invalid phone format</small>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label">Location</label>
+                                <textarea rows="3" class="form-control" 
+                                          formControlName="location" 
+                                          placeholder="Enter Location"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Update Avatar</label>
+                        <input class="form-control" type="file" 
+                               id="avatar" 
+                               (change)="onFileChange($event)"
+                               accept="image/*">
+                    </div>
+                </div>
+
+                <div class="card-footer text-end">
+                    <button type="button" class="btn btn-danger btn-lg me-2" 
+                            (click)="closeForm()">Close</button>
+                    <button type="submit" class="btn btn-success btn-lg" 
+                            [disabled]="partnerForm.invalid">Update Partner</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Row-->

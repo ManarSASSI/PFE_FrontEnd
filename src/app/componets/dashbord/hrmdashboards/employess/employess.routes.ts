@@ -23,6 +23,10 @@ const routes: Routes = [
           import('./add-employee/add-employee.component').then((m) => m.AddEmployeeComponent),
           
       },
+      {
+        path: 'edit-employee/:id',
+        loadComponent: () => import('./edit-employee/edit-employee.component').then(m => m.EditEmployeeComponent)
+      }
     
      
     ]
