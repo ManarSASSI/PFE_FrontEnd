@@ -6,9 +6,13 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ContratService } from '../../../../shared/services/contrat/contrat.service';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { Contrat } from '../../../../shared/models/contrat.model';
 import { saveAs } from 'file-saver';
+import { FormsModule } from '@angular/forms';
+import { SuiviContrat } from '../../../../shared/models/suivi-contrat.model';
+import { SuiviContratService } from '../../../../shared/services/suiviContrat/suivi-contrat.service';
+import { EtatExecution } from '../../../../shared/models/contrat.model';
 
 interface departmentList {
   id: string;
@@ -18,15 +22,17 @@ interface departmentList {
 @Component({
   selector: 'app-department',
   standalone: true,
-  imports: [NgbModule,NgSelectModule,SharedModule,RouterModule,CommonModule],
+  imports: [FormsModule,NgbModule,NgSelectModule,SharedModule,RouterModule,CommonModule],
   templateUrl: './department.component.html',
   styleUrl: './department.component.scss'
 })
 export class DepartmentComponent {
 
-   contrats: any[] = [];
-   ContratCount = 0;
 
+    EtatExecution = EtatExecution;
+     contrats: any[] = [];
+     ContratCount = 0;
+     selectedType: Contrat['typeContrat'] | '' = '';
 
    
      currentPage = 1;
@@ -36,8 +42,16 @@ export class DepartmentComponent {
      pageNumbers: number[] = [];
    
      total$!: Observable<number>;
+
+    selectedContrat: Contrat | null = null;
+    historiqueSuivi: SuiviContrat[] = [];
+    newSuivi: Partial<SuiviContrat> = {
+      etatExecution: EtatExecution.EN_COURS,
+      commentaire: '',
+      action:'',
+    };
   
-  constructor(private modalService: NgbModal,private contratService: ContratService,private toastr: ToastrService) { 
+  constructor(private modalService: NgbModal,private contratService: ContratService,private toastr: ToastrService, private suiviService: SuiviContratService) { 
   }
 
   ngOnInit(): void {
@@ -45,24 +59,43 @@ export class DepartmentComponent {
     this.loadContratCount();
   }
 
+  onTypeChange(): void {
+    this.currentPage = 1;
+    this.generatePageNumbers();
+  }
+
+
+  onSearchChange(): void {
+    this.currentPage = 1;
+    this.generatePageNumbers();
+  }
+
   
 
   // Méthode pour filtrer et paginer les données
     get filteredContrats(): Contrat[] {
-      console.log('Filtering contrats:');
-      const filtered = this.contrats.filter(contrat =>
-        Object.values(contrat).some(value =>
+      let filtered = this.contrats;
+
+      // Filtrage par type
+      if (this.selectedType) {
+        filtered = filtered.filter(c => c.typeContrat === this.selectedType);
+      }
+
+      // Filtrage par recherche
+      filtered = filtered.filter(c =>
+        Object.values(c).some(value =>
           value?.toString().toLowerCase().includes(this.searchQuery.toLowerCase())
-      ));
-      
+        )
+      );
+
       this.totalPages = Math.ceil(filtered.length / this.itemsPerPage);
       this.generatePageNumbers();
-      
+
       return filtered.slice(
         (this.currentPage - 1) * this.itemsPerPage,
         this.currentPage * this.itemsPerPage
       );
-    }
+  }
   
   
     private generatePageNumbers(): void {
@@ -119,9 +152,38 @@ export class DepartmentComponent {
   }
 
 
-  open(content1:any) {
-    this.modalService.open(content1, { windowClass : 'modalCusSty' })
+  async open(content: any, contrat: Contrat) {
+      try {
+    this.selectedContrat = contrat;
+    this.historiqueSuivi = []; // Réinitialiser l'historique avant chargement
+    
+    const modalRef = this.modalService.open(content, { 
+      size: 'lg',
+      backdrop: 'static'
+    });
+
+    const response = await this.suiviService.getHistorique(contrat.id).toPromise();
+    
+    // Filtrer les entrées nulles et trier par date
+    this.historiqueSuivi = (response || [])
+      .filter(s => s !== null && s.dateSuivi !== null)
+      .sort((a, b) => new Date(b.dateSuivi).getTime() - new Date(a.dateSuivi).getTime());
+    } catch (error) {
+      console.error('Erreur chargement historique', error);
+      this.toastr.error('Erreur de chargement de l\'historique');
+      this.modalService.dismissAll(); // Assurer la fermeture en cas d'erreur
   }
+
+  //   try {
+  //         this.selectedContrat = contrat;
+  //         this.modalService.open(content, { size: 'lg' });
+  //         const response = await this.suiviService.getHistorique(contrat.id).toPromise();
+  //         this.historiqueSuivi = response || []; // Gestion du undefined
+  //        } catch (error) {
+  //         console.error('Erreur chargement historique', error);
+  //         this.toastr.error('Erreur de chargement de l\'historique');
+  // } 
+}
 
   click(id:string){
     const data = this.contrats.filter((x: { id: string }) => {
@@ -176,6 +238,35 @@ export class DepartmentComponent {
       this.toastr.error('Échec génération rapport');
     }
   });
+}
+
+
+addSuivi() {
+  if (this.selectedContrat && this.newSuivi.etatExecution) {
+    this.suiviService.ajouterSuivi(this.selectedContrat.id, this.newSuivi as SuiviContrat).subscribe({
+      next: (suiviResult) => {
+        // Mise à jour de l'historique
+        this.historiqueSuivi = [suiviResult, ...this.historiqueSuivi];
+        this.historiqueSuivi = [...this.historiqueSuivi];
+        this.resetSuivi();
+        // Mise à jour de l'état dans la liste des contrats
+        const index = this.contrats.findIndex(c => c.id === this.selectedContrat!.id);
+        if (index > -1) {
+          this.contrats[index].etatExecution = suiviResult.etatExecution;
+        }        
+        this.resetSuivi();
+        this.toastr.success('Suivi ajouté avec succès');
+      },
+      error: (err) => this.toastr.error('Erreur lors de l\'ajout du suivi')
+    });
+  }
+} 
+
+resetSuivi() {
+  this.newSuivi = { 
+    etatExecution: EtatExecution.EN_COURS,
+    commentaire: '' 
+  };
 }
 
 }

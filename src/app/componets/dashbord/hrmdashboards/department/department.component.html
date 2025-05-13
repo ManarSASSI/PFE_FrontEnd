@@ -36,22 +36,31 @@
                             <div class="d-flex ms-2 mx-2">
                                 <div class="form-group mb-0">
                                     <ng-select name="quantity" id="select-countries17" class="form-control  wd-150 p-0 remove-ngbutton"
-                                        data-trigger placeholder="10">
-                                        <ng-option value="1" selected="">10</ng-option>
-                                        <ng-option value="2">25</ng-option>
-                                        <ng-option value="3">50</ng-option>
-                                        <ng-option value="4">100</ng-option>
+                                        [(ngModel)]="itemsPerPage" (ngModelChange)="onItemsPerPageChange()">
+                                        <ng-option [value]="10" selected="">10</ng-option>
+                                        <ng-option [value]="25">25</ng-option>
+                                        <ng-option [value]="50">50</ng-option>
+                                        <ng-option [value]="100">100</ng-option>
                                     </ng-select>
                                 </div>
                             </div>
                             <span>entries</span>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-3">
+                        <select class="form-control" [(ngModel)]="selectedType" (ngModelChange)="onTypeChange()">
+                            <option value="">Tous les types</option>
+                            <option value="SERVICE">SERVICE</option>
+                            <option value="TRAVAUX">TRAVAUX</option>
+                            <option value="CONTINU">CONTINU</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3">
                         <div class="float-end">
-                            <input type="text" class="form-control" placeholder="search">
+                            <input type="text" class="form-control" placeholder="search" [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()">
                         </div>
                     </div>
+                    
                 </div>
                 <div class="table-responsive">
                     <table class="table mb-0 text-nowrap text-md-nowrap table-bordered border">
@@ -68,12 +77,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for(contrat of contrats; track $index){
+                            @for(contrat of filteredContrats; track $index){
 
                             <tr class="border-bottom">
                                 <th scope="row">{{contrat.id}}</th>
                                 <td>{{contrat.objetContrat}}</td>
-                                <td>{{contrat.partner?.username}}</td>
+                                <td>{{contrat.partner.username}}</td>
                                 <td>{{contrat.dateDebut | date:'dd/MM/yyyy'}}</td>
                                 <td>{{contrat.dateFin | date:'dd/MM/yyyy'}}</td>
                                 <td>{{contrat.typeContrat}}</td>
@@ -83,8 +92,7 @@
                                     <a class="btn btn-primary btn-icon me-1" (click)="generatePdf(contrat.id)" data-bs-toggle="modal">
                                         <i class="fe fe-file-text" data-bs-toggle="tooltip" data-original-title="Générer PDF"></i>
                                     </a>
-                                    <a class="btn btn-primary btn-icon me-1" (click)="open(content1)" data-bs-toggle="modal"
-                                        data-bs-target="#editdepartmentmodal">
+                                    <a class="btn btn-primary btn-icon me-1" (click)="open(content1, contrat)">
                                         <i class="fe fe-edit" data-bs-toggle="tooltip" data-original-title="Edit"></i>
                                     </a>
                                     <a class="btn btn-danger btn-icon " (click)="deleteContrat(contrat.id)"
@@ -115,16 +123,6 @@
                   </li>
                 </ul>
                 </nav>
-                <!-- <nav class="mt-4">
-                    <ul class="pagination justify-content-end mb-0">
-                        <li class="page-item disabled"><a class="page-link" href="javascript:void(0);">Prev</a></li>
-                        <li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>
-                        <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
-                        <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
-                        <li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>
-                    </ul>
-                </nav> -->
-                <!-- End::pagination -->
             </div>
         </div>
     </div>
@@ -134,12 +132,51 @@
         <ng-template #content1 let-modal>
 
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel1">Edit Department</h5> <button (click)="modal.close('cross click')" type="button" class="btn-close"
+                <h5 class="modal-title" >Suivi du Contrat #{{selectedContrat?.id}}</h5> <button (click)="modal.dismiss()" type="button" class="btn-close"
                     data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body"> <label for="input-text11" class="form-label">Edit Department</label> <input type="text"
-                    class="form-control" id="input-text11" placeholder="Departments"> </div>
-            <div class="modal-footer"> <button type="button" class="btn btn-outline-primary" (click)="modal.close('cross click')"
-                    data-bs-dismiss="modal">Close</button> <button type="button" class="btn btn-primary">Save</button>
+            <div class="modal-body"> 
+                <!-- Formulaire d'ajout de suivi -->
+            <form (ngSubmit)="addSuivi()">
+              <div class="mb-3">
+                <label class="form-label">Action</label>
+                <textarea class="form-control" [(ngModel)]="newSuivi.action" name="action"></textarea>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Commentaire</label>
+                <textarea class="form-control" [(ngModel)]="newSuivi.commentaire" name="commentaire"></textarea>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Etat</label>
+                <select class="form-select" [(ngModel)]="newSuivi.etatExecution" name="etatExecution">
+                  <option [value]="EtatExecution.EN_COURS">En cours</option>
+                  <option [value]="EtatExecution.TERMINE">Terminé</option>
+                  <option [value]="EtatExecution.EN_RETARD">En retard</option>
+                </select>
+              </div>
+              <div class="modal-footer"> 
+                <button type="button" class="btn btn-outline-primary" (click)="modal.close('cross click')" data-bs-dismiss="modal">Close</button> 
+                <button type="submit" class="btn btn-primary">Add</button>
             </div>
+            </form>
+        
+            <!-- Historique des suivis -->
+            <div class="mt-4">
+              <h6>Historique des suivis</h6>
+              <div class="list-group">
+                <div *ngFor="let suivi of historiqueSuivi" class="list-group-item">
+                  <div class="d-flex justify-content-between">
+                    <small class="text-muted">{{suivi?.dateSuivi | date:'dd/MM/yyyy'}}</small>
+                    <span class="badge bg-primary">{{suivi.etatExecution}}</span>
+                  </div>
+                  <p class="mb-0">{{suivi.action}}</p>
+                </div>
+              </div>
+            </div>
+
+
+                <!-- <label for="input-text11" class="form-label">Edit Department</label> 
+                <input type="text" class="form-control" id="input-text11" placeholder="Departments">  -->
+            </div>
+            
         </ng-template>
