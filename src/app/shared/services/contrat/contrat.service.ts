@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, tap } from 'rxjs';
-import { Contrat } from '../../models/contrat.model';
+import { Contrat, EtatExecution } from '../../models/contrat.model';
 import { User } from '../auth/auth.service';
 
 
@@ -60,6 +60,10 @@ export class ContratService {
     return this.http.get(`/api/rapports/contrats/${id}`, {
       responseType: 'blob'
     });
+  }
+
+  updateEtatExecution(contratId: number, etat: EtatExecution): Observable<Contrat> {
+    return this.http.patch<Contrat>(`${this.apiUrl}/${contratId}/etat-execution`, { etatExecution: etat });
   }
 
 }
