@@ -42,7 +42,8 @@ export class NewProjectComponent implements OnInit {
     dateFin: ['', Validators.required],
     status: ['NOUVEAU', Validators.required],
     commentaire: ['', Validators.required],
-    etatExecution: ['EN_COURS', Validators.required]
+    etatExecution: ['EN_COURS', Validators.required],
+    penaliteParJour: [null, [Validators.required, minValue(0)]]
   });
 
   partners: User[] = [];
@@ -120,10 +121,8 @@ export class NewProjectComponent implements OnInit {
     if (this.contratForm.valid) {
       const formData: Contrat = {
         ...this.contratForm.value,
-        // Valeurs par défaut pour les champs obligatoires manquants
         heureDebutSemaine: '08:00',
         heureFinSemaine: '18:00',
-        penaliteParJour: 0,
         joursRetard: 0,
         alerteExpirationEnvoyee: false
       } as Contrat;
@@ -160,16 +159,5 @@ export class NewProjectComponent implements OnInit {
   ngOnDestroy() {
       this.editor.destroy();
   }
-
-  //   flatpickr('#inlinetime', this.flatpickrOptions);
-
-  //     this.flatpickrOptions = {
-  //       enableTime: true,
-  //       dateFormat: 'Y-m-d H:i', // Specify the format you want
-  //       defaultDate: '2023-11-07 14:30', // Set the default/preloaded time (adjust this to your desired time)
-  //     };
-
-  //     flatpickr('#pretime', this.flatpickrOptions);
-  // }
 
 }

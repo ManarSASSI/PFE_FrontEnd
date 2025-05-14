@@ -218,27 +218,70 @@ export class DepartmentComponent {
   generatePdf(contratId: number): void {
   this.contratService.generatePdfReport(contratId).subscribe({
     next: (data: Blob) => {
-      const blob = new Blob([data], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
+      // Vérification approfondie du blob
+      if (!(data instanceof Blob)) {
+        this.toastr.error('Format de réponse inattendu');
+        return;
+      }
       
-      // Solution cross-browser
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      a.download = `contrat_${contratId}.pdf`;
-      document.body.appendChild(a);
-      a.click();
+      // Création d'un URL object sécurisé
+      const blobUrl = URL.createObjectURL(data);
       
-      // Nettoyage
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      // Méthode compatible avec tous les navigateurs
+      const downloadLink = document.createElement('a');
+      downloadLink.href = blobUrl;
+      downloadLink.download = `contrat_${contratId}.pdf`;
+      
+      // Déclenchement du téléchargement
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      
+      // Nettoyage asynchrone
+      setTimeout(() => {
+        document.body.removeChild(downloadLink);
+        URL.revokeObjectURL(blobUrl);
+      }, 1000);
     },
     error: (err) => {
-      console.error('Erreur génération PDF', err);
-      this.toastr.error('Échec génération rapport');
+      // Gestion avancée des erreurs blob
+      if (err.error instanceof Blob) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const errorMessage = reader.result as string;
+          this.toastr.error(`Erreur serveur: ${errorMessage}`);
+        };
+        reader.readAsText(err.error);
+      } else {
+        this.toastr.error('Erreur inconnue lors de la génération');
+      }
     }
   });
 }
+
+//   generatePdf(contratId: number): void {
+//   this.contratService.generatePdfReport(contratId).subscribe({
+//     next: (data: Blob) => {
+//       const blob = new Blob([data], { type: 'application/pdf' });
+//       const url = window.URL.createObjectURL(blob);
+      
+//       // Solution cross-browser
+//       const a = document.createElement('a');
+//       a.style.display = 'none';
+//       a.href = url;
+//       a.download = `contrat_${contratId}.pdf`;
+//       document.body.appendChild(a);
+//       a.click();
+      
+//       // Nettoyage
+//       window.URL.revokeObjectURL(url);
+//       document.body.removeChild(a);
+//     },
+//     error: (err) => {
+//       console.error('Erreur génération PDF', err);
+//       this.toastr.error('Échec génération rapport');
+//     }
+//   });
+// }
 
 
 addSuivi() {
