@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ContratService } from '../../../../shared/services/contrat/contrat.service';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin, Observable } from 'rxjs';
+import { catchError, forkJoin, Observable, of } from 'rxjs';
 import { Contrat } from '../../../../shared/models/contrat.model';
 import { saveAs } from 'file-saver';
 import { FormsModule } from '@angular/forms';
@@ -124,30 +124,44 @@ export class DepartmentComponent {
   
 
   loadContrats() {
-    this.contratService.getAllContrats().subscribe(
+    const manager = JSON.parse(localStorage.getItem('currentUser')!);
+
+    this.contratService.getContratsByManager(manager.id).subscribe(
       (data: any[]) => {
-        this.contrats = data;
-      this.contrats.forEach(contrat => {
-        if (contrat.partnerId) {
-          this.contratService.getPartnerDetails(contrat.partnerId).subscribe({
-            next: (partner) => {
-              contrat.partner = partner; 
-            },
-            error: (err) => console.error('Error loading partner', err)
-          });
-        }
-      });
-      },
-      (error) => {
-        console.error('Erreur lors du chargement des contrats:', error);
-      }
-    );
+      this.contrats = data;
+      // this.chargerDetailsPartenaires();
+    },
+    (error) => {
+      console.error('Erreur lors du chargement des contrats:', error);
+    }
+  );
   }
 
+//   private chargerDetailsPartenaires() {
+//   const requests = this.contrats
+//     .filter(contrat => contrat.partnerId)
+//     .map(contrat => 
+//       this.contratService.getPartnerDetails(contrat.partnerId!)
+//         .pipe(
+//           catchError(() => of(null)) // Gérer les erreurs silencieusement
+//         )
+//     );
+
+//   forkJoin(requests).subscribe(results => {
+//     results.forEach((partner, index) => {
+//       if (partner) {
+//         this.contrats[index].partner = partner;
+//       }
+//     });
+//   });
+// }
+
   loadContratCount(): void {
-    this.contratService.getContratCount().subscribe({
+    const manager = JSON.parse(localStorage.getItem('currentUser')!);
+
+    this.contratService.getContratCountByManager(manager.id).subscribe({
       next: (count) => this.ContratCount = count,
-      error: (err) => console.error('Error loading partner count', err)
+      error: (err) => console.error('Error loading Contract count', err)
     });
   }
 
@@ -173,16 +187,6 @@ export class DepartmentComponent {
       this.toastr.error('Erreur de chargement de l\'historique');
       this.modalService.dismissAll(); // Assurer la fermeture en cas d'erreur
   }
-
-  //   try {
-  //         this.selectedContrat = contrat;
-  //         this.modalService.open(content, { size: 'lg' });
-  //         const response = await this.suiviService.getHistorique(contrat.id).toPromise();
-  //         this.historiqueSuivi = response || []; // Gestion du undefined
-  //        } catch (error) {
-  //         console.error('Erreur chargement historique', error);
-  //         this.toastr.error('Erreur de chargement de l\'historique');
-  // } 
 }
 
   click(id:string){

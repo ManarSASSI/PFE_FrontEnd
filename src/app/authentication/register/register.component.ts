@@ -65,7 +65,13 @@ export class RegisterComponent {
   passwordMatchValidator(formGroup: FormGroup) {
     const password = formGroup.get('password')?.value;
     const confirmPassword = formGroup.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { mismatch: true };
+      if (password !== confirmPassword) {
+        formGroup.get('confirmPassword')?.setErrors({ mismatch: true });
+      return { mismatch: true };
+      } else {
+        formGroup.get('confirmPassword')?.setErrors(null);
+      return null;
+      }
   }
 
   togglePassword() {
@@ -122,9 +128,4 @@ export class RegisterComponent {
       }
     });
   }
-    // // Handle registration logic here
-    // console.log('Registration data:', this.registerForm.value);
-    // // After registration:
-    // // this.isLoading = false;
-    // // this.router.navigate(['/dashboard']);
 }

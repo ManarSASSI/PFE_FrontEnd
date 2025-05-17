@@ -58,7 +58,8 @@ export class AuthService {
   }
 
   public getCurrentUserValue() {
-    return this.currentUserSubject.value;
+    const userData = localStorage.getItem('currentUser');
+  return userData ? JSON.parse(userData) : null;
   }
 
   // Méthodes principales
@@ -129,7 +130,8 @@ export class AuthService {
   }
 
   get currentUserValue(): User | null {
-    return this.currentUserSubject.value;
+    const userData = localStorage.getItem('currentUser');
+  return userData ? JSON.parse(userData) : null;
   }
 
   getCurrentUserId(): string {
@@ -151,7 +153,7 @@ export class AuthService {
     return user?.displayName || '';
   }
 
-  // Méthodes optionnelles (si vous en avez besoin)
+  
   SendVerificationMail(): void {
     // Implémentez cette fonction si votre backend Spring gère l'envoi d'emails
     console.warn('SendVerificationMail not implemented for Spring Boot');
@@ -163,139 +165,9 @@ export class AuthService {
 }
 
   SetUserData(user: any): void {
+    if (user) {
     localStorage.setItem('currentUser', JSON.stringify(user));
     this.currentUserSubject.next(user);
   }
-
-
-
-
-
-
-
-
-
-  // all firebase getdata functions
-
-  // get isUserAnonymousLoggedIn(): boolean {
-  //   return this.authState !== null ? this.authState.isAnonymous : false;
-  // }
-
-  // get currentUserId(): string {
-  //   return this.authState !== null ? this.authState.uid : '';
-  // }
-
-  // get currentUserName(): string {
-  //   return this.authState['email'];
-  // }
-
-  // get currentUser(): any {
-  //   return this.authState !== null ? this.authState : null;
-  // }
-
-  // get isUserEmailLoggedIn(): boolean {
-  //   if (this.authState !== null && !this.isUserAnonymousLoggedIn) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-  // registerWithEmail(email: string, password: string) {
-  //   return this.afu
-  //     .createUserWithEmailAndPassword(email, password)
-  //     .then((user: any) => {
-  //       this.authState = user;
-  //     })
-  //     .catch((_error: any) => {
-  //       console.log(_error);
-  //       throw _error;
-  //     });
-  // }
-
-  // loginWithEmail(email: string, password: string) {
-  //   return this.afu
-  //     .signInWithEmailAndPassword(email, password)
-  //     .then((user: any) => {
-  //       this.authState = user;
-  //     })
-  //     .catch((_error: any) => {
-  //       console.log(_error);
-  //       throw _error;
-  //     });
-  // }
-
-  // singout(): void {
-  //   this.afu.signOut();
-  //   this.router.navigate(['/login']);
-  // }
-
-
-  // get isLoggedIn(): boolean {
-  //   const user = JSON.parse(this.cookieService.get('user')|| '{}');
-  //   return (user != null && user.emailVerified != false) ? true : false;
-  // }
-
-    // // Sign up with email/password
-    // SignUp(email:any, password:any) {
-    //   return this.afAuth.createUserWithEmailAndPassword(email, password)
-    //     .then((result:any) => {
-    //       /* Call the SendVerificaitonMail() function when new user sign
-    //       up and returns promise */
-    //       this.SendVerificationMail();
-    //       this.SetUserData(result.user);
-    //     }).catch((error:any) => {
-    //       window.alert(error.message)
-    //     })
-    // }
-
-
-    // // main verification function
-    // SendVerificationMail() {
-    //   return this.afAuth.currentUser.then((u:any) => u.sendEmailVerification()).then(() => {
-    //       this.router.navigate(['/dashboard/hrmdashboards/dashboard']);
-    //     })
-    // }
-//       // Set user
-//   SetUserData(user:any) {
-//     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-//     const userData: User = {
-//       email: user.email,
-//       displayName: user.displayName,
-//       uid: user.uid,
-//       photoURL: user.photoURL || 'src/favicon.ico',
-//       emailVerified: user.emailVerified
-//     };
-//     userRef.delete().then(function () {})
-//           .catch(function (error:any) {});
-//     return userRef.set(userData, {
-//       merge: true
-//     });
-//   }
-//  // sign in function
-//  SignIn(email:any, password:any) {
-//   return this.afAuth.signInWithEmailAndPassword(email, password)
-//     .then((result:any) => {
-//       if (result.user.emailVerified !== true) {
-//         this.SetUserData(result.user);
-//         this.SendVerificationMail();
-//         this.showLoader = true;
-//       } else {
-//         this.showLoader = false;
-//         this.ngZone.run(() => {
-//           this.router.navigate(['/auth/login']);
-//         });
-//       }
-//     }).catch((error:any) => {
-//       throw error;
-//     })
-// }
-// ForgotPassword(passwordResetEmail:any) {
-//   return this.afAuth.sendPasswordResetEmail(passwordResetEmail)
-//     .then(() => {
-//       window.alert('Password reset email sent, check your inbox.');
-//     }).catch((error:any) => {
-//       window.alert(error);
-//     });
-// }
+  }
 }

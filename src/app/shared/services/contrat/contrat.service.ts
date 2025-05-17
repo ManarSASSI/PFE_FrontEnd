@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { Contrat, EtatExecution } from '../../models/contrat.model';
-import { User } from '../auth/auth.service';
+import { AuthService, User } from '../auth/auth.service';
 
 
 @Injectable({
@@ -11,7 +11,7 @@ import { User } from '../auth/auth.service';
 export class ContratService {
   private apiUrl = 'http://localhost:8081/api/contrats';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
    getAllContrats(): Observable<Contrat[]> {
     return this.http.get<Contrat[]>(this.apiUrl).pipe(
@@ -21,6 +21,14 @@ export class ContratService {
       return of([]);
     })
   );
+  }
+
+  private getHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
   }
 
   getContratById(id: number): Observable<Contrat> {
@@ -49,7 +57,19 @@ export class ContratService {
   }
 
   createContrat(contrat: Contrat): Observable<Contrat> {
-    return this.http.post<Contrat>(this.apiUrl, contrat);
+    const manager = JSON.parse(localStorage.getItem('currentUser')!);
+    // Ajouter le manager ID au contrat
+    const contratWithManager = {
+    ...contrat,
+    managerId: manager.id
+  };
+
+    return this.http.post<Contrat>(
+    this.apiUrl, 
+    contratWithManager, 
+    { 
+      headers: this.getHeaders()  
+    });
   }
 
   getPartnerDetails(partnerId: number): Observable<User> {
@@ -65,5 +85,19 @@ export class ContratService {
   updateEtatExecution(contratId: number, etat: EtatExecution): Observable<Contrat> {
     return this.http.patch<Contrat>(`${this.apiUrl}/${contratId}/etat-execution`, { etatExecution: etat });
   }
+
+  getContrats(): Observable<Contrat[]> {
+    return this.http.get<Contrat[]>(this.apiUrl, { headers: this.getHeaders() });
+  }
+
+  getContratsByManager(managerId: number): Observable<Contrat[]> {
+  return this.http.get<Contrat[]>(`${this.apiUrl}/manager/${managerId}`, { 
+    headers: this.getHeaders() 
+  });
+}
+
+getContratCountByManager(managerId: number): Observable<number> {
+  return this.http.get<number>(`${this.apiUrl}/count/manager/${managerId}`);
+}
 
 }

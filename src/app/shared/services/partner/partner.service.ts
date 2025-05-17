@@ -31,12 +31,7 @@ export class PartnerService {
   }
 
   deletePartner(id: number): Observable<void> {
-    // const headers = new HttpHeaders({
-    //   'Authorization': `Bearer ${this.authService.getToken()}`,
-    //   'Content-Type': 'application/json'
-    // });
     return this.http.delete<void>(`${this.apiUrl}/${id}`
-      // , {headers}
     );
   }
 
@@ -59,8 +54,17 @@ export class PartnerService {
   getPartnerById(id: number): Observable<User> {
   return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
-  
-  
-  
+
+  getPartnersByManager(managerId: number, searchName: string = ''): Observable<User[]> {
+  let params = new HttpParams();
+  if (searchName) {
+    params = params.set('name', searchName);
+  }
+  return this.http.get<User[]>(`${this.apiUrl}/manager/${managerId}`, { params });
+  }
+
+  getPartnerCountByManager(managerId: number): Observable<number> {
+  return this.http.get<number>(`${this.apiUrl}/count/manager/${managerId}`);
+  }
   
 }

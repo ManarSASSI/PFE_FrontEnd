@@ -12,6 +12,7 @@ export interface Contrat {
   dateDebut: string; // ou Date si vous faites la conversion
   dateFin: string;   // ou Date si vous faites la conversion
   status: StatusContrat;
+  createdById?: number;
   commentaire: string | null;
   departement: Departement;
   heureDebutSemaine: string | null; // ou LocalTime si vous créez un type

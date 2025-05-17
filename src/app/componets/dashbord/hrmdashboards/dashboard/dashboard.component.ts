@@ -19,7 +19,7 @@ import SwiperCore, {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ContratService } from '../../../../shared/services/contrat/contrat.service';
 import { PartnerService } from '../../../../shared/services/partner/partner.service';
 import { Contrat } from '../../../../shared/models/contrat.model';
@@ -324,34 +324,19 @@ export class DashboardComponent implements OnInit {
   chartOptions2: any;
 
   constructor(private modalService:NgbModal,private contratService: ContratService,
-    private partnerService: PartnerService ){
+    private partnerService: PartnerService, private route: Router ){
     // this.futureDate.setDate(this.futureDate.getDate() + 2);
   }
 
   ngOnInit() : void{
+    const manager = JSON.parse(localStorage.getItem('currentUser')!);
+  if (!manager) {
+    // Redirection vers la page de login si non authentifié
+    this.route.navigate(['/auth/login']);
+    return;
+  }
     this.loadDashboardData();
     this.initializeCharts();
-  //   setInterval(() => {
-  //     this.timerInterval =  this.updateTimer();
-  //   }, 1000);
-  //   this.flatpickrOptions = {
-  //     enableTime: true,
-  //     noCalendar: true,
-  //     dateFormat: 'H:i',
-  //   };
-
-  //   flatpickr('#inlinetime', this.flatpickrOptions);
-
-  //     this.flatpickrOptions = {
-  //       enableTime: true,
-  //       dateFormat: 'Y-m-d H:i', // Specify the format you want
-  //       defaultDate: '2023-11-07 14:30', // Set the default/preloaded time (adjust this to your desired time)
-  //     };
-
-  //     flatpickr('#pretime', this.flatpickrOptions);
-  // }
-  // open(content:any) {
-  //   this.modalService.open(content, { windowClass : 'modalCusSty' })
   }
 
   getCountByType(type: string): number {
@@ -360,7 +345,9 @@ export class DashboardComponent implements OnInit {
 }
 
   loadDashboardData(): void {
-    this.partnerService.countPartners().subscribe({
+    const manager = JSON.parse(localStorage.getItem('currentUser')!);
+ 
+    this.partnerService.getPartnerCountByManager(manager.id).subscribe({
     next: count => {
       this.totalPartners = count;
       console.log('Total partners loaded:', count);
@@ -368,16 +355,15 @@ export class DashboardComponent implements OnInit {
     error: err => console.error('Error loading partners count:', err)
     });
 
-    this.contratService.getAllContrats().subscribe({
+    this.contratService.getContratsByManager(manager.id).subscribe({
       next: (contrats) => {
       console.log('Contrats loaded:', contrats);
       this.totalProjects = contrats.length;
       this.recentContrats = contrats.slice(0, 5); 
-
-      // Calculer les statistiques
       this.calculateContratStats(contrats);
-      this.updateChartsWithRealData();
       this.prepareRecentActivities(contrats);
+
+      this.updateChartsWithRealData();
     },
       error: (err) => {
         console.error('Erreur chargement contrats:', err);
@@ -386,12 +372,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  //   this.recentActivities = [
-  //     // Données temporaires, à remplacer par un appel API
-  //     { type: 'Nouveau contrat', date: new Date(), details: 'Contrat #CT-001 créé' },
-  //     { type: 'Modification', date: new Date(), details: 'Contrat #CT-002 modifié' }
-  //   ];
-  // }
 
   prepareRecentActivities(contrats: Contrat[]): void {
     this.recentActivities = contrats

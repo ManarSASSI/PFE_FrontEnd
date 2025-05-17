@@ -78,21 +78,26 @@ export class EmployeeListComponent implements OnInit {
 
 
   loadPartners(): void {
+    const manager = JSON.parse(localStorage.getItem('currentUser')!);
     const searchName = this.searchQuery.trim();
     console.log('Chargement des partenaires...');
-    this.partnerService.getPartners(searchName).subscribe({
+
+    this.partnerService.getPartnersByManager(manager.id, searchName).subscribe({
       next: (partners) => {
         console.log('Partenaires reçus:', partners); // Debug
         this.partners = partners;
       },
       error: (err) => {
         console.error('Error loading partners', err);
+        this.toastr.error('Error Loading Partner');
       }
     });
   }
 
   loadPartnerCount(): void {
-    this.partnerService.getPartnerCount().subscribe({
+    const manager = JSON.parse(localStorage.getItem('currentUser')!);
+
+    this.partnerService.getPartnerCountByManager(manager.id).subscribe({
       next: (count) => this.partnerCount = count,
       error: (err) => console.error('Error loading partner count', err)
     });

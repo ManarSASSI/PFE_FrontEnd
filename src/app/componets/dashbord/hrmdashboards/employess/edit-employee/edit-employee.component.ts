@@ -34,7 +34,10 @@ export class EditEmployeeComponent implements OnInit {
         Validators.minLength(8),
         Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
       ]],
-      phone: ['', Validators.pattern(/^[0-9]{8}$/)],
+      phone: ['',[
+        Validators.required, 
+        Validators.pattern(/^\+?[\d\s-]{10,}$/)
+  ]],
       location: [''],
     });
   }

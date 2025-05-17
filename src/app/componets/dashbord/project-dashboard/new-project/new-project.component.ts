@@ -61,39 +61,12 @@ export class NewProjectComponent implements OnInit {
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
-  // model!: NgbDateStruct;
-  // model1!: NgbDateStruct;
+  
   constructor(private fb: FormBuilder,
     private contratService: ContratService,
     private partnerService: PartnerService,private router: Router,private toastr: ToastrService) { 
       this.loadPartners();
     }
-
-
-
-  // selected=['choice 2','Choice 3']
-  // inlineDatePicker: boolean = false;
-  // weekNumbers!: true
-  // // selectedDate: Date | null = null; 
-  // flatpickrOptions: any = {
-  //   inline: true,
-   
-  // };
-  // flatpickrOptions: FlatpickrOptions;
-
-  // editordoc = jsonDoc;
-
-  
-
-  // form = new FormGroup({
-  //   editorContent: new FormControl(
-  //     { value: jsonDoc, disabled: false },
-  //     Validators.required()
-  //   ),
-  // });
-
-  
-
 
   ngOnInit() {
     this.initializeForm();
@@ -119,8 +92,11 @@ export class NewProjectComponent implements OnInit {
       return;
     }
     if (this.contratForm.valid) {
+      const manager = JSON.parse(localStorage.getItem('currentUser')!);
+      console.log("managerId :"+ manager.id)
       const formData: Contrat = {
         ...this.contratForm.value,
+        createdById: manager.id,
         heureDebutSemaine: '08:00',
         heureFinSemaine: '18:00',
         joursRetard: 0,

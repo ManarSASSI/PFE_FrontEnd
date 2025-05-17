@@ -19,7 +19,6 @@ import { AppStateService } from '../../shared/services/app-state.service';
     AngularFireDatabaseModule,
     AngularFirestoreModule,ToastrModule
 ],
-  
     providers: [FirebaseService,{ provide: ToastrService, useClass: ToastrService }],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -42,8 +41,6 @@ export class LoginComponent implements OnInit{
     }
   }
 
-// disabled = '';
-// public localdata:any=this.appStateService;
 
 constructor(
   @Inject(DOCUMENT) private document: Document,private elementRef: ElementRef,
@@ -61,13 +58,6 @@ constructor(
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]
   });
-  // AngularFireModule.initializeApp(environment.firebase);
-
-  // document.body.classList.add('error-1');
-  // const htmlElement =
-  // this.elementRef.nativeElement.ownerDocument.documentElement;
-// htmlElement.removeAttribute('style');
-// Convenience getter pour accéder facilement aux champs du formulaire
 
 }
 ngOnInit(): void {
@@ -82,16 +72,7 @@ ngOnDestroy(): void {
 this.elementRef.nativeElement.ownerDocument.documentElement;
   document.body.classList.remove('error-1');    
 
-
-
-
 }
-//  firestoreModule = this.firebaseService.getFirestore();
-//  databaseModule = this.firebaseService.getDatabase();
-//  authModule = this.firebaseService.getAuth();
-// firebase
-// email = 'spruko@admin.com';
-// password = 'sprukoadmin';
 errorMessage = ''; // validation _error handle
 _error: { name: string; message: string } = { name: '', message: '' }; // for firbase _error handle
 
@@ -108,8 +89,6 @@ clearErrorMessage() {
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
-
-
 
 login() {
 
@@ -187,6 +166,7 @@ Submit() {
       .subscribe({
         next: (res) => {
           console.log('Réponse complète:', res);
+          
           this.router.navigate(['/dashboard/hrmdashboards/dashboard']);
           this.toastr.success('login successful', 'PFE', {
             timeOut: 3000,
@@ -209,21 +189,5 @@ Submit() {
         }
       });
   }
-
-  // if (
-  //   this.loginForm.controls['username'].value === 'spruko@admin.com' &&
-  //   this.loginForm.controls['password'].value === 'sprukoadmin'
-  // ) {
-  //   this.router.navigate(['/dashboard/hrmdashboards/dashboard']);
-  //   this.toastr.success('login successful','dayone', {
-  //     timeOut: 3000,
-  //     positionClass: 'toast-top-right',
-  //   });
-  // } else {
-  //   this.toastr.error('Invalid details','dayone', {
-  //     timeOut: 3000,
-  //     positionClass: 'toast-top-right',
-  //   });
-  // }
 
 }
