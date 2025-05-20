@@ -14,6 +14,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { RightSidebarComponent } from '../right-sidebar/right-sidebar.component';
 import { AlertService } from '../../services/alert/alert.service';
+import { MessageService } from '../../services/message/message.service';
 interface Item {
   id: number;
   name: string;
@@ -31,7 +32,11 @@ export class HeaderComponent implements OnInit {
   userName: string = 'User';
   notificationCount = 0;
   alerts: any[] = [];
+  currentManagerId: number | null = null;
 
+  isMessagesOpen = false;
+  messages: any[] = [];
+  messageCount = 0;
   cartItemCount: number = 5;
   public isCollapsed = true;
   collapse: any;
@@ -49,7 +54,8 @@ modal: any;
     public renderer: Renderer2,
     public modalService:NgbModal,
     private router: Router, private activatedRoute: ActivatedRoute,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private messageService: MessageService
   ) {this.localStorageBackUp()}
 
   private offcanvasService = inject(NgbOffcanvas);
@@ -247,12 +253,15 @@ modal: any;
   public SearchResultEmpty: boolean = false;
 
   ngOnInit(): void {
-    this.loadAlerts();
     const userData = localStorage.getItem('currentUser');
+    
     if (userData) {
       try {
         const user = JSON.parse(userData);
         this.userName = user.username || 'User';
+        this.currentManagerId = user.id;
+        this.loadManagerAlerts();
+        
       } catch (e) {
         console.error('Erreur de parsing des données utilisateur', e);
       }
@@ -385,27 +394,21 @@ modal: any;
     this.isInputFocused = false;
   }
 
-  // isFullscreen = false;
-
-  // fullScreenToggle() {
-  //   this.isFullscreen = !this.isFullscreen;
-  // }
   isFullscreen: boolean = false;
   toggleFullscreen() {
     this.isFullscreen = !this.isFullscreen;
   }
 
-  private loadAlerts() {
-    this.alertService.getUserAlerts().subscribe({
+  private loadManagerAlerts() {
+    this.alertService.getAlertsForManager(this.currentManagerId!).subscribe({
       next: (alerts) => {
-        console.log('Alertes reçues:', alerts);
         this.alerts = alerts;
-        this.notificationCount = alerts.filter(alert => !alert.read).length;
-        console.log('Nombre de notifications non lues:', this.notificationCount); 
+        this.notificationCount = this.alerts.filter(alert => !alert.read).length;
       },
       error: (err) => console.error('Error loading alerts', err)
     });
   }
+
   openNotifications() {
     this.offcanvasService.open(RightSidebarComponent, {
     position: 'end',

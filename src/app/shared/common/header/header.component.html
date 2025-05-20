@@ -30,7 +30,7 @@
               <!-- End::header-link -->
               <!-- Start::header-search -->
               <div class="mt-0 position-relative">
-                  <form class="form-inline d-none d-lg-block">
+                  <!-- <form class="form-inline d-none d-lg-block">
                       <div class="search-element header-search">
                           <input type="search" class="form-control header-search " placeholder="Search…" (click)="SearchHeader()" [(ngModel)]="text" [ngModelOptions]="{standalone: true}"
                           (keyup)="Search(text)" aria-label="Search" tabindex="1">
@@ -38,7 +38,7 @@
                               <i class="fe fe-search"></i>
                           </button>
                         </div>
-                    </form>
+                    </form> -->
                     <div>
     
                       @if("menuItems?.length>0"){
@@ -116,66 +116,6 @@
               </a>
               <!-- End::header-link|layout-setting -->
           </div>
-          <!-- End::header-element -->
-
-          <!-- Start::header-element -->
-        <!--  <div class="header-element country-selector" ngbDropdown [autoClose]="'outside'">
-               Start::header-link|dropdown-toggle -->
-            <!--  <a href="javascript:void(0);" ngbDropdownToggle class="header-link dropdown-toggle" data-bs-auto-close="outside" data-bs-toggle="dropdown">
-                  <img src="./assets/images/flags/6.jpg" alt="img" class="rounded-circle">
-              </a>
-              <!-- End::header-link|dropdown-toggle 
-              <ul ngbDropdownMenu class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none">
-                  <li>
-                      <a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                          <span class="avatar avatar-xs lh-1 me-2">
-                              <img src="./assets/images/flags/5.jpg" alt="img">
-                          </span>
-                          English
-                      </a>
-                  </li>
-                  <li>
-                      <a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                          <span class="avatar avatar-xs lh-1 me-2">
-                              <img src="./assets/images/flags/4.jpg" alt="img" >
-                          </span>
-                          Spanish
-                      </a>
-                  </li>
-                  <li>
-                      <a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                          <span class="avatar avatar-xs lh-1 me-2">
-                              <img src="./assets/images/flags/6.jpg" alt="img" >
-                          </span>
-                          French
-                      </a>
-                  </li>
-                  <li>
-                      <a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                          <span class="avatar avatar-xs lh-1 me-2">
-                              <img src="./assets/images/flags/1.jpg" alt="img" >
-                          </span>
-                          German
-                      </a>
-                  </li>
-                  <li>
-                      <a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                          <span class="avatar avatar-xs lh-1 me-2">
-                              <img src="./assets/images/flags/2.jpg" alt="img" >
-                          </span>
-                          Italian
-                      </a>
-                  </li>
-                  <li>
-                      <a ngbDropdownItem class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                          <span class="avatar avatar-xs lh-1 me-2">
-                              <img src="./assets/images/flags/3.jpg" alt="img" >
-                          </span>
-                          Russian
-                      </a>
-                  </li>
-              </ul>
-          </div>-->
           <!-- End::header-element -->
 
           <!-- Start::header-element -->
@@ -324,91 +264,154 @@
               </div>
               <!-- End::main-header-dropdown -->
           </div>
-          <!-- End::header-element -->
 
-          <!-- Start::header-element -->
-          <!-- <div class="header-element header-shortcuts-dropdown d-none d-lg-flex" ngbDropdown>
-              < Start::header-link|dropdown-toggle -->
-              <!-- <a href="javascript:void(0);" ngbDropdownToggle class="header-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="notificationDropdown" aria-expanded="false">
-                  <i class="fe fe-grid header-link-icon"></i>
+          <!-- <div class="header-element cart-dropdown" ngbDropdown [autoClose]="'outside'"> -->
+              <!-- Start::header-link|dropdown-toggle -->
+              <!-- <a href="javascript:void(0);" ngbDropdownToggle class="header-link dropdown-toggle" data-bs-auto-close="outside" data-bs-toggle="dropdown">
+                  <i class="fe fe-mail header-link-icon"></i>
+                  <span class="badge bg-success rounded-pill header-icon-badge" id="cart-icon-badge">{{cartItemCount}}</span>
               </a> -->
               <!-- End::header-link|dropdown-toggle -->
               <!-- Start::main-header-dropdown -->
-              <!-- <div ngbDropdownMenu class="main-header-dropdown header-shortcuts-dropdown dropdown-menu pb-0 dropdown-menu-end" aria-labelledby="notificationDropdown">
+              <!-- <div ngbDropdownMenu class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none">
                   <div class="p-3">
                       <div class="d-flex align-items-center justify-content-between">
-                          <p class="mb-0 fs-17 fw-medium">Related Apps</p>
+                          <p class="mb-0 fs-17 fw-medium">You have messages</p>
+                          <span class="badge bg-success-transparent" id="cart-data">{{cartItemCount}} Items</span>
                       </div>
                   </div>
-                  <div class="dropdown-divider mb-0"></div>
-                  <div class="main-header-shortcuts p-3" id="header-shortcut-scroll">
-                     <div class="row g-2">
-                         <div class="col-4">
-                              <a routerLink="/components/calendar">
-                                  <div class="text-center p-3 related-app border">
-                                      <span class="avatar fs-23 bg-success-transparent p-2 mb-2">
-                                          <i class='bx bx-calendar text-success'></i>
-                                      </span>
-                                      <span class="d-block fs-13 fw-normal">Calendar</span>
+                  <div><hr class="dropdown-divider"></div>
+                  <overlay-scrollbars [defer]>
+                      <ul class="list-unstyled mb-0" id="header-cart-items-scroll" (click)="handleCardClick($event)" >
+                          <li class="dropdown-item" ngbDropdownItem id="row1">
+                              <div class="d-flex align-items-start cart-dropdown-item">
+                                  <img src="./assets/images/users/1.jpg" alt="img" class="avatar avatar-md avatar-rounded br-5 me-3">
+                                  <div class="flex-grow-1">
+                                      <div class="d-flex align-items-start justify-content-between mb-0">
+                                          <div class="mb-0 fs-13 text-dark fw-medium">
+                                              <a routerLink="/chat">Jack Wright</a>
+                                          </div>
+                                          <div>
+                                              <a href="javascript:void(0);"  (click)="removeRow('row1')" class="header-cart-remove float-end dropdown-item-close"><i class="bi bi-x-octagon"></i></a>
+                                          </div>
+                                      </div>
+                                      <div class="min-w-fit-content d-flex align-items-start justify-content-between">
+                                          <ul class="header-product-item d-flex">
+                                              <li>All the best your template awesome</li>
+                                              <li class="text-muted">3 hours ago</li>
+                                          </ul>
+                                      </div>
                                   </div>
-                              </a>
-                         </div>
-                         <div class="col-4">
-                              <a routerLink="/pages/email/email-inbox">
-                                  <div class="text-center p-3 related-app border">
-                                      <span class="avatar  fs-23 bg-info-transparent p-2 mb-2">
-                                          <i class='bx bx-envelope  text-info'></i>
-                                      </span>
-                                      <span class="d-block fs-13 fw-normal">Mail</span>
+                              </div>
+                          </li>
+                          <li class="dropdown-item" ngbDropdownItem id="row2">
+                              <div class="d-flex align-items-start cart-dropdown-item">
+                                  <img src="./assets/images/users/3.jpg" alt="img" class="avatar avatar-md avatar-rounded br-5 me-3">
+                                  <div class="flex-grow-1">
+                                      <div class="d-flex align-items-start justify-content-between mb-0">
+                                          <div class="mb-0 fs-13 text-dark fw-medium">
+                                              <a routerLink="/chat">Lisa Rutherford</a>
+                                          </div>
+                                          <div>
+                                              <a href="javascript:void(0);"  (click)="removeRow('row2')" class="header-cart-remove float-end dropdown-item-close"><i class="bi bi-x-octagon"></i></a>
+                                          </div>
+                                      </div>
+                                      <div class="min-w-fit-content d-flex align-items-start justify-content-between">
+                                          <ul class="header-product-item d-flex">
+                                              <li>Hey! there I'm available</li>
+                                              <li class="text-muted">5 hour ago</li>
+                                          </ul>
+                                      </div>
                                   </div>
-                              </a>
-                         </div>
-                         <div class="col-4">
-                              <a routerLink="/pages/profile/profile01">
-                                  <div class="text-center p-3 related-app border">
-                                      <span class="avatar bg-warning-transparent fs-23 bg p-2 mb-2">
-                                          <i class='bx bx-user  text-warning'></i>
-                                      </span>
-                                      <span class="d-block fs-13 fw-normal">Profile</span>
+                              </div>
+                          </li>
+                          <li class="dropdown-item" ngbDropdownItem id="row3">
+                              <div class="d-flex align-items-start cart-dropdown-item">
+                                  <img src="./assets/images/users/5.jpg" alt="img" class="avatar avatar-md avatar-rounded br-5 me-3">
+                                  <div class="flex-grow-1">
+                                      <div class="d-flex align-items-start justify-content-between mb-0">
+                                          <div class="mb-0 fs-13 text-dark fw-medium">
+                                              <a routerLink="/chat">Blake Walker</a>
+                                          </div>
+                                          <div>
+                                              <a href="javascript:void(0);"  (click)="removeRow('row3')" class="header-cart-remove float-end dropdown-item-close"><i class="bi bi-x-octagon"></i></a>
+                                          </div>
+                                      </div>
+                                      <div class="min-w-fit-content d-flex align-items-start justify-content-between">
+                                          <ul class="header-product-item d-flex">
+                                              <li>Just created a new blog post</li>
+                                              <li class="text-muted">45 mintues ago</li>
+                                          </ul>
+                                      </div>
                                   </div>
-                              </a>
-                         </div>
-                         <div class="col-4">
-                              <a routerLink="/chat">
-                                  <div class="text-center p-3 related-app border">
-                                      <span class="avatar    bg-pink-transparent fs-23 bg p-2 mb-2">
-                                          <i class='bx bx-chat text-pink'></i>
-                                      </span>
-                                      <span class="d-block fs-13 fw-normal">Chat</span>
+                              </div>
+                          </li>
+                          <li class="dropdown-item" ngbDropdownItem id="row4">
+                              <div class="d-flex align-items-start cart-dropdown-item">
+                                  <img src="./assets/images/users/4.jpg" alt="img" class="avatar avatar-md avatar-rounded br-5 me-3">
+                                  <div class="flex-grow-1">
+                                      <div class="d-flex align-items-start justify-content-between mb-0">
+                                          <div class="mb-0 fs-13 text-dark fw-medium">
+                                              <a routerLink="/chat">Fiona Morrison</a>
+                                          </div>
+                                          <div>
+                                              <a href="javascript:void(0);"  (click)="removeRow('row4')" class="header-cart-remove float-end dropdown-item-close"><i class="bi bi-x-octagon"></i></a>
+                                          </div>
+                                      </div>
+                                      <div class="min-w-fit-content d-flex align-items-start justify-content-between">
+                                          <ul class="header-product-item d-flex">
+                                              <li>Added new comment on your photo</li>
+                                              <li class="text-muted">2 days ago</li>
+                                          </ul>
+                                      </div>
                                   </div>
-                              </a>
-                         </div>
-                         <div class="col-4">
-                              <a routerLink="/components/contact/contact-list02">
-                                  <div class="text-center p-3 related-app border">
-                                      <span class="avatar    bg-secondary-transparent fs-23 bg p-2 mb-2">
-                                          <i class='bx bx-phone text-secondary'></i>
-                                      </span>
-                                      <span class="d-block fs-13 fw-normal">Contacts</span>
+                              </div>
+                          </li>
+                          <li class="dropdown-item" ngbDropdownItem id="row5">
+                              <div class="d-flex align-items-start cart-dropdown-item">
+                                  <img src="./assets/images/users/6.jpg" alt="img" class="avatar avatar-md avatar-rounded br-5 me-3">
+                                  <div class="flex-grow-1">
+                                      <div class="d-flex align-items-start justify-content-between mb-0">
+                                          <div class="mb-0 fs-13 text-dark fw-medium">
+                                              <a routerLink="/chat">Stewart Bond</a>
+                                          </div>
+                                          <div>
+                                              <a href="javascript:void(0);"  (click)="removeRow('row5')" class="header-cart-remove float-end dropdown-item-close"><i class="bi bi-x-octagon"></i></a>
+                                          </div>
+                                      </div>
+                                      <div class="min-w-fit-content d-flex align-items-start justify-content-between">
+                                          <ul class="header-product-item d-flex">
+                                              <li>Your payment invoice is generated</li>
+                                              <li class="text-muted">3 days ago</li>
+                                          </ul>
+                                      </div>
                                   </div>
-                              </a>
-                         </div>
-                         <div class="col-4">
-                              <a routerLink="/pages/settings">
-                                  <div class="text-center p-3 related-app border">
-                                      <span class="avatar    bg-teal-transparent fs-23 bg p-2 mb-2">
-                                          <i class='bx bx-cog text-teal'></i>
-                                      </span>
-                                      <span class="d-block fs-13 fw-normal">Settings</span>
-                                  </div>
-                              </a>
-                         </div>
-                     </div>
+                              </div>
+                          </li>
+                      </ul>
+                    </overlay-scrollbars>
+                    @if (!isCartEmpty) {
+                        <div class="p-3 empty-header-item border-top">
+                            <div class="d-grid">
+                                <a routerLink="/chat/chat" class="btn btn-primary">See All Messages</a>
+                            </div>
+                        </div>
+                    }
+                  <div class="p-5 empty-item" [class.d-none]="!isCartEmpty">
+                      <div class="text-center">
+                          <span class="avatar avatar-xl avatar-rounded bg-warning-transparent">
+                              <i class="ri-chat-2-line fs-2"></i>
+                          </span>
+                          <h6 class="fw-bold mb-1 mt-3">Your Inbox is Empty</h6>
+                          <span class="mb-3 fw-normal fs-13 d-block">See more messages in chat page :)</span>
+                          <a routerLink="/chat/chat" class="btn btn-primary btn-wave btn-sm m-1" data-abc="true">continue Viewing <i class="bi bi-arrow-right ms-1"></i></a>
+                      </div>
                   </div>
               </div> -->
               <!-- End::main-header-dropdown -->
-          <!-- </div>  -->
+          <!-- </div> -->
           <!-- End::header-element -->
+
 
           <!-- Start::header-element -->
           <div class="header-element header-fullscreen">

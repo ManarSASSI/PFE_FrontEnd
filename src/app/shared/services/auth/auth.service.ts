@@ -32,13 +32,14 @@ export class AuthService {
   constructor(
     private storage: StorageService,
     private http: HttpClient,
-    private router: Router,public ngZone: NgZone, 
+    private router: Router,
+    public ngZone: NgZone, 
   ) {
  
     const userData = this.storage.getUser;
     this.currentUserSubject = new BehaviorSubject<any>(userData);
     this.currentUser = this.currentUserSubject.asObservable();
-    this.clearStorage();  
+    
   }
 
   private loadCurrentUser(): void {
