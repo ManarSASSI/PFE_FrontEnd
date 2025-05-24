@@ -66,5 +66,11 @@ export class PartnerService {
   getPartnerCountByManager(managerId: number): Observable<number> {
   return this.http.get<number>(`${this.apiUrl}/count/manager/${managerId}`);
   }
+
+  getMonthlyPartnersCount(managerId: number): Observable<number[]> {
+  return this.http.get<number[]>(`${this.apiUrl}/monthly-count/${managerId}`);
+ }
+
+ 
   
 }

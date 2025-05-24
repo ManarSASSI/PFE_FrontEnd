@@ -1,58 +1,24 @@
-import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarModule, CalendarView } from 'angular-calendar';
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
-// import { DlDateTimePickerChange } from 'angular-bootstrap-datetimepicker';
-import * as data from './employeeDashboardChartData'
-import { SharedModule } from '../../../../shared/common/sharedmodule';
-import { NgApexchartsModule } from 'ng-apexcharts';
-import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { subDays, startOfDay, addDays, endOfMonth, addHours, isSameMonth, isSameDay, endOfDay } from 'date-fns';
-import { Subject } from 'rxjs';
-import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions, EventInput } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGrigPlugin from '@fullcalendar/timegrid';
-import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
-import moment from 'moment';
-import flatpickr from 'flatpickr';
-import { FlatpickrDefaults, FlatpickrModule } from 'angularx-flatpickr';
-import { Router, RouterModule } from '@angular/router';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { Contrat } from '../../../../shared/models/contrat.model';
-import { ContratService } from '../../../../shared/services/contrat/contrat.service';
-import { PartnerService } from '../../../../shared/services/partner/partner.service';
-import { CommonModule } from '@angular/common';
-const colors = {
-  red: {
-    primary: '#705ec8',
-    secondary: '#6958be',
-  },
-  blue: {
-    primary: '#fb1c52',
-    secondary: '#f83e6b',
-  },
-  yellow: {
-    primary: '#ffab00',
-    secondary: '#f3a403',
-  },
-};
-@Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [CommonModule,SharedModule,NgApexchartsModule,NgbModule,CalendarModule,FullCalendarModule,RouterModule,FlatpickrModule,NgSelectModule],
-  providers:[FlatpickrDefaults],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
-})
-export class DashboardComponent implements OnInit {
+import { Component } from '@angular/core';
+import { Contrat } from '../../../shared/models/contrat.model';
+import { PartnerService } from '../../../shared/services/partner/partner.service';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ContratService } from '../../../shared/services/contrat/contrat.service';
 
-    totalPartners: number = 0;
+@Component({
+  selector: 'app-admin-dashboard',
+  standalone: true,
+  imports: [],
+  templateUrl: './admin-dashboard.component.html',
+  styleUrl: './admin-dashboard.component.scss'
+})
+export class AdminDashboardComponent {
+
+  totalPartners: number = 0;
     totalProjects: number = 0;
     recentContrats: Contrat[] = [];
     contratStats: any = {};
     recentActivities: any[] = [];
-  
-    monthlyPartners: number[] = [];
-    monthlyProjects: number[] = [];
   
     chartOptions: any;
     chartOptions1: any;
@@ -64,34 +30,14 @@ export class DashboardComponent implements OnInit {
     }
   
     ngOnInit() : void{
-      const partner = JSON.parse(localStorage.getItem('currentUser')!);
-    if (!partner) {
+      const manager = JSON.parse(localStorage.getItem('currentUser')!);
+    if (!manager) {
       // Redirection vers la page de login si non authentifié
       this.route.navigate(['/auth/login']);
       return;
     }
-      this.loadPartnerData(partner.id);
-    }
-
-
-    loadPartnerData(partnerId: number): void {
-    // Chargement des contrats du partenaire
-    this.contratService.getContratsByPartner(partnerId).subscribe({
-    next: (contrats) => {
-      this.totalProjects = contrats.length;
-      this.recentContrats = contrats.slice(0, 5);
-      this.calculateContratStats(contrats);
-      this.prepareRecentActivities(contrats);
-    }
-    });
-
-    // Statistiques mensuelles
-    this.contratService.getMonthlyContratsForPartner(partnerId).subscribe({
-    next: counts => {
-      this.monthlyProjects = this.normalizeMonthlyData(counts);
-      this.updateChartData();
-    }
-    });
+      this.loadDashboardData();
+      this.initializeCharts();
     }
   
     getCountByType(type: string): number {
@@ -125,118 +71,7 @@ export class DashboardComponent implements OnInit {
   
         }
       });
-  
-      this.partnerService.getMonthlyPartnersCount(manager.id).subscribe({
-      next: counts => {
-        console.log('Monthly Partners Data:', counts); 
-        this.monthlyPartners = this.normalizeMonthlyData(counts);
-        this.updateChartData();
-      },
-      error: err => console.error('Error loading partners monthly:', err)
-    });
-  
-    this.contratService.getMonthlyContratsCount(manager.id).subscribe({
-      next: counts => {
-        console.log('Monthly Projects Data:', counts); 
-        this.monthlyProjects = this.normalizeMonthlyData(counts);
-        this.updateChartData();
-      },
-      error: err => console.error('Error loading contracts monthly:', err)
-    });
     }
-  
-    private normalizeMonthlyData(data: number[]): number[] {
-    const normalized = new Array(12).fill(0);
-    if (data && data.length === 12) {
-      return [...data];
-    }
-    // Si les données sont partielles, les répartir correctement
-    data?.forEach((val, index) => {
-      if (index < 12) normalized[index] = val;
-    });
-    return normalized;
-   }
-  
-    updateChartData(): void {
-    if (this.monthlyPartners.length === 0 || this.monthlyProjects.length === 0) return;
-  
-    this.chartOptions = {
-      series: [{
-        name: "Mes contrats", 
-        data: this.monthlyProjects,
-      }],
-      chart: {
-        height: 325,
-        type: 'line',
-        zoom: { enabled: false },
-        toolbar: { show: false },
-        dropShadow: {
-          enabled: true,
-          top: 5,
-          left: 0,
-          blur: 3,
-          color: '#000',
-          opacity: 0.1
-        }
-      },
-      dataLabels: { enabled: false },
-      legend: { show: false },
-      stroke: {
-        curve: 'smooth',
-        width: 3,
-        dashArray: [0, 5]
-      },
-      grid: {
-        borderColor: '#f2f6f7'
-      },
-      colors: ["var(--primary-color)", "rgba(var(--primary-rgb), 0.2)"],
-      xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        axisBorder: {
-          show: false,
-          color: 'rgba(119, 119, 142, 0.05)'
-        },
-        axisTicks: {
-          show: true,
-          color: 'rgba(119, 119, 142, 0.05)',
-          width: 6
-        },
-        labels: {
-          rotate: -90
-        }
-      },
-      yaxis: {
-        title: {
-          text: '',
-          style: {
-            color: '#adb5be',
-            fontSize: '14px',
-            fontFamily: 'poppins, sans-serif'
-          }
-        }
-      }
-    };
-  }
-  
-  
-  //   updateChartData(): void {
-  //   if (this.monthlyPartners.length === 0 || this.monthlyProjects.length === 0) return;
-  
-  //   this.chartOptions = {
-  //     ...this.chartOptions,
-  //     series: [{
-  //       name: "Total Partners",
-  //       data: this.monthlyPartners
-  //     }, {
-  //       name: "Total Projects", 
-  //       data: this.monthlyProjects
-  //     }],
-  //     xaxis: {
-  //       ...this.chartOptions.xaxis,
-  //       categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  //     }
-  //   };
-  // }
   
   
     prepareRecentActivities(contrats: Contrat[]): void {
@@ -433,5 +268,5 @@ export class DashboardComponent implements OnInit {
   //         clearInterval(this.timerInterval);
   //     }
   // }
-}
 
+}

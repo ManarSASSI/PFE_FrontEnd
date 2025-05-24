@@ -39,7 +39,7 @@ SwiperCore.use([
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule,SharedModule,NgApexchartsModule,SwiperModule,NgbModule,RouterModule,FlatpickrModule],
+  imports: [CommonModule,SharedModule,NgApexchartsModule,SwiperModule,NgbModule,RouterModule,FlatpickrModule,NgApexchartsModule],
   providers:[FlatpickrDefaults],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -319,6 +319,9 @@ export class DashboardComponent implements OnInit {
   contratStats: any = {};
   recentActivities: any[] = [];
 
+  monthlyPartners: number[] = [];
+  monthlyProjects: number[] = [];
+
   chartOptions: any;
   chartOptions1: any;
   chartOptions2: any;
@@ -370,7 +373,122 @@ export class DashboardComponent implements OnInit {
 
       }
     });
+
+    this.partnerService.getMonthlyPartnersCount(manager.id).subscribe({
+    next: counts => {
+      console.log('Monthly Partners Data:', counts); 
+      this.monthlyPartners = this.normalizeMonthlyData(counts);
+      this.updateChartData();
+    },
+    error: err => console.error('Error loading partners monthly:', err)
+  });
+
+  this.contratService.getMonthlyContratsCount(manager.id).subscribe({
+    next: counts => {
+      console.log('Monthly Projects Data:', counts); 
+      this.monthlyProjects = this.normalizeMonthlyData(counts);
+      this.updateChartData();
+    },
+    error: err => console.error('Error loading contracts monthly:', err)
+  });
   }
+
+  private normalizeMonthlyData(data: number[]): number[] {
+  const normalized = new Array(12).fill(0);
+  if (data && data.length === 12) {
+    return [...data];
+  }
+  // Si les données sont partielles, les répartir correctement
+  data?.forEach((val, index) => {
+    if (index < 12) normalized[index] = val;
+  });
+  return normalized;
+ }
+
+  updateChartData(): void {
+  if (this.monthlyPartners.length === 0 || this.monthlyProjects.length === 0) return;
+
+  this.chartOptions = {
+    series: [{
+      name: "Total Partners",
+      data: this.monthlyPartners
+    }, {
+      name: "Total Projects", 
+      data: this.monthlyProjects,
+      dashArray: [5, 5]
+    }],
+    chart: {
+      height: 325,
+      type: 'line',
+      zoom: { enabled: false },
+      toolbar: { show: false },
+      dropShadow: {
+        enabled: true,
+        top: 5,
+        left: 0,
+        blur: 3,
+        color: '#000',
+        opacity: 0.1
+      }
+    },
+    dataLabels: { enabled: false },
+    legend: { show: false },
+    stroke: {
+      curve: 'smooth',
+      width: 3,
+      dashArray: [0, 5]
+    },
+    grid: {
+      borderColor: '#f2f6f7'
+    },
+    colors: ["var(--primary-color)", "rgba(var(--primary-rgb), 0.2)"],
+    xaxis: {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      axisBorder: {
+        show: false,
+        color: 'rgba(119, 119, 142, 0.05)'
+      },
+      axisTicks: {
+        show: true,
+        color: 'rgba(119, 119, 142, 0.05)',
+        width: 6
+      },
+      labels: {
+        rotate: -90
+      }
+    },
+    yaxis: {
+      title: {
+        text: '',
+        style: {
+          color: '#adb5be',
+          fontSize: '14px',
+          fontFamily: 'poppins, sans-serif'
+        }
+      }
+    }
+  };
+}
+
+
+//   updateChartData(): void {
+//   if (this.monthlyPartners.length === 0 || this.monthlyProjects.length === 0) return;
+
+//   this.chartOptions = {
+//     ...this.chartOptions,
+//     series: [{
+//       name: "Total Partners",
+//       data: this.monthlyPartners
+//     }, {
+//       name: "Total Projects", 
+//       data: this.monthlyProjects
+//     }],
+//     xaxis: {
+//       ...this.chartOptions.xaxis,
+//       categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+//     }
+//   };
+// }
 
 
   prepareRecentActivities(contrats: Contrat[]): void {
