@@ -1,5 +1,5 @@
 
-<app-hr-dashboard-page-header [title]="'Partners'"  [title2]="'Add New Partner'" [class]="'btn btn-primary'" [class1]="''" [path]="'/dashboard/hrmdashboards/employees/add-employee'" ></app-hr-dashboard-page-header>
+<app-hr-dashboard-page-header [title]="'Pending Registrations'"   ></app-hr-dashboard-page-header>
        
               <!-- Start::row-1 -->
                 <div class="row">
@@ -8,8 +8,8 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-7">
-                                        <div class="mt-0 text-start"> <span class="fw-medium">Total Partners</span>
-                                            <h3 class="mb-0 mt-1 text-success">{{partnerCount}}</h3>
+                                        <div class="mt-0 text-start"> <span class="fw-medium">Pending Approvals</span>
+                                            <h3 class="mb-0 mt-1 text-success">{{pendingCount}}</h3>
                                         </div>
                                     </div>
                                     <div class="col-5">
@@ -19,6 +19,52 @@
                             </div>
                         </div>
                     </div>
+                    <!-- <div class="col-xl-3 col-lg-6 col-md-6">
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <div class="mt-0 text-start"> <span class="fw-medium">Total Male Partners</span>
+                                            <h3 class="mb-0 mt-1 text-primary">3,876</h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="icon1 bg-primary-transparent my-auto float-end"> <i class="las la-male"></i> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6">
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <div class="mt-0 text-start"> <span class="fw-medium">Total Female Partners</span>
+                                        <h3 class="mb-0 mt-1 text-secondary">1,396</h3> </div>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="icon1 bg-secondary-transparent my-auto float-end"> <i class="las la-female"></i> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6">
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <div class="mt-0 text-start"> <span class="fw-medium">Total New Partners</span>
+                                        <h3 class="mb-0 mt-1 text-danger">398</h3> </div>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="icon1 bg-danger-transparent my-auto float-end"> <i class="las la-user-friends"></i> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
                 </div>
                 <!-- Start::row-1 -->
 
@@ -27,7 +73,7 @@
                     <div class="col-md-12">
                         <div class="card custom-card">
                             <div class="card-header">
-                                <h3 class="card-title">Partners List</h3>
+                                <h3 class="card-title">Pending List</h3>
                             </div>
                             <div class="card-body">
                                 <div class="row mb-2 gap-2 gap-lg-0">
@@ -44,7 +90,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="float-end">
-                                            <input type="search" class="form-control" placeholder="Search By Name..." [(ngModel)]="searchQuery" (ngModelChange)="loadPartners()">
+                                            <input type="search" class="form-control" placeholder="Search By Name..." [(ngModel)]="searchQuery" (ngModelChange)="loadPendingUsers()">
                                         </div>
                                     </div>
                                 </div>
@@ -56,20 +102,18 @@
                                                 <th>Avatar</th>
                                                 <th>Name</th>
                                                 <th>Email</th>
-                                                <th>Phone Number</th>
-                                                <th>Location</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         
                                         <tbody>
-                                            @for(partner of filteredPartners; track partner.id) {
+                                            @for(user of filteredUsers; track user.id) {
 
                                                 <tr class="border-bottom">
-                                                    <th scope="row">{{partner.id}}</th>
+                                                    <th scope="row">{{user.id}}</th>
                                                     <td>
                                                         <div class="avatar me-2 avatar-rounded">
-                                                            <img [src]="'./assets/images/users/' + (partner.avatar || 'default.png')" alt="img">
+                                                            <img [src]="user.avatar || './assets/images/users/default.png'" alt="img">
                                                         </div>
                                                     </td>
                                                     <td>
@@ -77,18 +121,15 @@
                                                             
                                                             <div>
                                                                 <div class="lh-1">
-                                                                    <h6 class="mb-1">{{partner.username}}</h6>
+                                                                    <h6 class="mb-1">{{user.username}}</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td>{{partner.email}}</td>
-                                                    <td>{{partner.phone}}</td>
-                                                    <td>{{partner.location}}</td>
+                                                    <td>{{user.email}}</td>
                                                     <td>
-                                                        <a class="btn btn-primary btn-icon me-2" (click)="open(content2,partner)" data-bs-toggle="tooltip" data-original-title="chat"><i class="fe fe-message-square"></i></a>
-                                                        <a class="btn btn-primary btn-icon me-2" routerLink="/dashboard/hrmdashboards/employees/edit-employee/{{partner.id}}" data-bs-toggle="tooltip" data-original-title="Edit"><i class="fe fe-edit"></i></a>
-                                                        <a class="btn btn-danger btn-icon" data-bs-toggle="tooltip" (click)="deletePartner(partner.id)" data-original-title="Delete"><i class="fe fe-trash-2"></i></a>
+                                                        <a class="btn btn-success btn-icon me-2" (click)="approveUser(user.id)" title="Approve User"><i class="fe fe-check"></i></a>
+                                                        <a class="btn btn-danger btn-icon" (click)="deleteUser(user.id)" title="Reject User"><i class="fe fe-trash-2"></i></a>
                                                     </td>
                                                 </tr>
                                             }
@@ -113,37 +154,19 @@
                                       </li>
                                     </ul>
                                   </nav>
+
+                                <!-- <nav class="mt-4">
+                                    <ul class="pagination justify-content-end mb-0">
+                                        <li class="page-item disabled"><a class="page-link" href="javascript:void(0);">Prev</a></li>
+                                        <li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>
+                                    </ul>
+                                </nav> -->
+                                <!-- End::pagination -->
                             </div>
                         </div>
                     </div>
                 </div>
                 <!--End::row-2 -->
-
-        <ng-template #content2 let-modal>
-
-            <div class="modal-header">
-                <h5 class="modal-title" >Send Notification to {{selectedPartner.username}}</h5> <button (click)="modal.dismiss()" type="button" class="btn-close"
-                    data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body"> 
-                <!-- Formulaire d'ajout de suivi -->
-                <form (ngSubmit)="sendMessage(modal)">
-              <div class="mb-3">
-                <label class="form-label">Message</label>
-                <textarea class="form-control" [(ngModel)]="messageContent" name="messageContent" required></textarea>
-              </div>
-              <!-- <div class="mb-3">
-                <label class="form-label">Etat</label>
-                <select class="form-select" [(ngModel)]="newSuivi.etatExecution" name="etatExecution">
-                  <option [value]="EtatExecution.EN_COURS">En cours</option>
-                  <option [value]="EtatExecution.TERMINE">Terminé</option>
-                  <option [value]="EtatExecution.EN_RETARD">En retard</option>
-                </select>
-              </div> -->
-              <div class="modal-footer"> 
-                <button type="button" class="btn btn-outline-primary" (click)="modal.close('cross click')" data-bs-dismiss="modal">Close</button> 
-                <button type="submit" class="btn btn-primary">Add</button>
-             </div>
-                </form>
-            </div>
-        </ng-template>

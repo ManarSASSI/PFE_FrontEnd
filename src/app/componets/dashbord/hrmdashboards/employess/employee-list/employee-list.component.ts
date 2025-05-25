@@ -10,6 +10,8 @@ import { PartnerService } from '../../../../../shared/services/partner/partner.s
 import { User } from '../../../../../shared/models/user.model';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { MessageService } from '../../../../../shared/services/message/message.service';
+import { AuthService } from '../../../../../shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -21,11 +23,14 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 })
 export class EmployeeListComponent implements OnInit {
 
+  messageContent: string = '';
+  selectedPartner!: User;
+  currentUser: any
+
+
   partners: User[] = [];
   partnerCount = 0;
-  // @ViewChildren(SortableHeader) headers!: QueryList<SortableHeader>;
-
-// Nouveaux états pour pagination et recherche
+  
   currentPage = 1;
   itemsPerPage = 10;
   searchQuery = '';
@@ -34,12 +39,47 @@ export class EmployeeListComponent implements OnInit {
 
   total$!: Observable<number>;
   
-  constructor(private partnerService: PartnerService,private toastr: ToastrService) {}
+  constructor(private modalService: NgbModal,private partnerService: PartnerService,private toastr: ToastrService,private messageService: MessageService,private authService: AuthService) {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser')!);
+  }
 
   ngOnInit(): void {
     this.loadPartners();
     this.loadPartnerCount();
   }
+
+
+  async open(content: any, partner: User) {
+      this.selectedPartner = partner;
+      // Réinitialiser l'historique avant chargement
+      
+      this.modalService.open(content, { 
+        size: 'lg',
+        backdrop: 'static',
+         centered: true
+      });
+  }
+
+  sendMessage(modal: any) {
+    if (this.messageContent && this.currentUser) {
+      this.messageService.sendMessage(
+        this.currentUser.id,
+        this.selectedPartner.id,
+        this.messageContent
+      ).subscribe({
+        next: () => {
+          alert('Message sent successfully !');
+          this.messageContent = '';
+          modal.close();
+        },
+        error: (err) => {
+          console.error('Error sending message:', err);
+          alert('An error has occurred');
+        }
+      });
+    }
+  }
+
 
   // Méthode pour filtrer et paginer les données
   get filteredPartners(): User[] {

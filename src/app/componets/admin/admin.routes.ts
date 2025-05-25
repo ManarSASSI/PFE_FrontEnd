@@ -24,7 +24,21 @@ const routes: Routes = [
       import('./role-access/role-access.component').then((m) => m.RoleAccessComponent),
       
 },
-     
+{
+    path: 'register-list',
+    loadComponent: () =>
+    import('./register-list/register-list.component').then((m) => m.RegisterListComponent),  
+},
+{
+    path: 'contract-list',
+    loadComponent: () =>
+    import('./contract-list/contract-list.component').then((m) => m.ContractListComponent),  
+}, 
+{
+    path: 'dashboard',
+    loadComponent: () =>
+    import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),  
+}, 
     ]
   }
 ];
