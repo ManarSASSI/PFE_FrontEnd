@@ -23,7 +23,12 @@
               <div class="app-sidebar__user mb-3">
                   <div class="dropdown user-pro-body text-center user-pic">
                       <span class="avatar avatar-xxl online avatar-rounded">
-                          <img [src] ="userAvatar || './assets/images/users/default.png'" alt="img" (error)="handleImageError($event)">
+                          <div class="avatar me-2 avatar-rounded">
+                              <img [src]="getAvatarUrl(userId)" (error)="handleImageError($event)" *ngIf="userId; else defaultAvatar" alt="img">
+                              <ng-template #defaultAvatar>
+                                   <img src="./assets/images/users/default.png" alt="Default Avatar">
+                               </ng-template>
+                          </div>
                       </span>
                       <div class="user-info mt-1">
                           <h5 class=" mb-1">{{ userName }}</h5>

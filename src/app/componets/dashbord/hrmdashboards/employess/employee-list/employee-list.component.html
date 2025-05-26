@@ -69,7 +69,10 @@
                                                     <th scope="row">{{partner.id}}</th>
                                                     <td>
                                                         <div class="avatar me-2 avatar-rounded">
-                                                            <img [src]="'./assets/images/users/' + (partner.avatar || 'default.png')" alt="img">
+                                                            <img [src]="getAvatarUrl(partner.id)" (error)="handleImageError($event)" *ngIf="partner.id; else defaultAvatar" alt="img">
+                                                            <ng-template #defaultAvatar>
+                                                                <img src="./assets/images/users/default.png" alt="Default Avatar">
+                                                            </ng-template>
                                                         </div>
                                                     </td>
                                                     <td>
@@ -132,14 +135,6 @@
                 <label class="form-label">Message</label>
                 <textarea class="form-control" [(ngModel)]="messageContent" name="messageContent" required></textarea>
               </div>
-              <!-- <div class="mb-3">
-                <label class="form-label">Etat</label>
-                <select class="form-select" [(ngModel)]="newSuivi.etatExecution" name="etatExecution">
-                  <option [value]="EtatExecution.EN_COURS">En cours</option>
-                  <option [value]="EtatExecution.TERMINE">Terminé</option>
-                  <option [value]="EtatExecution.EN_RETARD">En retard</option>
-                </select>
-              </div> -->
               <div class="modal-footer"> 
                 <button type="button" class="btn btn-outline-primary" (click)="modal.close('cross click')" data-bs-dismiss="modal">Close</button> 
                 <button type="submit" class="btn btn-primary">Add</button>

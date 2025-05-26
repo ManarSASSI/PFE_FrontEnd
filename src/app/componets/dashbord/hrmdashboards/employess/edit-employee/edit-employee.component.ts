@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PartnerService } from '../../../../../shared/services/partner/partner.service';
-import { User } from '../../../../../shared/models/user.model';
 import { ToastrService } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../../../shared/common/sharedmodule';
@@ -81,19 +80,25 @@ export class EditEmployeeComponent implements OnInit {
 
   onSubmit(): void {
     if (this.partnerForm.valid) {
-      const formData = new FormData();
-      formData.append('username', this.partnerForm.get('username')?.value ?? '');
-      formData.append('email', this.partnerForm.get('email')?.value ?? '');
-      formData.append('phone', this.partnerForm.get('phone')?.value ?? '');
-      formData.append('location', this.partnerForm.get('location')?.value ?? '');
+    console.log('Données envoyées:', this.partnerForm.value);
+    console.log('Fichier avatar:', this.avatarFile);
+    const formData = new FormData();
+    
+    formData.append('username', this.partnerForm.get('username')?.value || '');
+    formData.append('email', this.partnerForm.get('email')?.value || '');
+    formData.append('phone', this.partnerForm.get('phone')?.value || '');
+    formData.append('location', this.partnerForm.get('location')?.value || '');
 
-      if (this.partnerForm.get('password')?.value) {
-        formData.append('password', this.partnerForm.get('password')?.value ?? '');
-      }
+    if (this.partnerForm.get('password')?.value) {
+      formData.append('password', this.partnerForm.get('password')?.value);
+    }
 
-      if (this.avatarFile) {
-        formData.append('avatar', this.avatarFile);
-      }
+    if(this.avatarFile) {
+    formData.append('avatar', this.avatarFile, this.avatarFile.name); // Le nom DOIT être "avatar"
+  }
+    formData.forEach((value, key) => {
+       console.log(key, value);
+    });
 
       this.partnerService.updatePartner(this.partnerId, formData).subscribe({
         next: () => {

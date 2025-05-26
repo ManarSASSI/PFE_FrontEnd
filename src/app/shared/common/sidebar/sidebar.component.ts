@@ -10,6 +10,7 @@ import {
 import { Menu, NavService } from '../../services/navservice';
 import { Subscription, fromEvent } from 'rxjs';
 import { NavigationEnd, Router } from '@angular/router';
+import { NULL } from 'sass';
 
 
 @Component({
@@ -19,6 +20,7 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class SidebarComponent implements OnInit, OnDestroy{
   
+  userId?: number;
   userName: string = 'User';
   userRole: string = 'Role';
   userAvatar: string | null = null;
@@ -29,6 +31,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
   options = { autoHide: false, scrollbarMinSize: 100 };
   public menuItems!: Menu[];
   public menuitemsSubscribe$!: Subscription;
+  
   constructor(
     private navServices: NavService,
     public router: Router,
@@ -56,6 +59,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
     if (userData) {
       try {
         const user = JSON.parse(userData);
+        this.userId = user.id;
         this.userName = user.username || 'User';
         this.userRole = user.role || 'Rôle';
         this.userAvatar = user.avatar || null; // Assurez-vous que le JSON contient avatarUrl
@@ -63,7 +67,6 @@ export class SidebarComponent implements OnInit, OnDestroy{
         console.error('Erreur de parsing des données utilisateur', e);
       }
     }
-
     this.menuitemsSubscribe$ = this.navServices.items.subscribe((items) => {
       this.menuItems = items;
       this.cd.detectChanges();
@@ -81,6 +84,10 @@ export class SidebarComponent implements OnInit, OnDestroy{
 
     if (document.querySelector('html')?.getAttribute('data-nav-layout') == 'horizontal' && window.innerWidth >= 992) { this.clearNavDropdown(); }
 
+  }
+
+  getAvatarUrl(userId: number): string {
+   return `http://localhost:8081/api/users/${userId}/avatar`; // Adaptez l'URL selon votre API
   }
 
    handleImageError(event: Event) {

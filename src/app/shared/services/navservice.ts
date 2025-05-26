@@ -128,7 +128,7 @@ export class NavService implements OnDestroy {
 			dirchange: false,
 			type: 'sub',
 			active: false,
-			roles:['MANAGER','ADMIN'],
+			roles:['MANAGER'],
 			children: [
 						{
 							title: 'Dashboard',
@@ -138,35 +138,7 @@ export class NavService implements OnDestroy {
 							selected: false,
 							path: '/dashboard/hrmdashboards/dashboard',
 						},
-						// {
-						// 	title: 'Project',
-						// 	dirchange: false,
-						// 	type: 'link',
-						// 	active: false,
-						// 	selected: false,
-						// 	path: '/dashboard/project-dashboard/project-list',
-						// },
-						// {
-						// 	title: 'Partners', dirchange: false, type: 'link', active: false, selected: false, path: '/dashboard/hrmdashboards/employees/employee-list',
-						// //  children: [
-						// // 		// { path: '/dashboard/employee-dashboard/dashboard', title: 'Dashboard', type: 'link', selected: false },
-						// //         // { path: '/dashboard/employee-dashboard/attendance', title: 'Attendance', type: 'link', selected: false },
-						// // 		{ path: '/dashboard/hrmdashboards/employees/employee-list', title: 'Partners List', type: 'link', selected: false },
-						// // 		{ path: '/dashboard/hrmdashboards/employees/view-employee', title: 'View Partner', type: 'link', selected: false },
-						// // 		{ path: '/dashboard/hrmdashboards/employees/add-employee', title: 'Add Partner', type: 'link', selected: false },
-						// // 	]
-						//  },
-						// {
-						// 	title: 'Attendance', type: 'sub', active: false, selected: false, Menusub: false, children: [
-						// 		{ path: '/dashboard/hrmdashboards/attendance/attendence-list', title: 'Attendence List', type: 'link', selected: false },
-						// 		{ path: '/dashboard/hrmdashboards/attendance/attendencebyuser', title: 'Attendence By User', type: 'link', selected: false },
-						// 		{ path: '/dashboard/hrmdashboards/attendance/attendenceview', title: 'Attendence View', type: 'link', selected: false },
-						// 		{ path: '/dashboard/hrmdashboards/attendance/overview-calendar', title: 'Overview Calendar', type: 'link', selected: false },
-						// 		{ path: '/dashboard/hrmdashboards/attendance/attendence-mark', title: 'Attendence Mark', type: 'link', selected: false },
-						//     ]
-						// },
-						// { title: 'Notice Board', dirchange: false, type: 'link', active: false, selected: false, path: '/dashboard/hrmdashboards/notice-board' },
-						// { title: 'Settings', dirchange: false, type: 'link', active: false, selected: false, path: '/dashboard/hrmdashboards/settings' },
+						
 				{
 					title: 'Partners', type: 'sub', badgeType: 'success', badgeValue: '2', selected: false, active: false, children: [
 				//  children: [
@@ -177,16 +149,6 @@ export class NavService implements OnDestroy {
 						{ path: '/dashboard/hrmdashboards/employees/add-employee', title: 'Add Partner', type: 'link', selected: false },
 				// 	]
 					]},
-				// { title: 'Chat', dirchange: false, type: 'link', active: false, selected: false, path: '/chat/chat' },
-				// {
-				// 	title: 'Task Dashboard', type: 'sub', badgeType: 'success', badgeValue: '2', selected: false, active: false, children: [
-				// 		{ path: '/dashboard/task-dashboard/completed-tasks', title: 'Completed Tasks', type: 'link', selected: false },
-				// 		{ path: '/dashboard/task-dashboard/view-tasks', title: 'View Tasks', type: 'link', selected: false },
-				// 		{ path: '/dashboard/task-dashboard/task-board', title: 'Task Board', type: 'link', selected: false },
-				// 		{ path: '/dashboard/task-dashboard/new-task', title: 'New Tasks', type: 'link', selected: false },
-				// 		{ path: '/dashboard/task-dashboard/user-profile', title: 'User Profile', type: 'link', selected: false },
-				// 	]
-				// },
 				{
 					title: 'Contrat', type: 'sub', badgeType: 'success', badgeValue: '2', selected: false, active: false, children: [
 						{ path: '/dashboard/hrmdashboards/department', title: 'Contrat List', type: 'link', selected: false },
@@ -196,33 +158,7 @@ export class NavService implements OnDestroy {
 						
 					]
 				},
-				// {
-				// 	title: 'Partner', type: 'sub', badgeType: 'success', badgeValue: '2', selected: false, active: false, children: [
-				// 		// { path: '/dashboard/client-dashboard/dashboard', title: 'Dashboard', type: 'link', selected: false },
-				// 		{ path: '/dashboard/client-dashboard/client-list', title: 'Client List', type: 'link', selected: false },
-				// 		{ path: '/dashboard/client-dashboard/view-client', title: 'View Client', type: 'link', selected: false },
-				// 		{ path: '/dashboard/client-dashboard/new-client', title: 'New Client', type: 'link', selected: false },
-				// 		{ path: '/dashboard/client-dashboard/user-profile', title: 'User Profile', type: 'link', selected: false },
-				// 	]
-				// },
-				// {
-				// 	title: 'Job Dashboard', type: 'sub', badgeType: 'success', badgeValue: '2', selected: false, active: false, children: [
-				// 		{ path: '/dashboard/job-dashboard/job-lists', title: 'Job Lists', type: 'link', selected: false },
-				// 		{ path: '/dashboard/job-dashboard/apply-job', title: 'Apply Job', type: 'link', selected: false },
-				// 		{ path: '/dashboard/job-dashboard/new-job', title: 'New Job', type: 'link', selected: false },
-				// 		{ path: '/dashboard/job-dashboard/user-profile', title: 'User Profile', type: 'link', selected: false },
-				// 	]
-				// },
-				// {
-				// 	title: 'Super Admin', type: 'sub', active: false, selected: false, children: [
-				// 		{ path: '/dashboard/super-admin/dashboard', title: 'Dashboard', type: 'link', selected: false },
-				// 		{ path: '/dashboard/super-admin/companies', title: 'Companies', type: 'link', selected: false },
-				// 		{ path: '/dashboard/super-admin/subscription-plans', title: 'Subscription Plans', type: 'link', selected: false },
-				// 		{ path: '/dashboard/super-admin/invoices', title: 'Invoices', type: 'link', selected: false },
-				// 		{ path: '/dashboard/super-admin/super-admins', title: 'Super Admins', type: 'link', selected: false },
-				// 		{ path: '/dashboard/super-admin/role-access', title: 'Role Access', type: 'link', selected: false },
-				// 	]
-				// }
+				
 			],
 		},
         {
@@ -249,10 +185,13 @@ export class NavService implements OnDestroy {
 			selected: false, 
 			roles:['ADMIN'],
 			children: [
-				{ path: '/admin/general-settings', title: 'General Settings', type: 'link', selected: false },
-				{ path: '/admin/api-settings', title: 'Api Settings', type: 'link', selected: false },
+				{ path: '/admin/dashboard', title: 'Dashboard', type: 'link', selected: false },
 				{ path: '/admin/role-access', title: 'Role Access', type: 'link', selected: false },
-				{ path: '/dashboard/super-admin/settings', title: 'Settings', type: 'link', selected: false },
+				{ path: '/admin/contract-list', title: 'Contract-list', type: 'link', selected: false },
+				{ path: '/admin/register-list', title: 'pending Users', type: 'link', selected: false },
+				// { path: '/admin/general-settings', title: 'General Settings', type: 'link', selected: false },
+				// { path: '/admin/api-settings', title: 'Api Settings', type: 'link', selected: false },
+				// { path: '/dashboard/super-admin/settings', title: 'Settings', type: 'link', selected: false },
 			]
 		},
 

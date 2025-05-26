@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { Contrat, EtatExecution } from '../../models/contrat.model';
-import { AuthService, User } from '../auth/auth.service';
+import { AuthService } from '../auth/auth.service';
+import { User } from '../../models/user.model';
 
 
 @Injectable({
@@ -111,5 +112,11 @@ getContratsByPartner(partnerId: number): Observable<Contrat[]> {
 getMonthlyContratsForPartner(partnerId: number): Observable<number[]> {
   return this.http.get<number[]>(`${this.apiUrl}/monthly/partner/${partnerId}`);
 }
+
+getGlobalMonthlyContrats(): Observable<number[]> {
+    return this.http.get<number[]>(`${this.apiUrl}/admin/monthly`, { 
+      headers: this.getHeaders() 
+    });
+  }
 
 }

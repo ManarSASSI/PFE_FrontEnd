@@ -9,6 +9,7 @@ export interface User {
   avatarFile?: File; // Pour les uploads
   role: Role;
   resetPasswordToken?: string;
+  enabled:boolean;
 }
 
 export enum Role {

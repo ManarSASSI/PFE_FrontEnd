@@ -9,17 +9,18 @@ import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { StorageService } from './storage.service';
 import { Token } from '@angular/compiler';
+import { User } from '../../models/user.model';
 
-export interface User {
-  id: string;
-  uid?: string; // Added to match both Firebase and Spring Boot responses
-  email: string;
-  displayName: string;
-  photoURL: string;
-  emailVerified: boolean;
-  role: 'ADMIN' | 'MANAGER' | 'PARTNER'; // Ajouter le champ role
-  permissions?: string[];
-}
+// export interface User {
+//   id: string;
+//   uid?: string; // Added to match both Firebase and Spring Boot responses
+//   email: string;
+//   displayName: string;
+//   photoURL: string;
+//   emailVerified: boolean;
+//   role: 'ADMIN' | 'MANAGER' | 'PARTNER'; // Ajouter le champ role
+//   permissions?: string[];
+// }
 @Injectable({
   providedIn: 'root',
 })
