@@ -48,9 +48,9 @@ export class EmployeeListComponent implements OnInit {
     this.loadPartnerCount();
   }
 
-  getAvatarUrl(userId: number): string {
-   return `http://localhost:8081/api/users/${userId}/avatar`; // Adaptez l'URL selon votre API
-  }
+  // getAvatarUrl(userId: number): string {
+  //  return `http://localhost:8081/api/users/${userId}/avatar`; // Adaptez l'URL selon votre API
+  // }
 
   handleImageError(event: Event) {
   const img = event.target as HTMLImageElement;

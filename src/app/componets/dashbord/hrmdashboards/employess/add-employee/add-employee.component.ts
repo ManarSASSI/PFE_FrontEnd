@@ -49,7 +49,7 @@ export class AddEmployeeComponent implements OnInit {
     Validators.pattern(/^\+?[\d\s-]{10,}$/)
   ]],
   location: ['', Validators.required],
-  avatar: [null]
+  // avatar: [null]
 });
   }
   ngOnInit(): void {
@@ -79,14 +79,14 @@ export class AddEmployeeComponent implements OnInit {
    };
 
 
-   onFileChange(event: any) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.partnerForm.patchValue({
-        avatar: file
-      });
-    }
-  }
+  //  onFileChange(event: any) {
+  //   if (event.target.files.length > 0) {
+  //     const file = event.target.files[0];
+  //     this.partnerForm.patchValue({
+  //       avatar: file
+  //     });
+  //   }
+  // }
 
 
   onSubmit() {
@@ -97,12 +97,8 @@ export class AddEmployeeComponent implements OnInit {
     if (this.partnerForm.valid) {
       const formData = new FormData();
       Object.keys(this.partnerForm.value).forEach(key => {
-        if (key === 'avatar' && this.partnerForm.get(key)?.value) {
-          formData.append(key, this.partnerForm.get(key)?.value);
-        } else {
-          formData.append(key, this.partnerForm.get(key)?.value);
-        }
-        console.log('Avatar value:', this.partnerForm.get('avatar')?.value);
+        formData.append(key, this.partnerForm.get(key)?.value);
+        // console.log('Avatar value:', this.partnerForm.get('avatar')?.value);
         for (let pair of (formData as any).entries()) {
             console.log(pair[0] + ', ' + pair[1]);
           }

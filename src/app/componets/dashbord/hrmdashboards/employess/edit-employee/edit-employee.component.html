@@ -7,12 +7,14 @@
                 <div class="card-body">
                     <h4 class="mb-5 fw-semibold">Partner Details:</h4>
                     
-                    <!-- Current Avatar Preview -->
+                    <!-- Current Avatar Preview
                     <div class="form-group text-center mb-4">
                         <label class="form-label d-block">Current Avatar</label>
-                        <img [src]="currentAvatar" class="avatar-preview rounded-circle" 
-                             alt="Current Avatar" style="width: 120px; height: 120px;">
-                    </div>
+                        <img [src]="getAvatarUrl(userId)" (error)="handleImageError($event)" *ngIf="userId; else defaultAvatar" alt="img" style="width: 120px; height: 120px;">
+                              <ng-template #defaultAvatar>
+                                   <img src="./assets/images/users/default.png" alt="Default Avatar">
+                               </ng-template> 
+                    </div> -->
 
                     <div class="row">
                         <div class="col-md-6">
@@ -81,21 +83,21 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label class="form-label">Update Avatar</label>
                         <input class="form-control" type="file" 
                                id="avatar" 
                                name="avatar"
                                (change)="onFileChange($event)"
                                accept="image/*">
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="card-footer text-end">
                     <button type="button" class="btn btn-danger btn-lg me-2" 
                             (click)="closeForm()">Close</button>
                     <button type="submit" class="btn btn-success btn-lg" 
-                            [disabled]="partnerForm.invalid">Update Partner</button>
+                            [disabled]="partnerForm.invalid">Update</button>
                 </div>
             </form>
         </div>

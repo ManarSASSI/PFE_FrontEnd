@@ -407,6 +407,14 @@ modal: any;
       },
       error: (err) => console.error('Error loading alerts', err)
     });
+
+    this.alertService.getUserAlerts().subscribe({
+      next: (alerts) => {
+        this.alerts = alerts;
+        this.notificationCount = this.alerts.filter(alert => !alert.read).length;
+      },
+      error: (err) => console.error('Error loading alerts', err)
+    });
   }
 
   openNotifications() {

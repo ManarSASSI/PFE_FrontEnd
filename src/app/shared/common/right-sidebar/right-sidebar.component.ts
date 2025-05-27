@@ -17,7 +17,6 @@ export class RightSidebarComponent {
   messages: any[] = [];
   MessagesCount = 0;
 
-  selectedTab: 'notifications' | 'messages' = 'notifications';
 
 
   activeOffcanvas = inject(NgbActiveOffcanvas);
@@ -30,26 +29,7 @@ export class RightSidebarComponent {
       const currentUser = JSON.parse(userData);
       this.currentUserId = currentUser.id;
       this.loadManagerAlerts();
-      this.loadMessages();
     }
-  }
-
-  switchTab(tab: 'notifications' | 'messages') {
-    this.selectedTab = tab;
-    if (tab === 'messages') {
-      this.loadMessages();
-    }
-  }
-
-
-
-   private loadMessages(): void {
-    if (!this.currentUserId) return;
-
-    this.messageService.getUserMessages(this.currentUserId)
-      .subscribe(messages => {
-        this.messages = messages;
-      });
   }
 
   private loadManagerAlerts() {
@@ -61,14 +41,15 @@ export class RightSidebarComponent {
         },
         error: (err) => console.error('Error loading alerts', err)
       });
-    }
-  }
 
-  sendMessage(receiverId: number, content: string): void {
-    this.messageService.sendMessage(this.currentUserId, receiverId, content)
-      .subscribe(() => {
-        this.loadMessages();
-      });
+      this.alertService.getUserAlerts().subscribe({
+        next: (alerts) => {
+          this.alerts = alerts;
+          this.notificationCount = this.alerts.filter(alert => !alert.read).length;
+        },
+        error: (err) => console.error('Error loading alerts', err)
+      })
+    }
   }
 
   markMessageAsRead(messageId: number): void {

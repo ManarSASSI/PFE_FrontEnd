@@ -53,7 +53,7 @@
                                         <thead>
                                             <tr class="border-bottom">
                                                 <th>ID</th>
-                                                <th>Avatar</th>
+                                                <!-- <th>Avatar</th> -->
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Phone Number</th>
@@ -66,15 +66,15 @@
                                             @for(partner of filteredPartners; track partner.id) {
 
                                                 <tr class="border-bottom">
-                                                    <th scope="row">{{partner.id}}</th>
-                                                    <td>
+                                                    <th scope="row">LEONI-P-{{partner.id}}</th>
+                                                    <!-- <td>
                                                         <div class="avatar me-2 avatar-rounded">
                                                             <img [src]="getAvatarUrl(partner.id)" (error)="handleImageError($event)" *ngIf="partner.id; else defaultAvatar" alt="img">
                                                             <ng-template #defaultAvatar>
                                                                 <img src="./assets/images/users/default.png" alt="Default Avatar">
                                                             </ng-template>
                                                         </div>
-                                                    </td>
+                                                    </td> -->
                                                     <td>
                                                         <div class="d-flex align-items-center">
                                                             

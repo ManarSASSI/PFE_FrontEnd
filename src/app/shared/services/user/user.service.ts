@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +12,12 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  updateUser(id: number, formData: FormData): Observable<User> {
-  return this.http.put<User>(`${this.apiUrl}/${id}`, formData);
+  updateUser(id: number, userData: any): Observable<User> {
+  return this.http.put<User>(`${this.apiUrl}/${id}`, userData, {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+      })
+    });
 }
 
   getPendingUsers(): Observable<User[]> {
@@ -34,6 +38,10 @@ export class UserService {
 
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}`);
+  }
+
+  getUserById(userId: number): Observable<User>{
+    return this.http.get<User>(`${this.apiUrl}/${userId}`);
   }
 
   getAvatarUrl(userId: number): string {

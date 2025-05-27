@@ -28,13 +28,17 @@
     </div> -->
     <div class="col-xl-8 col-lg-8">
         <div class="card custom-card">
+            <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
             <div class="card-body">
                 <div class="card-title">Basic info:</div>
                 <div class="row">
                     <div class="col-sm-6 col-md-6">
                         <div class="form-group">
                             <label class="form-label">Username</label>
-                            <input type="text" class="form-control" [placeholder]="userData?.username" formControlName="username">
+                            <input type="text" class="form-control" formControlName="username" placeholder="Enter Full Name" required>
+                            @if(editForm.get('username')?.invalid && editForm.get('username')?.touched) {
+                                    <small class="text-danger">Full name is required</small>
+                                }
                         </div>
                     </div>
                     <!-- <div class="col-sm-6 col-md-6">
@@ -46,22 +50,48 @@
                     <div class="col-sm-6 col-md-6">
                         <div class="form-group">
                             <label class="form-label">Email address</label>
-                            <input type="email" class="form-control" placeholder="Enter Email Address" required formControlName="email">
+                            <input type="email" class="form-control" formControlName="email" placeholder="Enter Email Address" required>
+                            @if(editForm.get('email')?.errors?.['required'] && editForm.get('email')?.touched) {
+                                    <small class="text-danger">Email is required</small>
+                                }
+                                @if(editForm.get('email')?.errors?.['email'] && editForm.get('email')?.touched) {
+                                    <small class="text-danger">Invalid email format</small>
+                                }
                         </div>
                     </div>
+                    <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">New Password (optional)</label>
+                                <input class="form-control" type="password" 
+                                       formControlName="password" 
+                                       placeholder="Enter New Password">
+                                @if(editForm.get('password')?.errors?.['minlength']) {
+                                    <small class="text-danger">Minimum 8 characters</small>
+                                }
+                                @if(editForm.get('password')?.errors?.['pattern']) {
+                                    <small class="text-danger">Requires uppercase, number and special char</small>
+                                }
+                            </div>
+                        </div>
+
                     <div class="col-sm-6 col-md-6">
                         <div class="form-group">
                             <label class="form-label">Phone Number</label>
-                            <input type="number" class="form-control" [placeholder]="userData?.phone" formControlName="phone">
+                            <input type="text" class="form-control" formControlName="phone" placeholder="Enter Phone Number">
+                            @if(editForm.get('phone')?.errors?.['pattern']) {
+                                    <small class="text-danger">Invalid phone format</small>
+                                }
                         </div>
                     </div>
+
+
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="form-label">Location</label>
-                            <input type="text" class="form-control" [placeholder]="userData?.location" formControlName="location">
+                            <input type="text" class="form-control" formControlName="location" placeholder="Enter Location">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-label mb-0 mt-2">Profile Photo</div>
@@ -74,7 +104,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- <div class="col-sm-6 col-md-4">
                         <div class="form-group">
                             <label class="form-label">City</label>
@@ -147,9 +177,10 @@
                 </div> -->
             </div>
             <div class="card-footer text-end">
-                <button type="submit" class="btn btn-lg btn-primary" [disabled]="editForm.invalid">Updated</button>
+                <button type="submit" class="btn btn-lg btn-primary" [disabled]="editForm.invalid">Update</button>
                 <button type="button" class="btn btn-lg btn-danger" (click)="onCancel()">Cancel</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
