@@ -77,6 +77,7 @@ export class RegisterListComponent {
   }
 
   approveUser(userId: number): void {
+    if (confirm('Are you sure to accept this user?')) {
     this.userService.approveUser(userId).subscribe({
       next: () => {
         this.pendingUsers = this.pendingUsers.filter(u => u.id !== userId);
@@ -89,9 +90,10 @@ export class RegisterListComponent {
       }
     });
   }
+  }
 
   deleteUser(userId: number): void {
-    if (confirm('Are you sure you want to reject this user?')) {
+    if (confirm('Are you sure to reject this user?')) {
       this.userService.deleteUser(userId).subscribe({
         next: () => {
           this.pendingUsers = this.pendingUsers.filter(u => u.id !== userId);

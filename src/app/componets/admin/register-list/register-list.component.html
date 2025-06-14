@@ -99,7 +99,6 @@
                                         <thead>
                                             <tr class="border-bottom">
                                                 <th>ID</th>
-                                                <th>Avatar</th>
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Action</th>
@@ -112,11 +111,6 @@
                                                 <tr class="border-bottom">
                                                     <th scope="row">{{user.id}}</th>
                                                     <td>
-                                                        <div class="avatar me-2 avatar-rounded">
-                                                            <img [src]="user.avatar || './assets/images/users/default.png'" alt="img">
-                                                        </div>
-                                                    </td>
-                                                    <td>
                                                         <div class="d-flex align-items-center">
                                                             
                                                             <div>
@@ -128,8 +122,8 @@
                                                     </td>
                                                     <td>{{user.email}}</td>
                                                     <td>
-                                                        <a class="btn btn-success btn-icon me-2" (click)="approveUser(user.id)" title="Approve User"><i class="fe fe-check"></i></a>
-                                                        <a class="btn btn-danger btn-icon" (click)="deleteUser(user.id)" title="Reject User"><i class="fe fe-trash-2"></i></a>
+                                                        <a class="btn btn-sm btn-success btn-icon me-2" (click)="approveUser(user.id)" title="Approve User"><i class="fe fe-check"></i></a>
+                                                        <a class="btn btn-sm btn-danger" (click)="deleteUser(user.id)" title="Reject User"><i class="fe fe-trash-2"></i></a>
                                                     </td>
                                                 </tr>
                                             }

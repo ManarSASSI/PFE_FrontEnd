@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { Contrat, EtatExecution } from '../../models/contrat.model';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../../models/user.model';
@@ -77,11 +77,36 @@ export class ContratService {
   return this.http.get<User>(`${this.apiUrl}/users/${partnerId}`);
 }
 
-  generatePdfReport(id: number): Observable<Blob> {
-    return this.http.get(`/api/rapports/contrats/${id}`, {
-      responseType: 'blob'
-    });
-  }
+generatePdfReport(id: number): Observable<Blob> {
+    return this.http.get(`http://localhost:8081/api/rapports/contrats/${id}`, {
+        responseType: 'blob'
+    }).pipe(
+        catchError(error => {
+            // Convertit les erreurs blob en erreurs lisibles
+            if (error.error instanceof Blob) {
+                return new Observable(observable => {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        try {
+                            const errObj = JSON.parse(reader.result as string);
+                            observable.error(new Error(errObj.error));
+                        } catch (e) {
+                            observable.error(new Error(reader.result as string));
+                        }
+                    };
+                    reader.readAsText(error.error);
+                });
+            }
+            return throwError(error);
+        })
+    ) as Observable<Blob>;
+}
+
+  // generatePdfReport(id: number): Observable<Blob> {
+  //   return this.http.get(`/api/rapports/contrats/${id}`, {
+  //     responseType: 'blob'
+  //   });
+  // }
 
   updateEtatExecution(contratId: number, etat: EtatExecution): Observable<Contrat> {
     return this.http.patch<Contrat>(`${this.apiUrl}/${contratId}/etat-execution`, { etatExecution: etat });
@@ -117,6 +142,18 @@ getGlobalMonthlyContrats(): Observable<number[]> {
     return this.http.get<number[]>(`${this.apiUrl}/admin/monthly`, { 
       headers: this.getHeaders() 
     });
+  }
+
+getContratCountByPartner(partnerId: number): Observable<number> {
+  return this.http.get<number>(`${this.apiUrl}/count/partner/${partnerId}`);
+}
+
+getMonthlyBudgetsForManager(managerId: number): Observable<number[]> {
+    return this.http.get<number[]>(`${this.apiUrl}/manager/${managerId}/monthly-budgets`);
+  }
+
+  getMonthlyBudgetsForPartner(partnerId: number): Observable<number[]> {
+    return this.http.get<number[]>(`${this.apiUrl}/partner/${partnerId}/monthly-budgets`);
   }
 
 }

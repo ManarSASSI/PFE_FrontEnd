@@ -50,6 +50,7 @@ export class DashboardComponent implements OnInit {
     recentContrats: Contrat[] = [];
     contratStats: any = {};
     recentActivities: any[] = [];
+    contrats: Contrat[] = [];
   
     monthlyPartners: number[] = [];
     monthlyProjects: number[] = [];
@@ -64,20 +65,18 @@ export class DashboardComponent implements OnInit {
     }
   
     ngOnInit() : void{
+      this.initializeCharts();
       const partner = JSON.parse(localStorage.getItem('currentUser')!);
-    if (!partner) {
-      // Redirection vers la page de login si non authentifié
-      this.route.navigate(['/auth/login']);
-      return;
+      if (partner.role === 'PARTNER') {
+        this.loadPartnerData(partner.id);  
+      } 
     }
-      this.loadPartnerData(partner.id);
-    }
-
 
     loadPartnerData(partnerId: number): void {
     // Chargement des contrats du partenaire
     this.contratService.getContratsByPartner(partnerId).subscribe({
     next: (contrats) => {
+      this.contrats = contrats;
       this.totalProjects = contrats.length;
       this.recentContrats = contrats.slice(0, 5);
       this.calculateContratStats(contrats);
@@ -89,15 +88,26 @@ export class DashboardComponent implements OnInit {
     this.contratService.getMonthlyContratsForPartner(partnerId).subscribe({
     next: counts => {
       this.monthlyProjects = this.normalizeMonthlyData(counts);
+      console.log('Monthly Projects Data:', this.monthlyProjects); // Debug
+      // Initialisez le graphique APRÈS avoir les données
+      this.initializeCharts();
+
       this.updateChartData();
-    }
+    },
+
+     error: err => {
+          console.error('Error loading monthly contracts:', err);
+          // Initialisez quand même avec des données par défaut
+          this.monthlyProjects = new Array(12).fill(0);
+          this.initializeCharts();
+        }
     });
     }
   
     getCountByType(type: string): number {
-    if (!this.recentContrats) return 0;
-    return this.recentContrats.filter(c => c.typeContrat === type).length;
-  }
+    if (!this.contrats || this.contrats.length === 0) return 0;
+      return this.recentContrats.filter(c => c.typeContrat === type).length;
+    }
   
     loadDashboardData(): void {
       const manager = JSON.parse(localStorage.getItem('currentUser')!);
@@ -160,62 +170,131 @@ export class DashboardComponent implements OnInit {
     updateChartData(): void {
     if (this.monthlyPartners.length === 0 || this.monthlyProjects.length === 0) return;
   
-    this.chartOptions = {
-      series: [{
-        name: "Mes contrats", 
-        data: this.monthlyProjects,
-      }],
-      chart: {
-        height: 325,
-        type: 'line',
+    // this.chartOptions = {
+    //   series: [{
+    //     name: "Mes contrats", 
+    //     data: this.monthlyProjects,
+    //   }],
+    //   chart: {
+    //     height: 325,
+    //     type: 'line',
+    //     zoom: { enabled: false },
+    //     toolbar: { show: false },
+    //     dropShadow: {
+    //       enabled: true,
+    //       top: 5,
+    //       left: 0,
+    //       blur: 3,
+    //       color: '#000',
+    //       opacity: 0.1
+    //     }
+    //   },
+    //   dataLabels: { enabled: false },
+    //   legend: { show: false },
+    //   stroke: {
+    //     curve: 'smooth',
+    //     width: 3,
+    //     dashArray: [0, 5]
+    //   },
+    //   grid: {
+    //     borderColor: '#f2f6f7'
+    //   },
+    //   colors: ["var(--primary-color)", "rgba(var(--primary-rgb), 0.2)"],
+    //   xaxis: {
+    //     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    //     axisBorder: {
+    //       show: false,
+    //       color: 'rgba(119, 119, 142, 0.05)'
+    //     },
+    //     axisTicks: {
+    //       show: true,
+    //       color: 'rgba(119, 119, 142, 0.05)',
+    //       width: 6
+    //     },
+    //     labels: {
+    //       rotate: -90
+    //     }
+    //   },
+    //   yaxis: {
+    //     title: {
+    //       text: '',
+    //       style: {
+    //         color: '#adb5be',
+    //         fontSize: '14px',
+    //         fontFamily: 'poppins, sans-serif'
+    //       }
+    //     }
+    //   }
+    // };
+
+      this.chartOptions = {
+    series: [{
+        name: "Contrats",
+        data: this.monthlyProjects || [] // Utilisation des données existantes
+    }],
+    chart: {
+        height: 300,
+        type: 'area',
         zoom: { enabled: false },
         toolbar: { show: false },
-        dropShadow: {
-          enabled: true,
-          top: 5,
-          left: 0,
-          blur: 3,
-          color: '#000',
-          opacity: 0.1
-        }
-      },
-      dataLabels: { enabled: false },
-      legend: { show: false },
-      stroke: {
+        sparkline: { enabled: false }
+    },
+    colors: ["#4361ee"],
+    dataLabels: { enabled: false },
+    stroke: {
         curve: 'smooth',
-        width: 3,
-        dashArray: [0, 5]
-      },
-      grid: {
-        borderColor: '#f2f6f7'
-      },
-      colors: ["var(--primary-color)", "rgba(var(--primary-rgb), 0.2)"],
-      xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        axisBorder: {
-          show: false,
-          color: 'rgba(119, 119, 142, 0.05)'
-        },
-        axisTicks: {
-          show: true,
-          color: 'rgba(119, 119, 142, 0.05)',
-          width: 6
-        },
+        width: 3
+    },
+    fill: {
+        type: 'gradient',
+        gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.1,
+            stops: [0, 90, 100]
+        }
+    },
+    grid: {
+        borderColor: '#f1f1f1',
+        row: {
+            colors: ['transparent', 'transparent'],
+            opacity: 0.5
+        }
+    },
+    markers: {
+        size: 5,
+        colors: ["#4361ee"],
+        strokeWidth: 0,
+        hover: {
+            size: 7
+        }
+    },
+    xaxis: {
+        categories: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+        labels: { style: { colors: '#718096' } }
+    },
+    yaxis: {
+        min: 0,
+        tickAmount: 5,
         labels: {
-          rotate: -90
+            style: { colors: '#718096' },
+            formatter: function(val: number) { // Type ajouté
+                return Math.floor(val).toString();
+            }
         }
-      },
-      yaxis: {
-        title: {
-          text: '',
-          style: {
-            color: '#adb5be',
-            fontSize: '14px',
-            fontFamily: 'poppins, sans-serif'
-          }
+    },
+    legend: { show: false },
+    tooltip: {
+        theme: 'light',
+        y: {
+            formatter: function(val: number) { // Type ajouté
+                return val + " contrats";
+            }
         }
-      }
-    };
+    }
+};
   }
   
   
@@ -273,11 +352,81 @@ export class DashboardComponent implements OnInit {
     }
   
     initializeCharts(): void {
-      
+
+      // Créez le graphique seulement quand vous avez les données
       this.chartOptions = {
-      series: [{ data: [] }],
-      chart: { type: 'line', height: 350 }
-    };
+        series: [{
+          name: "Contrats",
+          data: this.monthlyProjects
+        }],
+        chart: {
+          height: 300,
+          type: 'area',
+          zoom: { enabled: false },
+          toolbar: { show: false },
+          sparkline: { enabled: false }
+        },
+        colors: ["#4361ee"],
+        dataLabels: { enabled: false },
+        stroke: {
+          curve: 'smooth',
+          width: 3
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.1,
+            stops: [0, 90, 100]
+          }
+        },
+        grid: {
+          borderColor: '#f1f1f1',
+          row: {
+            colors: ['transparent', 'transparent'],
+            opacity: 0.5
+          }
+        },
+        markers: {
+          size: 5,
+          colors: ["#4361ee"],
+          strokeWidth: 0,
+          hover: {
+            size: 7
+          }
+        },
+        xaxis: {
+          categories: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+          axisBorder: { show: false },
+          axisTicks: { show: false },
+          labels: { style: { colors: '#718096' } }
+        },
+        yaxis: {
+          min: 0,
+          tickAmount: 5,
+          labels: {
+            style: { colors: '#718096' },
+            formatter: function(val: number) {
+              return Math.floor(val).toString();
+            }
+          }
+        },
+        legend: { show: false },
+        tooltip: {
+          theme: 'light',
+          y: {
+            formatter: function(val: number) {
+              return val + " contrats";
+            }
+          }
+        }
+      };
+      
+    //   this.chartOptions = {
+    //   series: [{ data: [] }],
+    //   chart: { type: 'line', height: 350 }
+    // };
     
     this.chartOptions1 = {
       series: [{ data: [] }],

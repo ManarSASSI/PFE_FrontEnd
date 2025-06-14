@@ -95,6 +95,12 @@
                                                         <input class="form-control" autocomplete formControlName="email"  required placeholder="email">
                                                     </div>
                                                 </div>
+                                                @if(loginForm.get('email')?.errors?.['required'] && loginForm.get('email')?.touched) {
+                                                    <small class="text-danger">Email is required</small>
+                                                }
+                                                @if(loginForm.get('email')?.errors?.['email'] && loginForm.get('email')?.touched) {
+                                                    <small class="text-danger">Please enter a valid email</small>
+                                                }
                                             </div>
                                             <div class="form-group">
                                             <label class="form-label">Password</label>
@@ -143,6 +149,12 @@
                                                         <input class="form-control" placeholder="Email" autocomplete formControlName="email"  required placeholder="Email">
                                                     </div>
                                                 </div>
+                                                @if(loginForm.get('email')?.errors?.['required'] && loginForm.get('email')?.touched) {
+                                                    <small class="text-danger">Email is required</small>
+                                                }
+                                                @if(loginForm.get('email')?.errors?.['email'] && loginForm.get('email')?.touched) {
+                                                    <small class="text-danger">Please enter a valid email</small>
+                                                }
                                             </div>
                                             <div class="form-group">
                                             <label class="form-label">Password</label>

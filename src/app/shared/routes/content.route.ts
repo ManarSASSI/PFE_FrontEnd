@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import {  RouterModule, Routes } from '@angular/router';
 import { hrmdashboardRoutingModule } from '../../../app/componets/dashbord/hrmdashboards/hrmdashboards.routes';
 import { EmployessRoutingModule } from '../../../app/componets/dashbord/hrmdashboards/employess/employess.routes';
-import { AttendanceRoutingModule } from '../../componets/dashbord/hrmdashboards/attendance/attendance.routes';
 import { EmployeeDashboardRoutingModule } from '../../componets/dashbord/employee-dashboard/employee-dashboard.routes';
 import { TaskDashboardRoutingModule } from '../../componets/dashbord/task-dashboard/task-dashboard.routes';
 import { ProjectDashboardRoutingModule } from '../../componets/dashbord/project-dashboard/project-dashboard.routes';
@@ -42,7 +41,6 @@ export const content: Routes = [
   { path: '', children: [
     ...hrmdashboardRoutingModule.routes,
     ...EmployessRoutingModule.routes,
-    ...AttendanceRoutingModule.routes,
     ...EmployeeDashboardRoutingModule.routes,
     ...TaskDashboardRoutingModule.routes,
     ...ProjectDashboardRoutingModule.routes,

@@ -1,5 +1,5 @@
-<app-hr-dashboard-page-header [title]="'Contrat'" [title3]="'Add contrat'" [class]="''"
-    [class1]="'btn btn-primary'" [path]="''"></app-hr-dashboard-page-header>
+<app-hr-dashboard-page-header [title]="'Contrat'" [title3]="''" [class]="''"
+    [class1]="''" [path]="''"></app-hr-dashboard-page-header>
 
 
 
@@ -80,22 +80,21 @@
                             @for(contrat of filteredContrats; track $index){
 
                             <tr class="border-bottom">
-                                <th scope="row">{{contrat.id}}</th>
+                                <th scope="row">LEONI-C-{{contrat.id}}</th>
                                 <td>{{contrat.objetContrat}}</td>
                                 <td>{{contrat.partner.username}}</td>
                                 <td>{{contrat.dateDebut | date:'dd/MM/yyyy'}}</td>
                                 <td>{{contrat.dateFin | date:'dd/MM/yyyy'}}</td>
                                 <td>{{contrat.typeContrat}}</td>
                                 <td>{{contrat.status}}</td>
-
                                 <td>
-                                    <a class="btn btn-primary btn-icon me-1" (click)="generatePdf(contrat.id)" data-bs-toggle="modal">
+                                    <a class="btn btn-sm btn-warning btn-icon me-1" (click)="generatePdf(contrat.id)" data-bs-toggle="modal">
                                         <i class="fe fe-file-text" data-bs-toggle="tooltip" data-original-title="Générer PDF"></i>
                                     </a>
-                                    <a class="btn btn-primary btn-icon me-1" (click)="open(content1, contrat)">
+                                    <a class="btn btn-sm btn-info me-1" (click)="open(content1, contrat)">
                                         <i class="fe fe-edit" data-bs-toggle="tooltip" data-original-title="Edit"></i>
                                     </a>
-                                    <a class="btn btn-danger btn-icon " (click)="deleteContrat(contrat.id)"
+                                    <a class="btn btn-sm btn-danger " (click)="deleteContrat(contrat.id)"
                                         data-bs-toggle="tooltip" data-original-title="Delete"><i
                                             class="fe fe-trash-2"></i>
                                     </a>
@@ -136,6 +135,82 @@
                     data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body"> 
+                <!-- Section des détails du contrat -->
+                <div class="row">
+    <!-- Colonne Gauche -->
+    <div class="col-md-6">
+        <div class="mb-3">
+            <h6 class="fw-semibold mb-3 text-primary">Détails du contrat</h6>
+            <ul class="list-unstyled">
+                <li class="d-flex justify-content-between border-bottom py-2">
+                    <span class="text-muted">Objet :</span>
+                    <span class="fw-medium">{{selectedContrat?.objetContrat}}</span>
+                </li>
+                <li class="d-flex justify-content-between border-bottom py-2">
+                    <span class="text-muted">Partenaire :</span>
+                    <span>{{selectedContrat?.partner?.username}}</span>
+                </li>
+                <li class="d-flex justify-content-between border-bottom py-2">
+                    <span class="text-muted">Type :</span>
+                    <span>{{selectedContrat?.typeContrat}}</span>
+                </li>
+                <li class="d-flex justify-content-between border-bottom py-2">
+                    <span class="text-muted">Département :</span>
+                    <span>{{selectedContrat?.departement}}</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="mt-4">
+            <h6 class="fw-semibold mb-3 text-primary">Aspects financiers</h6>
+            <ul class="list-unstyled">
+                <li class="d-flex justify-content-between border-bottom py-2">
+                    <span class="text-muted">Montant total :</span>
+                    <span class="fw-medium text-success">{{selectedContrat?.montant | currency:'TND'}}</span>
+                </li>
+                <li class="d-flex justify-content-between border-bottom py-2">
+                    <span class="text-muted">Pénalité/jour :</span>
+                    <span class="text-danger">{{selectedContrat?.penaliteParJour | currency:'TND'}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Colonne Droite -->
+    <div class="col-md-6">
+        <div class="mb-3">
+            <h6 class="fw-semibold mb-3 text-primary">Période contractuelle</h6>
+            <ul class="list-unstyled">
+                <li class="d-flex justify-content-between border-bottom py-2">
+                    <span class="text-muted">Début :</span>
+                    <span class="fw-medium">{{selectedContrat?.dateDebut | date:'dd/MM/yyyy'}}</span>
+                </li>
+                <li class="d-flex justify-content-between border-bottom py-2">
+                    <span class="text-muted">Fin :</span>
+                    <span>{{selectedContrat?.dateFin | date:'dd/MM/yyyy'}}</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="mt-4">
+            <h6 class="fw-semibold mb-3 text-primary">État du contrat</h6>
+            <ul class="list-unstyled">
+                <li class="d-flex justify-content-between border-bottom py-2">
+                    <span class="text-muted">Statut :</span>
+                    <span >
+                        {{selectedContrat?.status}}
+                    </span>
+                </li>
+                <li class="d-flex justify-content-between border-bottom py-2">
+                    <span class="text-muted">Jours de retard :</span>
+                    <span class="badge bg-warning text-dark">
+                        {{selectedContrat?.joursRetard || 0}}
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+                </div>
                 <!-- Formulaire d'ajout de suivi -->
             <form (ngSubmit)="addSuivi()">
               <div class="mb-3">

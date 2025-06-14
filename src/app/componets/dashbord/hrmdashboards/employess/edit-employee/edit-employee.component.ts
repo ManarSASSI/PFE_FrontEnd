@@ -77,40 +77,12 @@ export class EditEmployeeComponent implements OnInit {
         }else{ 
           this.router.navigate(['/admin/role-access']);
         }
-        // this.router.navigate(['/dashboard/hrmdashboards/employees/employee-list']);
       }
     });
-    // this.partnerService.getPartnerById(this.partnerId).subscribe({
-    //   next: (partner) => {
-    //     console.log('Données reçues:', partner);
-    //     this.currentAvatar = partner.avatar || './assets/images/users/default.png';
-    //     this.partnerForm.patchValue({
-    //       username: partner.username,
-    //       email: partner.email,
-    //       phone: partner.phone,
-    //       location: partner.location
-    //     });
-    //     console.log('Valeurs du formulaire:', this.partnerForm.value);
-    //   },
-    //   error: (err) => {
-    //     this.toastr.error('Failed to load partner data');
-    //     this.router.navigate(['/dashboard/hrmdashboards/employees/employee-list']);
-    //   }
-    // });
+    
   }
 
-  // onFileChange(event: any): void {
-  //   if (event.target.files.length > 0) {
-  //     this.avatarFile = event.target.files[0];
-  //     // Preview new avatar
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.currentAvatar = e.target.result;
-  //     };
-  //     reader.readAsDataURL(this.avatarFile!);
-  //   }
-  // }
-
+  
 
   handleImageError(event: Event) {
   const img = event.target as HTMLImageElement;
@@ -118,17 +90,9 @@ export class EditEmployeeComponent implements OnInit {
   img.onerror = null;
 }
 
-
-
-  // getAvatarUrl(userId: number): string {
-  //  return `http://localhost:8081/api/users/${userId}/avatar`; // Adaptez l'URL selon votre API
-  // }
-
   onSubmit(): void {
     if (this.partnerForm.valid) {
     console.log('Données envoyées:', this.partnerForm.value);
-    // console.log('Fichier avatar:', this.avatarFile);
-    const formData = new FormData();
     const userData = {
     username: this.partnerForm.get('username')?.value,
     email: this.partnerForm.get('email')?.value,
@@ -136,7 +100,7 @@ export class EditEmployeeComponent implements OnInit {
     location: this.partnerForm.get('location')?.value,
     password: this.partnerForm.get('password')?.value || null
     };
-    formData.append('data', new Blob([JSON.stringify(userData)], { type: 'application/json' }));
+    // formData.append('data', new Blob([JSON.stringify(userData)], { type: 'application/json' }));
     // if (this.avatarFile) {
     // formData.append('avatar', this.avatarFile, this.avatarFile.name);
     
@@ -155,9 +119,9 @@ export class EditEmployeeComponent implements OnInit {
     //    console.log(key, value);
     // });
 
-      this.userService.updateUser(this.partnerId, formData).subscribe({
+      this.userService.updateUser(this.partnerId, userData).subscribe({
         next: () => {
-          this.toastr.success('Partner updated successfully');
+          this.toastr.success('User updated successfully');
         if(this.currentUser.role === 'MANAGER'){
            this.router.navigate(['/dashboard/hrmdashboards/employees/employee-list']);
         }else{
@@ -165,7 +129,7 @@ export class EditEmployeeComponent implements OnInit {
         }
         },
         error: (err) => {
-          this.toastr.error('Error updating partner');
+          this.toastr.error('Error updating user');
           console.error('Update error:', err);
         }
       })

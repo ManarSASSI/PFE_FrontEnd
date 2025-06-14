@@ -136,7 +136,34 @@
                   </div>
                   <div><hr class="dropdown-divider"></div>
                   <overlay-scrollbars [defer]>
-                      <ul class="list-unstyled mb-0" id="header-cart-items-scroll" (click)="handleCardClick($event)" >
+                    <!-- Remplacez la liste statique par -->
+                    <ul class="list-unstyled mb-0" id="header-cart-items-scroll">
+                      <li class="dropdown-item" ngbDropdownItem *ngFor="let message of messages">
+                        <div class="d-flex align-items-start cart-dropdown-item">
+                          
+                          <div class="flex-grow-1">
+                            <div class="d-flex align-items-start justify-content-between mb-0">
+                              <div class="mb-0 fs-13 text-dark fw-medium">
+                                <a [routerLink]="['/chat', message.sender.id]">{{message.sender.username}}</a>
+                              </div>
+                              <div>
+                                <a href="javascript:void(0);" 
+                                   (click)="removeMessage(message.id)" 
+                                   class="header-cart-remove float-end dropdown-item-close">
+                                  <i class="bi bi-x-octagon"></i>
+                                </a>
+                              </div>
+                            </div>
+                            <div class="min-w-fit-content d-flex align-items-start justify-content-between">
+                              <ul class="header-product-item d-flex">
+                                <li>{{message.content}}</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                      <!-- <ul class="list-unstyled mb-0" id="header-cart-items-scroll" (click)="handleCardClick($event)" >
                           <li class="dropdown-item" ngbDropdownItem id="row1">
                               <div class="d-flex align-items-start cart-dropdown-item">
                                   <img src="./assets/images/users/1.jpg" alt="img" class="avatar avatar-md avatar-rounded br-5 me-3">
@@ -242,23 +269,22 @@
                                   </div>
                               </div>
                           </li>
-                      </ul>
+                      </ul> -->
                     </overlay-scrollbars>
-                    @if (!isCartEmpty) {
+                    <!-- @if (!isCartEmpty) {
                         <div class="p-3 empty-header-item border-top">
                             <div class="d-grid">
                                 <a routerLink="/chat/chat" class="btn btn-primary">See All Messages</a>
                             </div>
                         </div>
-                    }
+                    } -->
                   <div class="p-5 empty-item" [class.d-none]="!isCartEmpty">
                       <div class="text-center">
                           <span class="avatar avatar-xl avatar-rounded bg-warning-transparent">
                               <i class="ri-chat-2-line fs-2"></i>
                           </span>
                           <h6 class="fw-bold mb-1 mt-3">Your Inbox is Empty</h6>
-                          <span class="mb-3 fw-normal fs-13 d-block">See more messages in chat page :)</span>
-                          <a routerLink="/chat/chat" class="btn btn-primary btn-wave btn-sm m-1" data-abc="true">continue Viewing <i class="bi bi-arrow-right ms-1"></i></a>
+                          
                       </div>
                   </div>
               </div>

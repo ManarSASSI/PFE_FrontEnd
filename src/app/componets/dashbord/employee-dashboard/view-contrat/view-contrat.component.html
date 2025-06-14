@@ -1,15 +1,17 @@
-<app-hr-dashboard-page-header [title]="'Contrat'" [title2]="'Add New Contrat'" [class]="'btn btn-primary'"
-    [class1]="''" [path]="'/dashboard/project-dashboard/new-project'"></app-hr-dashboard-page-header>
+<app-hr-dashboard-page-header [title]="'Contrat'" [class1]="''" [path]="''"></app-hr-dashboard-page-header>
 
 
 
 <div class="row">
      <div class="col-xl-3 col-lg-6 col-md-6">
+
+       
+
          <div class="card custom-card">
              <div class="card-body">
                  <div class="row">
                      <div class="col-7">
-                         <div class="mt-0 text-start"> <span class="fw-medium">Total Contrats</span>
+                         <div class="mt-0 text-start"> <span class="fw-medium">Total Contracts</span>
                              <h3 class="mb-0 mt-1 text-success">{{ContratCount}}</h3>
                          </div>
                      </div>
@@ -25,8 +27,17 @@
 <div class="row">
     <div class="col-xl-12">
         <div class="card custom-card">
+             <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    
+                    <button class="btn btn-primary" (click)="openSendMessage()">
+                        <i class="fe fe-plus"></i> Add New User
+                    </button>
+                </div>
+            </div>
+
             <div class="card-header">
-                <h3 class="card-title">contrat Summary</h3>
+                <h3 class="card-title">contract Summary</h3>
             </div>
             <div class="card-body">
                 <div class="row mb-2 gap-1 gap-lg-0">
@@ -68,7 +79,6 @@
                             <tr class="border-bottom">
                                 <th>#ID</th>
                                 <th>Contrat object</th>
-                                <th>Partner</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Type</th>
@@ -81,24 +91,18 @@
 
                             <tr class="border-bottom">
                                 <th scope="row">LEONI-C-{{contrat.id}}</th>
-                                <td>{{contrat.objetContrat}}</td>
-                                <td>{{contrat.partner.username}}</td>
-                                <td>{{contrat.dateDebut | date:'dd/MM/yyyy'}}</td>
+                                <td>{{contrat.objetContrat}}</td>                                <td>{{contrat.dateDebut | date:'dd/MM/yyyy'}}</td>
                                 <td>{{contrat.dateFin | date:'dd/MM/yyyy'}}</td>
                                 <td>{{contrat.typeContrat}}</td>
                                 <td>{{contrat.status}}</td>
-
                                 <td>
-                                    <a class="btn btn-sm btn-warning btn-icon me-1" (click)="generatePdf(contrat.id)" data-bs-toggle="modal">
+                                    <a class="btn btn-primary btn-icon me-1" (click)="generatePdf(contrat.id)" data-bs-toggle="modal">
                                         <i class="fe fe-file-text" data-bs-toggle="tooltip" data-original-title="Générer PDF"></i>
                                     </a>
-                                    <a class="btn btn-sm btn-info me-1" (click)="open(content1, contrat)">
-                                        <i class="fe fe-edit" data-bs-toggle="tooltip" data-original-title="Edit"></i>
+                                    <a class="btn btn-primary btn-icon me-1" (click)="open(content1, contrat)">
+                                        <i class="fe fe-eye" data-bs-toggle="tooltip" data-original-title="Edit"></i>
                                     </a>
-                                    <a class="btn btn-sm btn-danger " (click)="deleteContrat(contrat.id)"
-                                        data-bs-toggle="tooltip" data-original-title="Delete"><i
-                                            class="fe fe-trash-2"></i>
-                                    </a>
+                                    
                                 </td>
                             </tr>
                             }
@@ -138,33 +142,33 @@
             <div class="modal-body"> 
                 <!-- Section des détails du contrat -->
                 <div class="row">
-    <!-- Colonne Gauche -->
-    <div class="col-md-6">
-        <div class="mb-3">
-            <h6 class="fw-semibold mb-3 text-primary">Détails du contrat</h6>
-            <ul class="list-unstyled">
-                <li class="d-flex justify-content-between border-bottom py-2">
+            <!-- Colonne Gauche -->
+            <div class="col-md-6">
+            <div class="mb-3">
+                <h6 class="fw-semibold mb-3 text-primary">Détails du contrat</h6>
+                <ul class="list-unstyled">
+                    <li class="d-flex justify-content-between border-bottom py-2">
                     <span class="text-muted">Objet :</span>
                     <span class="fw-medium">{{selectedContrat?.objetContrat}}</span>
-                </li>
-                <li class="d-flex justify-content-between border-bottom py-2">
-                    <span class="text-muted">Partenaire :</span>
-                    <span>{{selectedContrat?.partner?.username}}</span>
-                </li>
-                <li class="d-flex justify-content-between border-bottom py-2">
+                    </li>
+                    <li class="d-flex justify-content-between border-bottom py-2">
+                    <span class="text-muted">Commentaire : </span>
+                      <span class="fw-medium" [innerHTML]="getSafeHtml(selectedContrat?.commentaire)"></span>
+                    </li>
+                    <li class="d-flex justify-content-between border-bottom py-2">
                     <span class="text-muted">Type :</span>
                     <span>{{selectedContrat?.typeContrat}}</span>
-                </li>
-                <li class="d-flex justify-content-between border-bottom py-2">
+                    </li>
+                    <li class="d-flex justify-content-between border-bottom py-2">
                     <span class="text-muted">Département :</span>
                     <span>{{selectedContrat?.departement}}</span>
-                </li>
-            </ul>
-        </div>
+                    </li>
+                </ul>
+            </div>
 
-        <div class="mt-4">
-            <h6 class="fw-semibold mb-3 text-primary">Aspects financiers</h6>
-            <ul class="list-unstyled">
+            <div class="mt-4">
+                <h6 class="fw-semibold mb-3 text-primary">Aspects financiers</h6>
+                <ul class="list-unstyled">
                 <li class="d-flex justify-content-between border-bottom py-2">
                     <span class="text-muted">Montant total :</span>
                     <span class="fw-medium text-success">{{selectedContrat?.montant | currency:'TND'}}</span>
@@ -213,7 +217,7 @@
     </div>
                 </div>
                 <!-- Formulaire d'ajout de suivi -->
-            <form (ngSubmit)="addSuivi()">
+            <!-- <form (ngSubmit)="addSuivi()">
               <div class="mb-3">
                 <label class="form-label">Action</label>
                 <textarea class="form-control" [(ngModel)]="newSuivi.action" name="action"></textarea>
@@ -234,7 +238,7 @@
                 <button type="button" class="btn btn-outline-primary" (click)="modal.close('cross click')" data-bs-dismiss="modal">Close</button> 
                 <button type="submit" class="btn btn-primary">Add</button>
             </div>
-            </form>
+            </form> -->
         
             <!-- Historique des suivis -->
             <div class="mt-4">
@@ -255,4 +259,26 @@
                 <input type="text" class="form-control" id="input-text11" placeholder="Departments">  -->
             </div>
             
+        </ng-template>
+
+
+        <ng-template #sendMessageModal let-modal>
+
+            <div class="modal-header">
+                <h5 class="modal-title" >Send Notification to {{selectedManager?.username}}</h5> <button (click)="modal.dismiss()" type="button" class="btn-close"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"> 
+                <!-- Formulaire d'ajout de suivi -->
+                <form (ngSubmit)="sendMessage(modal)">
+              <div class="mb-3">
+                <label class="form-label">Message</label>
+                <textarea class="form-control" [(ngModel)]="messageContent" name="messageContent" required></textarea>
+              </div>
+              <div class="modal-footer"> 
+                <button type="button" class="btn btn-outline-primary" (click)="modal.close('cross click')" data-bs-dismiss="modal">Close</button> 
+                <button type="submit" class="btn btn-primary">Send</button>
+             </div>
+                </form>
+            </div>
         </ng-template>

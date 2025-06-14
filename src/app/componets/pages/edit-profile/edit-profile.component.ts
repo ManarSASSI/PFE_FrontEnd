@@ -104,7 +104,17 @@ export class EditProfileComponent implements OnInit {
       // // }
     }
       this.userService.updateUser(this.userId, userData).subscribe({
-        next: () => {
+        next: (updatedUser) => {
+          // Mettre à jour le localStorage avec les nouvelles données
+        localStorage.setItem('currentUser', JSON.stringify({
+          ...this.currentUser,
+          ...updatedUser // Utilisez les données retournées par l'API
+        }));
+        
+        // Mettre à jour la variable locale
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser')!);
+
+
           this.toastr.success('User updated successfully');
           if(this.currentUser.role === 'PARTNER'){
               this.router.navigate(['/dashboard/employee-dashboard/dashboard']);

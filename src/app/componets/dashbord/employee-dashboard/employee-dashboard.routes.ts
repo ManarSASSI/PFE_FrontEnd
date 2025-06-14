@@ -18,6 +18,12 @@ const routes: Routes = [
           import('./attendance/attendance.component').then((m) => m.AttendanceComponent),
           
       },
+      {
+        path: 'view-contract',
+        loadComponent: () =>
+          import('./view-contrat/view-contrat.component').then((m) => m.ViewContratComponent),
+          
+      },
      
     ]
   }

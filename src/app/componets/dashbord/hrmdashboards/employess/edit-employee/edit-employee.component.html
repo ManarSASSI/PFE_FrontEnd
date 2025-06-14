@@ -1,11 +1,11 @@
-<app-hr-dashboard-page-header [title]="'Edit Partner'" ></app-hr-dashboard-page-header>
+<app-hr-dashboard-page-header [title]="'Edit'" ></app-hr-dashboard-page-header>
 <!-- Row -->
 <div class="row">
     <div class="col-xl-12 col-md-12 col-lg-12">
         <div class="card">
-            <form [formGroup]="partnerForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+            <form [formGroup]="partnerForm" (ngSubmit)="onSubmit()" >
                 <div class="card-body">
-                    <h4 class="mb-5 fw-semibold">Partner Details:</h4>
+                    <h4 class="mb-5 fw-semibold">Details:</h4>
                     
                     <!-- Current Avatar Preview
                     <div class="form-group text-center mb-4">

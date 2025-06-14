@@ -171,9 +171,9 @@ export class NavService implements OnDestroy {
 			children: [
 				{ path: '/dashboard/employee-dashboard/dashboard', title: 'Dashboard', type: 'link', selected: false },
 				// { path: '/dashboard/employee-dashboard/attendance', title: 'Attendance', type: 'link', selected: false },
-				{ path: '/chat/chat', title: 'Chat', type: 'link', selected: false },
-				{ path: '/dashboard/hrmdashboards/employees/employee-list', title: 'Project List', type: 'link', selected: false },
-				{ path: '/dashboard/hrmdashboards/employees/view-employee', title: 'View Partner', type: 'link', selected: false },
+				// { path: '/chat/chat', title: 'Chat', type: 'link', selected: false },
+				{ path: '/dashboard/employee-dashboard/view-contract', title: 'Contract List', type: 'link', selected: false },
+				// { path: '/dashboard/hrmdashboards/employees/view-employee', title: 'View Partner', type: 'link', selected: false },
 				// { path: '/dashboard/hrmdashboards/employees/add-employee', title: 'Add Partner', type: 'link', selected: false },		
 			]
 		},

@@ -91,32 +91,6 @@ clearErrorMessage() {
   }
 
 login() {
-
-  // // this.disabled = "btn-loading"
-  // this.clearErrorMessage();
-  // if (this.validateForm(this.email, this.password)) {
-  //   this.authservice
-  //     .login(this.email, this.password).toPromise()
-  //     .then(() => {
-  //       this.router.navigate(['/dashboard/hrmdashboards/dashboard']);
-  //       console.clear();
-  //       this.toastr.success('login successful','dayone', {
-  //         timeOut: 3000,
-  //         positionClass: 'toast-top-right',
-  //       });
-  //     })
-  //     .catch((_error: any) => {
-  //       this._error = _error;
-  //       this.router.navigate(['/']);
-  //     });
-   
-  // }
-  // else {
-  //   this.toastr.error('Invalid details','dayone', {
-  //     timeOut: 3000,
-  //     positionClass: 'toast-top-right',
-  //   });
-  // }
 }
 
 validateForm(email: string, password: string) {
@@ -166,9 +140,15 @@ Submit() {
       .subscribe({
         next: (res) => {
           console.log('Réponse complète:', res);
+          console.log('Réponse complète:', res.user.role);
+          if(res.user.role === 'ADMIN'){
+            this.router.navigate(['/admin/dashboard']);
+          }else if (res.user.role === 'MANAGER'){
+            this.router.navigate(['/dashboard/hrmdashboards/dashboard']);
+          }else {
+           this.router.navigate(['/dashboard/employee-dashboard/dashboard']);
+          }
           
-          
-          this.router.navigate(['/dashboard/hrmdashboards/dashboard']);
           this.toastr.success('login successful', 'PFE', {
             timeOut: 3000,
             positionClass: 'toast-top-right',

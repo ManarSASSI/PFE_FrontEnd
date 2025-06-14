@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AttendenceviewComponent } from './attendenceview.component';
+import { ViewContratComponent } from './view-contrat.component';
 
-describe('AttendenceviewComponent', () => {
-  let component: AttendenceviewComponent;
-  let fixture: ComponentFixture<AttendenceviewComponent>;
+describe('ViewContratComponent', () => {
+  let component: ViewContratComponent;
+  let fixture: ComponentFixture<ViewContratComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AttendenceviewComponent]
+      imports: [ViewContratComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AttendenceviewComponent);
+    fixture = TestBed.createComponent(ViewContratComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

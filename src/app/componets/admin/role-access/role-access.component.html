@@ -4,6 +4,16 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card custom-card">
+
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    
+                    <button class="btn btn-primary" (click)="openAddUserModal()">
+                        <i class="fe fe-plus"></i> Add New User
+                    </button>
+                </div>
+            </div>
+
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
@@ -67,7 +77,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let user of paginatedUsers">
-                                <td>{{user.id}}</td>
+                                <td>LEONI-U-{{user.id}}</td>
                                 <td>{{user.username}}</td>
                                 <td>{{user.email}}</td>
                                 <td>
@@ -79,6 +89,9 @@
                                     </span>
                                 </td>
                                 <td class="text-center">
+                                     <button class="btn btn-sm btn-warning me-1" (click)="openMessageModal(user, messageModal)">
+                                            <i class="fe fe-message-circle"></i>
+                                    </button>
                                     <button class="btn btn-sm btn-info me-1" routerLink="/dashboard/hrmdashboards/employees/edit-employee/{{user.id}}"(click)="editUser(user)">
                                         <i class="fe fe-edit"></i>
                                     </button>
@@ -113,3 +126,86 @@
     </div>
 </div>
 <!--End::row-1 -->
+
+
+
+
+<!-- Modal pour ajouter un nouvel utilisateur -->
+<ng-template #addUserModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Add New User</h5>
+        <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <form #userForm="ngForm">
+            <div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
+            
+            <div class="form-group mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" [(ngModel)]="newUser.username" name="username" required>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" [(ngModel)]="newUser.email" name="email" required>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label class="form-label">Role</label>
+                <select class="form-select" [(ngModel)]="newUser.role" name="role" required>
+                    <option value="" disabled selected>Select a role</option>
+                    <option *ngFor="let role of roles" [value]="role">{{role}}</option>
+                </select>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" [(ngModel)]="newUser.password" name="password" required>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="createNewUser()">Create User</button>
+    </div>
+</ng-template>
+
+
+<!-- Après le modal addUserModal -->
+<ng-template #messageModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Send Message to {{selectedUser?.username}}</h5>
+        <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <form #messageForm="ngForm">
+            <div *ngIf="messageError" class="alert alert-danger">{{messageError}}</div>
+            
+            <div class="form-group mb-3">
+                <label class="form-label">Message</label>
+                <textarea 
+                    class="form-control" 
+                    [(ngModel)]="messageContent" 
+                    name="messageContent" 
+                    rows="5"
+                    required>
+                </textarea>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+        <button 
+            type="button" 
+            class="btn btn-primary" 
+            [disabled]="!messageForm.valid || sendingMessage"
+            (click)="sendMessage(modal)">
+            
+            <span *ngIf="!sendingMessage">Send Message</span>
+            <span *ngIf="sendingMessage" class="d-flex align-items-center">
+                <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                Sending...
+            </span>
+        </button>
+    </div>
+</ng-template>

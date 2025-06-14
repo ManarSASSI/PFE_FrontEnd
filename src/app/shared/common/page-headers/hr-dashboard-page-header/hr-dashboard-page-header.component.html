@@ -8,12 +8,6 @@
             <div class="d-flex gap-2">
                 <a class="{{class}}" routerLink="{{path}}">{{title2}}</a>
                 <a class="{{class1}}" (click)="openModal(content)">{{title3}}</a>
-                <!-- <button type="button" class="btn btn-light3" data-bs-toggle="tooltip" placement="top"
-                    ngbTooltip="E-mail"> <i class="fe fe-mail"></i> </button>
-                <button type="button" class="btn btn-light3" data-bs-toggle="tooltip" placement="top"
-                    ngbTooltip="Contact"> <i class="fe fe-phone-call"></i> </button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" placement="top"
-                    ngbTooltip="Info"> <i class="fe fe-info"></i> </button> -->
             </div>
         </div>
     </div>
@@ -34,6 +28,21 @@
     </div>
     <div class="modal-footer"> <button (click)="modal.close('cross click')" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button> <button
             class="btn btn-primary">submit</button> </div>
+    }
+
+    @if(currentPath.includes('/dashboard/employee-dashboard/view-contract')){
+    <div class="modal-header">
+        <h5 class="modal-title">Add New Contrat</h5> <button (click)="modal.close('cross click')" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"> </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group mb-3"> 
+            <label class="form-label">Type Text</label> 
+            <input class="form-control"placeholder="Text"> </div>
+      
+    </div>
+    <div class="modal-footer"> <button (click)="modal.close('cross click')" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button> <button
+            class="btn btn-primary">Send</button> </div>
     }
 
     @if(currentPath=="/dashboard/hrmdashboards/attendance/leave-settings"){

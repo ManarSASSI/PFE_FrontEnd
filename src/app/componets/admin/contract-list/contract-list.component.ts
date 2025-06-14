@@ -187,49 +187,76 @@ export class ContractListComponent {
         });
       }
     }
-  
+
     generatePdf(contratId: number): void {
     this.contratService.generatePdfReport(contratId).subscribe({
-      next: (data: Blob) => {
-        // Vérification approfondie du blob
-        if (!(data instanceof Blob)) {
-          this.toastr.error('Unexpected response format');
-          return;
+        next: (pdfBlob: Blob) => {
+            const blobUrl = URL.createObjectURL(pdfBlob);
+            
+            // Solution compatible avec tous les navigateurs
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = `contrat_${contratId}.pdf`;
+            
+            // Déclenchement du téléchargement
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            
+            // Nettoyage
+            setTimeout(() => {
+                document.body.removeChild(link);
+                URL.revokeObjectURL(blobUrl);
+            }, 100);
+        },
+        error: (err) => {
+            this.toastr.error(`Erreur génération PDF: ${err.message}`);
         }
-        
-        // Création d'un URL object sécurisé
-        const blobUrl = URL.createObjectURL(data);
-        
-        // Méthode compatible avec tous les navigateurs
-        const downloadLink = document.createElement('a');
-        downloadLink.href = blobUrl;
-        downloadLink.download = `contrat_${contratId}.pdf`;
-        
-        // Déclenchement du téléchargement
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        
-        // Nettoyage asynchrone
-        setTimeout(() => {
-          document.body.removeChild(downloadLink);
-          URL.revokeObjectURL(blobUrl);
-        }, 1000);
-      },
-      error: (err) => {
-        // Gestion avancée des erreurs blob
-        if (err.error instanceof Blob) {
-          const reader = new FileReader();
-          reader.onload = () => {
-            const errorMessage = reader.result as string;
-            this.toastr.error(`Server error: ${errorMessage}`);
-          };
-          reader.readAsText(err.error);
-        } else {
-          this.toastr.error('Unknown error while generating');
-        }
-      }
     });
-  }
+}
+  
+  //   generatePdf(contratId: number): void {
+  //   this.contratService.generatePdfReport(contratId).subscribe({
+  //     next: (data: Blob) => {
+  //       // Vérification approfondie du blob
+  //       if (!(data instanceof Blob)) {
+  //         this.toastr.error('Unexpected response format');
+  //         return;
+  //       }
+        
+  //       // Création d'un URL object sécurisé
+  //       const blobUrl = URL.createObjectURL(data);
+        
+  //       // Méthode compatible avec tous les navigateurs
+  //       const downloadLink = document.createElement('a');
+  //       downloadLink.href = blobUrl;
+  //       downloadLink.download = `contrat_${contratId}.pdf`;
+        
+  //       // Déclenchement du téléchargement
+  //       document.body.appendChild(downloadLink);
+  //       downloadLink.click();
+        
+  //       // Nettoyage asynchrone
+  //       setTimeout(() => {
+  //         document.body.removeChild(downloadLink);
+  //         URL.revokeObjectURL(blobUrl);
+  //       }, 1000);
+  //     },
+  //     error: (err) => {
+  //       // Gestion avancée des erreurs blob
+  //       if (err.error instanceof Blob) {
+  //         const reader = new FileReader();
+  //         reader.onload = () => {
+  //           const errorMessage = reader.result as string;
+  //           this.toastr.error(`Server error: ${errorMessage}`);
+  //         };
+  //         reader.readAsText(err.error);
+  //       } else {
+  //         this.toastr.error('Unknown error while generating');
+  //       }
+  //     }
+  //   });
+  // }
   
   //   generatePdf(contratId: number): void {
   //   this.contratService.generatePdfReport(contratId).subscribe({

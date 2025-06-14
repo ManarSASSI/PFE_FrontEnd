@@ -89,9 +89,9 @@
                                                     <td>{{partner.phone}}</td>
                                                     <td>{{partner.location}}</td>
                                                     <td>
-                                                        <a class="btn btn-primary btn-icon me-2" (click)="open(content2,partner)" data-bs-toggle="tooltip" data-original-title="chat"><i class="fe fe-message-square"></i></a>
-                                                        <a class="btn btn-primary btn-icon me-2" routerLink="/dashboard/hrmdashboards/employees/edit-employee/{{partner.id}}" data-bs-toggle="tooltip" data-original-title="Edit"><i class="fe fe-edit"></i></a>
-                                                        <a class="btn btn-danger btn-icon" data-bs-toggle="tooltip" (click)="deletePartner(partner.id)" data-original-title="Delete"><i class="fe fe-trash-2"></i></a>
+                                                        <a class="btn btn-sm btn-warning me-1" (click)="open(content2,partner)" data-bs-toggle="tooltip" data-original-title="chat"><i class="fe fe-message-circle"></i></a>
+                                                        <a class="btn btn-sm btn-info me-1" routerLink="/dashboard/hrmdashboards/employees/edit-employee/{{partner.id}}" data-bs-toggle="tooltip" data-original-title="Edit"><i class="fe fe-edit"></i></a>
+                                                        <a class="btn btn-sm btn-danger" data-bs-toggle="tooltip" (click)="deletePartner(partner.id)" data-original-title="Delete"><i class="fe fe-trash-2"></i></a>
                                                     </td>
                                                 </tr>
                                             }

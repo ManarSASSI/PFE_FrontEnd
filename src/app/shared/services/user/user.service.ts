@@ -33,8 +33,20 @@ export class UserService {
   }
 
   deleteUser(userId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${userId}`);
-  }
+  // Ajouter l'en-tête Content-Type
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.delete<void>(
+    `${this.apiUrl}/${userId}`, 
+    { headers: headers }
+  );
+}
+
+  // deleteUser(userId: number): Observable<void> {
+  //   return this.http.delete<void>(`${this.apiUrl}/${userId}`);
+  // }
 
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}`);
@@ -47,4 +59,8 @@ export class UserService {
   getAvatarUrl(userId: number): string {
   return `${this.apiUrl}/${userId}/avatar`;
   }
+
+  createUser(userData: any): Observable<any> {
+    return this.http.post(`http://localhost:8081/api/auth/register-admin`, userData);
+}
 }

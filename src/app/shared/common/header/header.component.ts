@@ -36,8 +36,7 @@ export class HeaderComponent implements OnInit {
 
   isMessagesOpen = false;
   messages: any[] = [];
-  messageCount = 0;
-  cartItemCount: number = 5;
+  cartItemCount: number = 0;
   public isCollapsed = true;
   collapse: any;
   closeResult = '';
@@ -87,12 +86,7 @@ modal: any;
       panelClass:'switcher-canvas-width'
     });
   }
-  // openNotifications() {
-  //   this.offcanvasService.open(RightSidebarComponent, {
-  //     position: 'end',
-  //     scroll: true,
-  //   });
-  // }
+  
   openModal(content: any) {
     this.modalService.open(content);
   }
@@ -253,6 +247,7 @@ modal: any;
   public SearchResultEmpty: boolean = false;
 
   ngOnInit(): void {
+    this.loadMessages();
     const userData = localStorage.getItem('currentUser');
     
     if (userData) {
@@ -288,6 +283,35 @@ modal: any;
     });
 
   }
+
+// messages
+
+private loadMessages() {
+    const user = JSON.parse(localStorage.getItem('currentUser')!); // À implémenter dans AuthService
+    this.messageService.getUserMessages(user.id).subscribe({
+      next: (messages) => {
+        this.messages = messages;
+        this.cartItemCount = messages.length;
+        this.isCartEmpty = this.cartItemCount === 0;
+      },
+      error: (err) => console.error('Erreur chargement messages', err)
+    });
+  }
+
+
+  removeMessage(messageId: number) {
+    this.messageService.deleteMessage(messageId).subscribe({
+      next: () => {
+        this.messages = this.messages.filter(msg => msg.id !== messageId);
+        this.cartItemCount = this.messages.length;
+        this.isCartEmpty = this.cartItemCount === 0;
+      },
+      error: (err) => console.error('Erreur suppression message', err)
+    });
+  }
+
+
+  // 
   
   private updateSelectedItem() {
     const dashboard = this.activatedRoute.snapshot.firstChild?.url[0]?.path;
