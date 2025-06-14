@@ -148,12 +148,4 @@ getContratCountByPartner(partnerId: number): Observable<number> {
   return this.http.get<number>(`${this.apiUrl}/count/partner/${partnerId}`);
 }
 
-getMonthlyBudgetsForManager(managerId: number): Observable<number[]> {
-    return this.http.get<number[]>(`${this.apiUrl}/manager/${managerId}/monthly-budgets`);
-  }
-
-  getMonthlyBudgetsForPartner(partnerId: number): Observable<number[]> {
-    return this.http.get<number[]>(`${this.apiUrl}/partner/${partnerId}/monthly-budgets`);
-  }
-
 }

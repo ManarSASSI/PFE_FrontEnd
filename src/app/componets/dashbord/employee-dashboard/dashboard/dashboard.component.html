@@ -17,7 +17,7 @@
                             <div class="row align-items-center">
                                 <div class="col-8">
                                     <div class="mt-0 text-start">
-                                        <span class="fs-14 fw-medium">Contrats</span>
+                                        <span class="fs-14 fw-medium">Contracts</span>
                                         <h3 class="mb-0 mt-1 mb-2">{{ totalProjects}}</h3>
                                     </div>
                                 </div>
@@ -32,79 +32,6 @@
                 </div>
 
                 <!-- Carte Overview (pleine largeur) -->
-                <!-- Carte Overview (pleine largeur) -->
-<div class="col-12">
-    <div class="card custom-card">
-        <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap">
-            <div>
-                <h4 class="card-title mb-0">Vue d'ensemble des Contrats</h4>
-                <p class="text-muted mb-0 fs-13">Évolution mensuelle des contrats</p>
-            </div>
-            <div class="d-flex flex-wrap gap-2">
-                <div class="btn-group" role="group" aria-label="Période">
-                    <button type="button" class="btn btn-sm btn-outline-light active">Mensuel</button>
-                    <button type="button" class="btn btn-sm btn-outline-light">Trimestriel</button>
-                    <button type="button" class="btn btn-sm btn-outline-light">Annuel</button>
-                </div>
-            </div>
-        </div>
-        <div class="card-body p-0">
-            <div class="d-flex flex-column flex-lg-row">
-                <div class="w-100" style="height: 300px;" *ngIf="chartOptions; else loading">
-                    <apx-chart 
-                        [series]="chartOptions.series" 
-                        [chart]="chartOptions.chart" 
-                        [legend]="chartOptions.legend"
-                        [xaxis]="chartOptions.xaxis" 
-                        [colors]="chartOptions.colors" 
-                        [stroke]="chartOptions.stroke" 
-                        [dataLabels]="chartOptions.dataLabels" 
-                        [grid]="chartOptions.grid"
-                        [yaxis]="chartOptions.yaxis">
-                    </apx-chart>
-                </div>
-                <ng-template #loading>
-            <div class="d-flex justify-content-center align-items-center h-100">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Chargement...</span>
-              </div>
-            </div>
-          </ng-template>
-                <div class="p-4 border-start" style="width: 300px;">
-                    <div class="d-flex align-items-center mb-4">
-                        <div class="bg-primary bg-opacity-10 p-2 rounded me-3">
-                            <i class="fe fe-file-text fs-3 text-primary"></i>
-                        </div>
-                        <div>
-                            <span class="fs-12 text-muted">Total Contrats</span>
-                            <h4 class="mb-0">{{ totalProjects }}</h4>
-                        </div>
-                    </div>
-                    
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="dot-label bg-success me-2"></span>
-                        <span class="fs-13">Contrats actifs</span>
-                        <span class="ms-auto fw-medium">{{ contratStats.active }}</span>
-                    </div>
-                    
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="dot-label bg-warning me-2"></span>
-                        <span class="fs-13">Contrats en alerte</span>
-                        <span class="ms-auto fw-medium">{{ contratStats.warning }}</span>
-                    </div>
-                    
-                    <div class="d-flex align-items-center">
-                        <span class="dot-label bg-danger me-2"></span>
-                        <span class="fs-13">Contrats expirés</span>
-                        <span class="ms-auto fw-medium">{{ contratStats.expired }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
                 <!-- <div class="col-12">
                     <div class="card custom-card">
                         <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap">
@@ -135,54 +62,42 @@
             </div>
         </div>
     </div>
-</div>
+</div><br>
     <!--End::row-1 -->
 
     <!-- Start::row-2 -->
 <div class="row">
-    <div class="col-xxl-4 col-md-12 col-lg-6">
+    <div class="col-xxl-4 col-md-12 col-lg-12">
         <div class="card custom-card">
-            <div class="card-header border-0 justify-content-between">
-                <h4 class="card-title">Aperçu des Contrats</h4>
-                <!-- <div>
-                    <div class="dropdown" ngbDropdown> 
-                        <a ngbDropdownToggle href="javascript:void(0);" class="btn btn-outline-light no-caret" data-bs-toggle="dropdown" aria-expanded="false"> 
-                            Ce mois <i class="fe fe-chevron-down"></i> 
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu role="menu">
-                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Ce trimestre</a></li>
-                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Cette année</a></li>
-                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Personnalisé</a></li>
-                        </ul>
-                    </div>
-                </div> -->
+            <div class="card-header border-0">
+                <h4 class="card-title">Breakdown by Type</h4> <!-- Titre modifié -->
             </div>
-            <div class="card-body">
-                <div id="contract-overview">
-                    <apx-chart [series]="chartOptions1.series" [chart]="chartOptions1.chart" [legend]="chartOptions1.legend"
-                    [xaxis]="chartOptions1.xaxis" [colors]="chartOptions1.colors" [plotOptions]="chartOptions1.plotOptions"
-                    [stroke]="chartOptions1.stroke" [fill]="chartOptions1.fill"
-                    [dataLabels]="chartOptions1.dataLabels" [grid]="chartOptions1.grid"
-                    [yaxis]="chartOptions1.yaxis"></apx-chart>
-                </div>
-                <div class="text-center mt-3">
-                    <div class="row">
-                        <div class="col-4 border-end">
-                            <span class="text-muted fs-12">Actifs</span>
-                            <h4 class="mb-0 fw-semibold mt-1">{{ contratStats.active }}</h4>
-                        </div>
-                        <div class="col-4 border-end">
-                            <span class="text-muted fs-12">Expirés</span>
-                            <h4 class="mb-0 fw-semibold mt-1">{{ contratStats.expired }}</h4>
-                        </div>
-                        <div class="col-4">
-                            <span class="text-muted fs-12">En alerte</span>
-                            <h4 class="mb-0 fw-semibold mt-1">{{ contratStats.warning }}</h4>
-                        </div>
+        <div class="card-body">
+            <div id="contract-types" class="py-4">
+                <apx-chart [series]="chartOptions3.series" [chart]="chartOptions3.chart" [legend]="chartOptions3.legend"
+                [xaxis]="chartOptions3.xaxis" [colors]="chartOptions3.colors" [plotOptions]="chartOptions3.plotOptions"
+                [stroke]="chartOptions3.stroke" [fill]="chartOptions3.fill"[labels]="chartOptions3.labels"
+                [dataLabels]="chartOptions3.dataLabels" [grid]="chartOptions3.grid"
+                [yaxis]="chartOptions3.yaxis"></apx-chart>
+            </div>
+            <div class="text-center">
+                <div class="row">
+                    <div class="col-4 border-end">
+                        <span class="text-muted fs-12">Services</span>
+                        <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('SERVICE') }}</h4>
+                    </div>
+                    <div class="col-4 border-end">
+                        <span class="text-muted fs-12">Travaux</span>
+                        <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('TRAVAUX') }}</h4>
+                    </div>
+                    <div class="col-4">
+                        <span class="text-muted fs-12">Continu</span>
+                        <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('CONTINU') }}</h4>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <div class="col-xxl-4 col-md-12 col-lg-6">
         <div class="card custom-card recent-activities">
@@ -206,7 +121,7 @@
     <div class="col-xxl-4 col-md-12 col-lg-12">
         <div class="card custom-card">
             <div class="card-header border-0">
-                <h4 class="card-title">Répartition par Type </h4>
+                <h4 class="card-title">Breakdown by State </h4>
             </div>
             <div class="card-body">
                 <div id="contract-types" class="py-4">
@@ -219,16 +134,16 @@
                 <div class="text-center">
                     <div class="row">
                         <div class="col-4 border-end">
-                            <span class="text-muted fs-12">Services</span>
-                            <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('SERVICE') }}</h4>
+                            <span class="text-muted fs-12">Active</span>
+                            <h4 class="mb-0 fw-semibold mt-1">{{ this.contratStats.active }}</h4>
                         </div>
                         <div class="col-4 border-end">
-                            <span class="text-muted fs-12">Travaux</span>
-                            <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('TRAVAUX') }}</h4>
+                            <span class="text-muted fs-12">Expired</span>
+                            <h4 class="mb-0 fw-semibold mt-1">{{ this.contratStats.expired }}</h4>
                         </div>
                         <div class="col-4">
-                            <span class="text-muted fs-12">Continu</span>
-                            <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('CONTINU') }}</h4>
+                            <span class="text-muted fs-12">warning</span>
+                            <h4 class="mb-0 fw-semibold mt-1">{{ this.contratStats.warning }}</h4>
                         </div>
                     </div>
                 </div>
@@ -319,7 +234,7 @@
                             <th class="text-start">Statut</th>
                             <th class="text-center">Nombre</th>
                             <th class="text-center">Pourcentage</th>
-                            <th class="text-end">Actions</th>
+                            <!-- <th class="text-end">Actions</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -327,41 +242,41 @@
                             <td class="text-start fw-semibold fs-14">Contrats actifs</td>
                             <td class="text-center">{{ contratStats.active }}</td>
                             <td class="text-center">{{ (contratStats.active / contratStats.total * 100).toFixed(0) }}%</td>
-                            <td class="text-end">
+                            <!-- <td class="text-end">
                                 <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Voir détails">
                                     <i class="fe fe-eye text-primary"></i>
                                 </a>
-                            </td>
+                            </td> -->
                         </tr>
                         <tr class="border-bottom">
                             <td class="text-start fw-semibold fs-14">Contrats expirés</td>
                             <td class="text-center">{{ contratStats.expired }}</td>
                             <td class="text-center">{{ (contratStats.expired / contratStats.total * 100).toFixed(0) }}%</td>
-                            <td class="text-end">
+                            <!-- <td class="text-end">
                                 <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Voir détails">
                                     <i class="fe fe-eye text-primary"></i>
                                 </a>
-                            </td>
+                            </td> -->
                         </tr>
                         <tr class="border-bottom">
                             <td class="text-start fw-semibold fs-14">Contrats en alerte</td>
                             <td class="text-center">{{ contratStats.warning }}</td>
                             <td class="text-center">{{ (contratStats.warning / contratStats.total * 100).toFixed(0) }}%</td>
-                            <td class="text-end">
+                            <!-- <td class="text-end">
                                 <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Voir détails">
                                     <i class="fe fe-eye text-primary"></i>
                                 </a>
-                            </td>
+                            </td> -->
                         </tr>
                         <tr>
                             <td class="text-start fw-semibold fs-14">Total contrats</td>
                             <td class="text-center">{{ contratStats.total }}</td>
                             <td class="text-center">100%</td>
-                            <td class="text-end">
+                            <!-- <td class="text-end">
                                 <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Voir détails">
                                     <i class="fe fe-eye text-primary"></i>
                                 </a>
-                            </td>
+                            </td> -->
                         </tr>
                     </tbody>
                 </table>

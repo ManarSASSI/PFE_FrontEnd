@@ -70,12 +70,8 @@
                             <h4 class="card-title mb-0">Overview</h4>
                             <div class="d-flex flex-wrap gap-2">
                                 <a href="javascript:void(0);" class="btn btn-outline-light text-dark d-flex align-items-center my-1">
-                                    <span class="dot-label bg-primary bg-opacity-20 me-2"></span>Partners
+                                    <span class="dot-label bg-primary me-2"></span>Project
                                 </a>
-                                <a href="javascript:void(0);" class="btn btn-outline-light text-dark d-flex align-items-center my-1">
-                                    <span class="dot-label bg-primary me-2"></span>Budget
-                                </a>
-                                
                             </div>
                         </div>
                         <div class="card-body p-0">
@@ -103,49 +99,37 @@
 
     <!-- Start::row-2 -->
 <div class="row">
-    <div class="col-xxl-4 col-md-12 col-lg-6">
+    <div class="col-xxl-4 col-md-12 col-lg-12">
         <div class="card custom-card">
-            <div class="card-header border-0 justify-content-between">
-                <h4 class="card-title">Aperçu des Contrats</h4>
-                <!-- <div>
-                    <div class="dropdown" ngbDropdown> 
-                        <a ngbDropdownToggle href="javascript:void(0);" class="btn btn-outline-light no-caret" data-bs-toggle="dropdown" aria-expanded="false"> 
-                            Ce mois <i class="fe fe-chevron-down"></i> 
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu role="menu">
-                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Ce trimestre</a></li>
-                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Cette année</a></li>
-                            <li><a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">Personnalisé</a></li>
-                        </ul>
-                    </div>
-                </div> -->
+            <div class="card-header border-0">
+                <h4 class="card-title">Breakdown by Type</h4> <!-- Titre modifié -->
             </div>
-            <div class="card-body">
-                <div id="contract-overview">
-                    <apx-chart [series]="chartOptions1.series" [chart]="chartOptions1.chart" [legend]="chartOptions1.legend"
-                    [xaxis]="chartOptions1.xaxis" [colors]="chartOptions1.colors" [plotOptions]="chartOptions1.plotOptions"
-                    [stroke]="chartOptions1.stroke" [fill]="chartOptions1.fill"
-                    [dataLabels]="chartOptions1.dataLabels" [grid]="chartOptions1.grid"
-                    [yaxis]="chartOptions1.yaxis"></apx-chart>
-                </div>
-                <div class="text-center mt-3">
-                    <div class="row">
-                        <div class="col-4 border-end">
-                            <span class="text-muted fs-12">Active</span>
-                            <h4 class="mb-0 fw-semibold mt-1">{{ contratStats.active }}</h4>
-                        </div>
-                        <div class="col-4 border-end">
-                            <span class="text-muted fs-12">Expired</span>
-                            <h4 class="mb-0 fw-semibold mt-1">{{ contratStats.expired }}</h4>
-                        </div>
-                        <div class="col-4">
-                            <span class="text-muted fs-12">On alert</span>
-                            <h4 class="mb-0 fw-semibold mt-1">{{ contratStats.warning }}</h4>
-                        </div>
+        <div class="card-body">
+            <div id="contract-types" class="py-4">
+                <apx-chart [series]="chartOptions3.series" [chart]="chartOptions3.chart" [legend]="chartOptions3.legend"
+                [xaxis]="chartOptions3.xaxis" [colors]="chartOptions3.colors" [plotOptions]="chartOptions3.plotOptions"
+                [stroke]="chartOptions3.stroke" [fill]="chartOptions3.fill"[labels]="chartOptions3.labels"
+                [dataLabels]="chartOptions3.dataLabels" [grid]="chartOptions3.grid"
+                [yaxis]="chartOptions3.yaxis"></apx-chart>
+            </div>
+            <div class="text-center">
+                <div class="row">
+                    <div class="col-4 border-end">
+                        <span class="text-muted fs-12">Services</span>
+                        <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('SERVICE') }}</h4>
+                    </div>
+                    <div class="col-4 border-end">
+                        <span class="text-muted fs-12">Travaux</span>
+                        <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('TRAVAUX') }}</h4>
+                    </div>
+                    <div class="col-4">
+                        <span class="text-muted fs-12">Continu</span>
+                        <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('CONTINU') }}</h4>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <div class="col-xxl-4 col-md-12 col-lg-6">
         <div class="card custom-card recent-activities">
@@ -182,16 +166,16 @@
                 <div class="text-center">
                     <div class="row">
                         <div class="col-4 border-end">
-                            <span class="text-muted fs-12">Services</span>
-                            <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('SERVICE') }}</h4>
+                            <span class="text-muted fs-12">active</span>
+                            <h4 class="mb-0 fw-semibold mt-1">{{ this.contratStats.active }}</h4>
                         </div>
                         <div class="col-4 border-end">
-                            <span class="text-muted fs-12">Travaux</span>
-                            <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('TRAVAUX') }}</h4>
+                            <span class="text-muted fs-12">expired</span>
+                            <h4 class="mb-0 fw-semibold mt-1">{{ this.contratStats.expired }}</h4>
                         </div>
                         <div class="col-4">
-                            <span class="text-muted fs-12">Continu</span>
-                            <h4 class="mb-0 fw-semibold mt-1">{{ getCountByType('CONTINU') }}</h4>
+                            <span class="text-muted fs-12">warning</span>
+                            <h4 class="mb-0 fw-semibold mt-1">{{ this.contratStats.warning }}</h4>
                         </div>
                     </div>
                 </div>
@@ -293,7 +277,7 @@
                             <th class="text-start">Statut</th>
                             <th class="text-center">Nombre</th>
                             <th class="text-center">Pourcentage</th>
-                            <th class="text-end">Actions</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -301,41 +285,25 @@
                             <td class="text-start fw-semibold fs-14">Active contracts</td>
                             <td class="text-center">{{ contratStats.active }}</td>
                             <td class="text-center">{{ (contratStats.active / contratStats.total * 100).toFixed(0) }}%</td>
-                            <td class="text-end">
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Voir détails">
-                                    <i class="fe fe-eye text-primary"></i>
-                                </a>
-                            </td>
+                            
                         </tr>
                         <tr class="border-bottom">
                             <td class="text-start fw-semibold fs-14">Expired contracts</td>
                             <td class="text-center">{{ contratStats.expired }}</td>
                             <td class="text-center">{{ (contratStats.expired / contratStats.total * 100).toFixed(0) }}%</td>
-                            <td class="text-end">
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Voir détails">
-                                    <i class="fe fe-eye text-primary"></i>
-                                </a>
-                            </td>
+                            
                         </tr>
                         <tr class="border-bottom">
                             <td class="text-start fw-semibold fs-14">Contracts on alert</td>
                             <td class="text-center">{{ contratStats.warning }}</td>
                             <td class="text-center">{{ (contratStats.warning / contratStats.total * 100).toFixed(0) }}%</td>
-                            <td class="text-end">
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Voir détails">
-                                    <i class="fe fe-eye text-primary"></i>
-                                </a>
-                            </td>
+                            
                         </tr>
                         <tr>
                             <td class="text-start fw-semibold fs-14">Total contracts</td>
                             <td class="text-center">{{ contratStats.total }}</td>
                             <td class="text-center">100%</td>
-                            <td class="text-end">
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" placement="top" ngbTooltip="Voir détails">
-                                    <i class="fe fe-eye text-primary"></i>
-                                </a>
-                            </td>
+                            
                         </tr>
                     </tbody>
                 </table>
@@ -343,24 +311,3 @@
         </div>
     </div>
 </div>
-
-        <!-- Start:: clock-in -->
-                <!-- <ng-template #content let-modal>
-                    <div class="modal-header">
-                        <h6 class="modal-title" id="exampleModalLabel1"><span class="fe fe-clock  me-1"></span>Clock In</h6>
-                        <button type="button" (click)="modal.close('cross click')" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mt-3 d-flex justify-content-center fs-30 digital-clock">{{hours}}:{{mins}}:{{secs}}</div>
-                        <div class="form-group">
-                            <label class="form-label">Note:</label>
-                            <textarea class="form-control" rows="3">Some text here...</textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="modal.close('cross click')">Close</button>
-                        <button type="button" class="btn btn-primary">Clock In</button>
-                    </div>
-                </ng-template> -->
-        <!-- ENd:: clock-in -->

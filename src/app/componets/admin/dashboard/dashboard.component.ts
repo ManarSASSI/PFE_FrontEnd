@@ -24,13 +24,15 @@ export class DashboardComponent {
     recentContrats: Contrat[] = [];
     contratStats: any = {};
     recentActivities: any[] = [];
+    contrats: Contrat[] = [];
   
-    monthlyPartners: number[] = [];
+    
     monthlyProjects: number[] = [];
   
     chartOptions: any;
     chartOptions1: any;
     chartOptions2: any;
+    chartOptions3:any;
   
     constructor(private modalService:NgbModal,private contratService: ContratService,
       private partnerService: PartnerService, private route: Router ){
@@ -43,8 +45,8 @@ export class DashboardComponent {
     }
   
     getCountByType(type: string): number {
-    if (!this.recentContrats) return 0;
-    return this.recentContrats.filter(c => c.typeContrat === type).length;
+    if (!this.contrats) return 0;
+    return this.contrats.filter(c => c.typeContrat === type).length;
   }
   
     loadDashboardData(): void {
@@ -59,6 +61,7 @@ export class DashboardComponent {
       this.contratService.getAllContrats().subscribe({
         next: (contrats) => {
         const now = new Date();
+        this.contrats = contrats;
         console.log('Contrats loaded:', contrats);
         this.totalProjects = contrats.length;
         this.recentContrats = contrats.filter(c => new Date(c.dateFin) > now).slice(0, 5); 
@@ -95,22 +98,64 @@ export class DashboardComponent {
     return normalized;
    }
   
-    updateChartData(): void {
-    if (this.monthlyPartners.length === 0 || this.monthlyProjects.length === 0) return;
-  
+    updateChartData(): void {  
     this.chartOptions = {
-      series: [{
-      name: "Contrats",
-      data: [] // Remplacer par des données statiques pour tester
-  }],
-      chart: {
+    series: [ {
+      name: "Total Projects", 
+      data: this.monthlyProjects,
+      dashArray: [5, 5]
+    }],
+    chart: {
+      height: 325,
       type: 'line',
-      height: 350
-  },
-      xaxis: {
-      categories: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc']
-  }
-};
+      zoom: { enabled: false },
+      toolbar: { show: false },
+      dropShadow: {
+        enabled: true,
+        top: 5,
+        left: 0,
+        blur: 3,
+        color: '#000',
+        opacity: 0.1
+      }
+    },
+    dataLabels: { enabled: false },
+    legend: { show: false },
+    stroke: {
+      curve: 'smooth',
+      width: 3,
+      dashArray: [0, 5]
+    },
+    grid: {
+      borderColor: '#f2f6f7'
+    },
+    colors: ["var(--primary-color)", "rgba(var(--primary-rgb), 0.2)"],
+    xaxis: {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      axisBorder: {
+        show: false,
+        color: 'rgba(119, 119, 142, 0.05)'
+      },
+      axisTicks: {
+        show: true,
+        color: 'rgba(119, 119, 142, 0.05)',
+        width: 6
+      },
+      labels: {
+        rotate: -90
+      }
+    },
+    yaxis: {
+      title: {
+        text: '',
+        style: {
+          color: '#adb5be',
+          fontSize: '14px',
+          fontFamily: 'poppins, sans-serif'
+        }
+      }
+    }
+  };
   }
   
     prepareRecentActivities(contrats: Contrat[]): void {
@@ -127,14 +172,33 @@ export class DashboardComponent {
   
     calculateContratStats(contrats: Contrat[]): void {
       const now = new Date();
-      const active = contrats.filter(c => new Date(c.dateFin) > now).length;
-      const expired = contrats.filter(c => new Date(c.dateFin) <= now).length;
-      const warning = contrats.filter(c => {
-        const endDate = new Date(c.dateFin);
-        const diffTime = endDate.getTime() - now.getTime();
-        const diffDays = diffTime / (1000 * 3600 * 24);
-        return diffDays > 0 && diffDays <= 30; // Moins de 30 jours restants
-      }).length;
+  let active = 0;
+  let expired = 0;
+  let warning = 0;
+
+  contrats.forEach(c => {
+    const endDate = new Date(c.dateFin);
+    
+    if (endDate <= now) {
+      expired++;
+    } else {
+      const diffTime = endDate.getTime() - now.getTime();
+      const diffDays = diffTime / (1000 * 3600 * 24);
+      
+      if (diffDays <= 30) {
+        warning++;
+      } else {
+        active++;
+      }
+    }
+  });
+
+  this.contratStats = {
+    active,
+    expired,
+    warning,
+    total: contrats.length
+  };
   
       this.contratStats = {
         active,
@@ -162,6 +226,11 @@ export class DashboardComponent {
       series: [],
       chart: { type: 'donut', height: 350 }
     };
+
+    this.chartOptions3 = {
+            series: [],
+            chart: { type: 'donut', height: 350 }
+        };
     }
   
   
@@ -169,13 +238,13 @@ export class DashboardComponent {
       // Graphique à barres (statut des contrats)
       this.chartOptions1 = {
         series: [{
-          name: 'Actifs',
+          name: 'active',
           data: [this.contratStats.active]
         }, {
-          name: 'Expirés',
+          name: 'expired',
           data: [this.contratStats.expired]
         }, {
-          name: 'En alerte',
+          name: 'warning',
           data: [this.contratStats.warning]
         }],
         chart: {
@@ -247,6 +316,67 @@ export class DashboardComponent {
         },
         colors: ["var(--primary-color)", "rgba(254, 127, 0, 1)", "#ffc107"]
       };
+      // Graphique circulaire pour les types de contrat
+        this.chartOptions3 = {
+            series: [
+                this.getCountByType('SERVICE'),
+                this.getCountByType('TRAVAUX'),
+                this.getCountByType('CONTINU')
+            ],
+            labels: ["Service", "Travaux", "Continu"],
+            chart: {
+                height: 330,
+                type: 'donut',
+                toolbar: { show: false },
+            },
+            dataLabels: { enabled: false },
+            legend: {
+                show: true,
+                position: "bottom",
+                horizontalAlign: "center",
+                offsetY: 8,
+                markers: {
+                    width: 12,
+                    height: 12,
+                    strokeWidth: 0,
+                    strokeColor: '#fff',
+                    radius: 4,
+                }
+            },
+            stroke: {
+                show: true,
+                curve: 'smooth',
+                lineCap: 'round',
+                colors: ["#fff"],
+                width: 0,
+                dashArray: 0,
+            },
+            plotOptions: {
+                pie: {
+                    expandOnClick: false,
+                    donut: {
+                        size: '80%',
+                        background: 'transparent',
+                        labels: {
+                            show: true,
+                            name: { show: true, fontSize: '20px', color: '#495057', offsetY: -13 },
+                            value: { show: true, fontSize: '30px', fontWeight: 500, offsetY: 8 },
+                            total: { 
+                                show: true, 
+                                showAlways: true, 
+                                label: 'Total', 
+                                fontSize: '18px', 
+                                fontWeight: 400,
+                                formatter: function (w: any) {
+                                    return w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0).toString();
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            colors: ["#4361ee", "#ffab00", "#38cb89"] // Couleurs pour chaque type
+        };
     }
   
   

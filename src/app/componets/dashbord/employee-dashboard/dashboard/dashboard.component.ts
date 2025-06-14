@@ -58,6 +58,7 @@ export class DashboardComponent implements OnInit {
     chartOptions: any;
     chartOptions1: any;
     chartOptions2: any;
+    chartOptions3: any;
   
     constructor(private modalService:NgbModal,private contratService: ContratService,
       private partnerService: PartnerService, private route: Router ){
@@ -88,25 +89,15 @@ export class DashboardComponent implements OnInit {
     this.contratService.getMonthlyContratsForPartner(partnerId).subscribe({
     next: counts => {
       this.monthlyProjects = this.normalizeMonthlyData(counts);
-      console.log('Monthly Projects Data:', this.monthlyProjects); // Debug
-      // Initialisez le graphique APRÈS avoir les données
-      this.initializeCharts();
-
       this.updateChartData();
-    },
-
-     error: err => {
-          console.error('Error loading monthly contracts:', err);
-          // Initialisez quand même avec des données par défaut
-          this.monthlyProjects = new Array(12).fill(0);
-          this.initializeCharts();
-        }
+    }
     });
     }
+
   
     getCountByType(type: string): number {
     if (!this.contrats || this.contrats.length === 0) return 0;
-      return this.recentContrats.filter(c => c.typeContrat === type).length;
+      return this.contrats.filter(c => c.typeContrat === type).length;
     }
   
     loadDashboardData(): void {
@@ -124,7 +115,8 @@ export class DashboardComponent implements OnInit {
         next: (contrats) => {
         console.log('Contrats loaded:', contrats);
         this.totalProjects = contrats.length;
-        this.recentContrats = contrats.slice(0, 5); 
+        this.recentContrats = this.recentActivities;
+        // contrats.slice(0, 5); 
         this.calculateContratStats(contrats);
         this.prepareRecentActivities(contrats);
   
@@ -170,131 +162,64 @@ export class DashboardComponent implements OnInit {
     updateChartData(): void {
     if (this.monthlyPartners.length === 0 || this.monthlyProjects.length === 0) return;
   
-    // this.chartOptions = {
-    //   series: [{
-    //     name: "Mes contrats", 
-    //     data: this.monthlyProjects,
-    //   }],
-    //   chart: {
-    //     height: 325,
-    //     type: 'line',
-    //     zoom: { enabled: false },
-    //     toolbar: { show: false },
-    //     dropShadow: {
-    //       enabled: true,
-    //       top: 5,
-    //       left: 0,
-    //       blur: 3,
-    //       color: '#000',
-    //       opacity: 0.1
-    //     }
-    //   },
-    //   dataLabels: { enabled: false },
-    //   legend: { show: false },
-    //   stroke: {
-    //     curve: 'smooth',
-    //     width: 3,
-    //     dashArray: [0, 5]
-    //   },
-    //   grid: {
-    //     borderColor: '#f2f6f7'
-    //   },
-    //   colors: ["var(--primary-color)", "rgba(var(--primary-rgb), 0.2)"],
-    //   xaxis: {
-    //     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    //     axisBorder: {
-    //       show: false,
-    //       color: 'rgba(119, 119, 142, 0.05)'
-    //     },
-    //     axisTicks: {
-    //       show: true,
-    //       color: 'rgba(119, 119, 142, 0.05)',
-    //       width: 6
-    //     },
-    //     labels: {
-    //       rotate: -90
-    //     }
-    //   },
-    //   yaxis: {
-    //     title: {
-    //       text: '',
-    //       style: {
-    //         color: '#adb5be',
-    //         fontSize: '14px',
-    //         fontFamily: 'poppins, sans-serif'
-    //       }
-    //     }
-    //   }
-    // };
-
-      this.chartOptions = {
-    series: [{
-        name: "Contrats",
-        data: this.monthlyProjects || [] // Utilisation des données existantes
-    }],
-    chart: {
-        height: 300,
-        type: 'area',
+    this.chartOptions = {
+      series: [{
+        name: "Mes contrats", 
+        data: this.monthlyProjects,
+      }],
+      chart: {
+        height: 325,
+        type: 'line',
         zoom: { enabled: false },
         toolbar: { show: false },
-        sparkline: { enabled: false }
-    },
-    colors: ["#4361ee"],
-    dataLabels: { enabled: false },
-    stroke: {
+        dropShadow: {
+          enabled: true,
+          top: 5,
+          left: 0,
+          blur: 3,
+          color: '#000',
+          opacity: 0.1
+        }
+      },
+      dataLabels: { enabled: false },
+      legend: { show: false },
+      stroke: {
         curve: 'smooth',
-        width: 3
-    },
-    fill: {
-        type: 'gradient',
-        gradient: {
-            shadeIntensity: 1,
-            opacityFrom: 0.7,
-            opacityTo: 0.1,
-            stops: [0, 90, 100]
-        }
-    },
-    grid: {
-        borderColor: '#f1f1f1',
-        row: {
-            colors: ['transparent', 'transparent'],
-            opacity: 0.5
-        }
-    },
-    markers: {
-        size: 5,
-        colors: ["#4361ee"],
-        strokeWidth: 0,
-        hover: {
-            size: 7
-        }
-    },
-    xaxis: {
-        categories: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
-        axisBorder: { show: false },
-        axisTicks: { show: false },
-        labels: { style: { colors: '#718096' } }
-    },
-    yaxis: {
-        min: 0,
-        tickAmount: 5,
+        width: 3,
+        dashArray: [0, 5]
+      },
+      grid: {
+        borderColor: '#f2f6f7'
+      },
+      colors: ["var(--primary-color)", "rgba(var(--primary-rgb), 0.2)"],
+      xaxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        axisBorder: {
+          show: false,
+          color: 'rgba(119, 119, 142, 0.05)'
+        },
+        axisTicks: {
+          show: true,
+          color: 'rgba(119, 119, 142, 0.05)',
+          width: 6
+        },
         labels: {
-            style: { colors: '#718096' },
-            formatter: function(val: number) { // Type ajouté
-                return Math.floor(val).toString();
-            }
+          rotate: -90
         }
-    },
-    legend: { show: false },
-    tooltip: {
-        theme: 'light',
-        y: {
-            formatter: function(val: number) { // Type ajouté
-                return val + " contrats";
-            }
+      },
+      yaxis: {
+        title: {
+          text: '',
+          style: {
+            color: '#adb5be',
+            fontSize: '14px',
+            fontFamily: 'poppins, sans-serif'
+          }
         }
-    }
-};
+      }
+    };
+
+    
   }
   
   
@@ -321,7 +246,7 @@ export class DashboardComponent implements OnInit {
     prepareRecentActivities(contrats: Contrat[]): void {
       this.recentActivities = contrats
         .sort((a, b) => new Date(b.dateDebut).getTime() - new Date(a.dateDebut).getTime())
-        .slice(0, 4)
+        .slice(0, 5)
         .map(contrat => ({
           type: 'Contrat ' + contrat.typeContrat,
           date: contrat.dateDebut,
@@ -332,14 +257,33 @@ export class DashboardComponent implements OnInit {
   
     calculateContratStats(contrats: Contrat[]): void {
       const now = new Date();
-      const active = contrats.filter(c => new Date(c.dateFin) > now).length;
-      const expired = contrats.filter(c => new Date(c.dateFin) <= now).length;
-      const warning = contrats.filter(c => {
-        const endDate = new Date(c.dateFin);
-        const diffTime = endDate.getTime() - now.getTime();
-        const diffDays = diffTime / (1000 * 3600 * 24);
-        return diffDays > 0 && diffDays <= 30; // Moins de 30 jours restants
-      }).length;
+  let active = 0;
+  let expired = 0;
+  let warning = 0;
+
+  contrats.forEach(c => {
+    const endDate = new Date(c.dateFin);
+    
+    if (endDate <= now) {
+      expired++;
+    } else {
+      const diffTime = endDate.getTime() - now.getTime();
+      const diffDays = diffTime / (1000 * 3600 * 24);
+      
+      if (diffDays <= 30) {
+        warning++;
+      } else {
+        active++;
+      }
+    }
+  });
+
+  this.contratStats = {
+    active,
+    expired,
+    warning,
+    total: contrats.length
+  };
   
       this.contratStats = {
         active,
@@ -352,81 +296,11 @@ export class DashboardComponent implements OnInit {
     }
   
     initializeCharts(): void {
-
-      // Créez le graphique seulement quand vous avez les données
-      this.chartOptions = {
-        series: [{
-          name: "Contrats",
-          data: this.monthlyProjects
-        }],
-        chart: {
-          height: 300,
-          type: 'area',
-          zoom: { enabled: false },
-          toolbar: { show: false },
-          sparkline: { enabled: false }
-        },
-        colors: ["#4361ee"],
-        dataLabels: { enabled: false },
-        stroke: {
-          curve: 'smooth',
-          width: 3
-        },
-        fill: {
-          type: 'gradient',
-          gradient: {
-            shadeIntensity: 1,
-            opacityFrom: 0.7,
-            opacityTo: 0.1,
-            stops: [0, 90, 100]
-          }
-        },
-        grid: {
-          borderColor: '#f1f1f1',
-          row: {
-            colors: ['transparent', 'transparent'],
-            opacity: 0.5
-          }
-        },
-        markers: {
-          size: 5,
-          colors: ["#4361ee"],
-          strokeWidth: 0,
-          hover: {
-            size: 7
-          }
-        },
-        xaxis: {
-          categories: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
-          axisBorder: { show: false },
-          axisTicks: { show: false },
-          labels: { style: { colors: '#718096' } }
-        },
-        yaxis: {
-          min: 0,
-          tickAmount: 5,
-          labels: {
-            style: { colors: '#718096' },
-            formatter: function(val: number) {
-              return Math.floor(val).toString();
-            }
-          }
-        },
-        legend: { show: false },
-        tooltip: {
-          theme: 'light',
-          y: {
-            formatter: function(val: number) {
-              return val + " contrats";
-            }
-          }
-        }
-      };
       
-    //   this.chartOptions = {
-    //   series: [{ data: [] }],
-    //   chart: { type: 'line', height: 350 }
-    // };
+      this.chartOptions = {
+      series: [{ data: [] }],
+      chart: { type: 'line', height: 350 }
+    };
     
     this.chartOptions1 = {
       series: [{ data: [] }],
@@ -437,6 +311,11 @@ export class DashboardComponent implements OnInit {
       series: [],
       chart: { type: 'donut', height: 350 }
     };
+
+    this.chartOptions3 = {
+            series: [],
+            chart: { type: 'donut', height: 350 }
+        };
     }
   
   
@@ -444,13 +323,13 @@ export class DashboardComponent implements OnInit {
       // Graphique à barres (statut des contrats)
       this.chartOptions1 = {
         series: [{
-          name: 'Actifs',
+          name: 'active',
           data: [this.contratStats.active]
         }, {
-          name: 'Expirés',
+          name: 'expired',
           data: [this.contratStats.expired]
         }, {
-          name: 'En alerte',
+          name: 'warning',
           data: [this.contratStats.warning]
         }],
         chart: {
@@ -477,7 +356,7 @@ export class DashboardComponent implements OnInit {
       // Graphique circulaire (répartition)
       this.chartOptions2 = {
         series: [this.contratStats.active, this.contratStats.expired, this.contratStats.warning],
-        labels: ["Actifs", "Expirés", "En alerte"],
+        labels: ["active", "expired", "warning"],
         chart: {
           height: 330,
           type: 'donut',
@@ -522,6 +401,70 @@ export class DashboardComponent implements OnInit {
         },
         colors: ["var(--primary-color)", "rgba(254, 127, 0, 1)", "#ffc107"]
       };
+
+      // Graphique circulaire pour les types de contrat
+        this.chartOptions3 = {
+            series: [
+                this.getCountByType('SERVICE'),
+                this.getCountByType('TRAVAUX'),
+                this.getCountByType('CONTINU')
+            ],
+            labels: ["Service", "Travaux", "Continu"],
+            chart: {
+                height: 330,
+                type: 'donut',
+                toolbar: { show: false },
+            },
+            dataLabels: { enabled: false },
+            legend: {
+                show: true,
+                position: "bottom",
+                horizontalAlign: "center",
+                offsetY: 8,
+                markers: {
+                    width: 12,
+                    height: 12,
+                    strokeWidth: 0,
+                    strokeColor: '#fff',
+                    radius: 4,
+                }
+            },
+            stroke: {
+                show: true,
+                curve: 'smooth',
+                lineCap: 'round',
+                colors: ["#fff"],
+                width: 0,
+                dashArray: 0,
+            },
+            plotOptions: {
+                pie: {
+                    expandOnClick: false,
+                    donut: {
+                        size: '80%',
+                        background: 'transparent',
+                        labels: {
+                            show: true,
+                            name: { show: true, fontSize: '20px', color: '#495057', offsetY: -13 },
+                            value: { show: true, fontSize: '30px', fontWeight: 500, offsetY: 8 },
+                            total: { 
+                                show: true, 
+                                showAlways: true, 
+                                label: 'Total', 
+                                fontSize: '18px', 
+                                fontWeight: 400,
+                                formatter: function (w: any) {
+                                    return w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0).toString();
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            colors: ["#4361ee", "#ffab00", "#38cb89"] // Couleurs pour chaque type
+        };
+
+
     }
   
   
