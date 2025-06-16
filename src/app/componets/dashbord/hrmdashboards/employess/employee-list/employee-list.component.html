@@ -125,8 +125,8 @@
         <ng-template #content2 let-modal>
 
             <div class="modal-header">
-                <h5 class="modal-title" >Send Notification to {{selectedPartner.username}}</h5> <button (click)="modal.dismiss()" type="button" class="btn-close"
-                    data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" >Send Notification to {{selectedPartner.username}}</h5> 
+                <button (click)="modal.dismiss()" type="button" class="btn-close"></button>
             </div>
             <div class="modal-body"> 
                 <!-- Formulaire d'ajout de suivi -->
@@ -136,8 +136,8 @@
                 <textarea class="form-control" [(ngModel)]="messageContent" name="messageContent" required></textarea>
               </div>
               <div class="modal-footer"> 
-                <button type="button" class="btn btn-outline-primary" (click)="modal.close('cross click')" data-bs-dismiss="modal">Close</button> 
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button> 
+                <button type="submit" class="btn btn-primary">Send</button>
              </div>
                 </form>
             </div>
